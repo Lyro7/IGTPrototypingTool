@@ -33,7 +33,7 @@ import javafx.util.Duration;
 import algorithm.VisualizationManager;
 import userinterface.TrackingDataDisplay;
 
-public class TrackingDataController implements Controller {
+public class TrackingController implements Controller {
 
     @FXML
     ScatterChart<Number, Number> s1;

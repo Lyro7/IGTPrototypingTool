@@ -38,7 +38,7 @@
     <center>
         <TabPane fx:id="tabPane">
             <Tab closable="false" fx:id="trackingDataTab" text="Tracking Data Input" onSelectionChanged="#onChangeView">
-                <fx:include fx:id="trackingData" source="TrackingDataView.fxml"/>
+                <fx:include fx:id="tracking" source="TrackingView.fxml"/>
             </Tab>
            <Tab closable="false" text="Video Input">
                 <fx:include fx:id="video" source="VideoView.fxml"/>

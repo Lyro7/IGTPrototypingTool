@@ -33,7 +33,7 @@ public class MainController implements Controller {
     Tab visualizationTab;
     // These three controller will be automatically injected since we annotated the "trackingData", "video" and "visual" element in the fxml
     @FXML
-    TrackingDataController trackingDataController;
+    TrackingController trackingController;
     @FXML
     VideoController videoController;
     @FXML
@@ -117,12 +117,12 @@ public class MainController implements Controller {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         registerController();
-        trackingDataController.injectStatusLabel(status);
-        trackingDataController.injectVisualizationManager(visualizationManager);
-        trackingDataController.injectVisualizationController(visualizationController);
+        trackingController.injectStatusLabel(status);
+        trackingController.injectVisualizationManager(visualizationManager);
+        trackingController.injectVisualizationController(visualizationController);
         videoController.injectStatusLabel(status);
         visualizationController.injectStatusLabel(status);
-        visualizationController.injectTrackingDataController(trackingDataController);
+        visualizationController.injectTrackingDataController(trackingController);
         visualizationController.injectVisualizationManager(visualizationManager);
         visualizationManager.injectStatusLabel(status);
 
@@ -154,8 +154,8 @@ public class MainController implements Controller {
     @FXML
     private void onChangeView() {
         if (trackingDataTab.isSelected()) {
-            visualizationManager.setPane(trackingDataController.scrollPane);
-            visualizationManager.setMeshGroup(trackingDataController.meshGroup);
+            visualizationManager.setPane(trackingController.scrollPane);
+            visualizationManager.setMeshGroup(trackingController.meshGroup);
 //            visualizationManager.setViewportSize(800);
             visualizationManager.showFigure();
         }

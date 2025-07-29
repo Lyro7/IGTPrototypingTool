@@ -76,7 +76,7 @@ public class VisualizationController implements Controller {
     CheckBox needleProjectionCB;
     @FXML
     Label selectedMatrixFile;
-    TrackingDataController trackingDataController;
+    TrackingController trackingController;
     VisualizationManager visualizationManager;
     TrackingService trackingService = TrackingService.getInstance();
 
@@ -107,8 +107,8 @@ public class VisualizationController implements Controller {
         this.statusLabel.setText("");
     }
 
-    public void injectTrackingDataController(TrackingDataController trackingDataController) {
-        this.trackingDataController = trackingDataController;
+    public void injectTrackingDataController(TrackingController trackingController) {
+        this.trackingController = trackingController;
     }
 
     public void injectVisualizationManager(VisualizationManager visualizationManager) {
@@ -291,7 +291,7 @@ public class VisualizationController implements Controller {
 
     @FXML
     private void startTracking() {
-        trackingDataController.visualizeTracking();
+        trackingController.visualizeTracking();
     }
 
     /**
@@ -489,7 +489,7 @@ public class VisualizationController implements Controller {
      */
     @FXML
     private void pauseVisualization() {
-        trackingDataController.freezeVisualization();
+        trackingController.freezeVisualization();
     }
 
     /**
