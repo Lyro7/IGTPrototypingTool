@@ -99,35 +99,6 @@ public class AlgorithmTest {
         assertEquals(result, new Quaternion((float) 0, (float) 0, (float) 0, (float) -1));
     }
 
-    @Test
-    /**
-     * {@link TrackingDataProcessor} {@link TrackingDataProcessor#getBoxPlot(double)}
-     */
-    public void getBoxPlotIsCorrect() {
-
-        processor = new TrackingDataProcessor();
-
-        List<Double> values = new ArrayList<>();
-        values.add(1.0);
-        values.add(2.0);
-        values.add(3.0);
-        values.add(4.0);
-        values.add(5.0);
-
-        BoxPlot result = processor.getBoxPlot(values);
-
-        // no deviation expected
-        assertEquals(1, result.getMin());
-        assertEquals(1.5, result.getQ1());
-        assertEquals(3, result.getMedian());
-        assertEquals(4.5, result.getQ3());
-        assertEquals(5, result.getMax());
-
-        System.out.println(
-                "BoxPlot Werte: \n Min: " + result.getMin() + "\n" + " 1.Q : " + result.getQ1() + "\n" + " Median: "
-                        + result.getMedian() + "\n" + " 3.Q: " + result.getQ3() + "\n" + " Max: " + result.getMax());
-
-    }
 
     @Test
     /**

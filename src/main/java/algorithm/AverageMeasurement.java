@@ -11,7 +11,6 @@ public class AverageMeasurement extends Measurement {
     private Quaternion rotationJitter;
     private Quaternion rotationError;
     private List<Double> errors = new ArrayList<>();
-    private BoxPlot boxPlot;
 
     public AverageMeasurement() {
         super();
@@ -25,13 +24,6 @@ public class AverageMeasurement extends Measurement {
         this.rotationJitter = rotationJitter;
     }
 
-    public BoxPlot getBoxPlot() {
-        return this.boxPlot;
-    }
-
-    public void setBoxPlot(BoxPlot boxPlot) {
-        this.boxPlot = boxPlot;
-    }
 
     public List<Double> getErrors() {
         return this.errors;

@@ -53,38 +53,7 @@ public class TrackingDataProcessor {
                 .subtract(expectedRotation);
     }
 
-    /**
-     * This method calculates the values for a boxplot. The values are sorted by
-     * using the sort method of the Collections class. After that, an array is
-     * created from the ArrayList using the method toDoubleArray, because the
-     * Percentile class can only count on arrays. The values are calculated using
-     * the available methods in these two classes.
-     *
-     * @param values - a list with values
-     * @return boxPlot - of type boxPlot with results
-     */
-    public static BoxPlot getBoxPlot(List<Double> values) {
 
-        BoxPlot boxPlot = new BoxPlot();
-
-        /*
-         * The values are sorted by using the method sort of the class Collections.
-         */
-        Collections.sort(values);
-
-        /* Create an array. */
-        Percentile percentile = new Percentile();
-        percentile.setData(toDoubleArray(values));
-
-        /* Calculation of the values. */
-        boxPlot.setMax(Collections.max(values));
-        boxPlot.setMin(Collections.min(values));
-        boxPlot.setQ1(percentile.evaluate(25));
-        boxPlot.setMedian(percentile.evaluate(50));
-        boxPlot.setQ3(percentile.evaluate(75));
-
-        return boxPlot;
-    }
 
     /* toDoubleArray converts a list into an array */
     private static double[] toDoubleArray(List<Double> list) {
