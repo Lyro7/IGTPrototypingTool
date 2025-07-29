@@ -63,18 +63,6 @@ public class DataService {
     }
 
     /**
-     * This method checks if the tool exists and returns the average
-     * measurement of all collected data of that tool
-     *
-     * @return average measurement of that tool
-     * @throws Exception an exception if the tool was not found
-     */
-    public AverageMeasurement getAverageMeasurement(String name)
-            throws Exception {
-        return getToolByName(name).getAverageMeasurement();
-    }
-
-    /**
      * The method loadNextData gets a number of how much data should be
      * reloaded. In a loop the tools of DataMangager are brought. A list of
      * measurements is created. AverageMeasurment is called and calculated.

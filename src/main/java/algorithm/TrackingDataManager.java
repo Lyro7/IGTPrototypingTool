@@ -55,8 +55,8 @@ public class TrackingDataManager {
             }
 
             for (TempTool tempTool : tempTools) {
-                Measurement measurement = new Measurement(tempTool);
-                addMeasurementToTool(measurement);
+                TrackingData trackingData = new TrackingData(tempTool);
+                addMeasurementToTool(trackingData);
             }
 
         }
@@ -81,24 +81,24 @@ public class TrackingDataManager {
      * the method adds the new measurements to this tool. If there is no
      * tool with this name,then a new tool is created
      *
-     * @param measurement - variable of type Measurement
+     * @param trackingData - variable of type Measurement
      */
 
-    private void addMeasurementToTool(Measurement measurement) {
+    private void addMeasurementToTool(TrackingData trackingData) {
 
         /* Check if tool exists */
         for (Tool tool : tools) {
-            if (tool.getName().equals(measurement.getToolname())) {
+            if (tool.getName().equals(trackingData.getToolname())) {
 
                 /* added new measurements to the tool */
-                tool.addMeasurement(measurement);
+                tool.addMeasurement(trackingData);
                 return;
             }
         }
 
         /* creation of a new tool */
-        Tool newTool = new Tool(measurement.getToolname());
-        newTool.addMeasurement(measurement);
+        Tool newTool = new Tool(trackingData.getToolname());
+        newTool.addMeasurement(trackingData);
         tools.add(newTool);
     }
 }

@@ -5,7 +5,7 @@ import inputOutput.TempTool;
 import util.Quaternion;
 import util.Vector3D;
 
-public class Measurement {
+public class TrackingData {
     private Vector3D pos;
     @Expose
     private double error;
@@ -19,7 +19,7 @@ public class Measurement {
     @Expose
     private double rot_x, rot_y, rot_z, rot_r;
 
-    public Measurement(TempTool tempTool) {
+    public TrackingData(TempTool tempTool) {
         x = tempTool.getCoordinate().getX();
         y = tempTool.getCoordinate().getY();
         z = tempTool.getCoordinate().getZ();
@@ -35,7 +35,7 @@ public class Measurement {
         this.setToolname(tempTool.getName());
     }
 
-    public Measurement() {
+    public TrackingData() {
 
     }
 

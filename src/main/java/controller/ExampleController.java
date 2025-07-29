@@ -1,7 +1,6 @@
 package controller;
 import algorithm.ImageDataManager;
-import algorithm.ImageDataProcessor;
-import algorithm.Measurement;
+import algorithm.TrackingData;
 import algorithm.TrackingService;
 import inputOutput.VideoSource;
 import javafx.fxml.FXML;
@@ -42,7 +41,7 @@ public class ExampleController implements Controller {
         TrackingService t = TrackingService.getInstance();
         if (t.getTrackingDataSource()!=null) {
             t.getTrackingDataSource().update();
-            List<Measurement> li = t.getDataService().loadNextData(1).get(0).getMeasurement();
+            List<TrackingData> li = t.getDataService().loadNextData(1).get(0).getMeasurement();
             s = "Tracking Coordinates: " + li.get(li.size() - 1).getPos();
         }
         else{

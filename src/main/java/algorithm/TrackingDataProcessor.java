@@ -1,10 +1,8 @@
 package algorithm;
 
 import javafx.geometry.Point3D;
-import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 import util.Quaternion;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,14 +20,14 @@ public class TrackingDataProcessor {
      * @return accurate - the distance
      */
     public static double getAccuracy(double expectedDistance,
-            AverageMeasurement firstAverageMeasurement,
-            AverageMeasurement secondAverageMeasurement) {
+            TrackingData firstTrackingData,
+            TrackingData secondTrackingData) {
 
         /*
          * calculates the distance between the points of
          * firstAverageMeasurement and secondAverageMeasurement
          */
-        return firstAverageMeasurement.getPos().distTo(secondAverageMeasurement.getPos()) - expectedDistance;
+        return firstTrackingData.getPos().distTo(secondTrackingData.getPos()) - expectedDistance;
     }
 
     /**
@@ -40,16 +38,16 @@ public class TrackingDataProcessor {
      * Then the expected quaternion is subtracted.
      *
      * @param expectedRotation  - of type quaternion
-     * @param firstMeasurement  - of type Measurement
-     * @param secondMeasurement - of type Measurement
+     * @param firstTrackingData  - of type Measurement
+     * @param secondTrackingData - of type Measurement
      * @return result - of type quaternion
      */
 
     public static Quaternion getAccuracyRotation(Quaternion expectedRotation,
-                                                 Measurement firstMeasurement,
-                                                 Measurement secondMeasurement) {
-        return secondMeasurement.getRotation()
-                .subtract(firstMeasurement.getRotation())
+                                                 TrackingData firstTrackingData,
+                                                 TrackingData secondTrackingData) {
+        return secondTrackingData.getRotation()
+                .subtract(firstTrackingData.getRotation())
                 .subtract(expectedRotation);
     }
 

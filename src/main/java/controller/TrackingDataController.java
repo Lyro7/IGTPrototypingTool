@@ -244,7 +244,7 @@ public class TrackingDataController implements Controller {
             TrackingDataDisplay display = checkToolDisplayList(tool.getName());
             display.clearData();
 
-            List<Measurement> li = tool.getMeasurement();
+            List<TrackingData> li = tool.getMeasurement();
             //use the last 5 measurements, otherwise blending will be a problem during motion
             for (int i = 1; i < 5; i++) {
                 if (li.size() - i < 0) {

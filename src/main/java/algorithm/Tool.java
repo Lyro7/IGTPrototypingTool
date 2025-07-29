@@ -31,7 +31,7 @@ public class Tool {
     @Expose
     private String name;
     @Expose
-    private List<Measurement> measurements;
+    private List<TrackingData> trackingData;
     private NeedleProjection projection;
     private TrackingCone cone;
     private Vector3D pos;
@@ -55,7 +55,7 @@ public class Tool {
      * Method to initialize the attributes of the tool
      */
     public void init() {
-        this.measurements = new ArrayList<>();
+        this.trackingData = new ArrayList<>();
         this.cone = new TrackingCone(36, 4, 10);
         this.projection = new NeedleProjection();
         this.projection.setVisible(true);
@@ -109,12 +109,12 @@ public class Tool {
      * Method to update the current position of the tool and perform all necessary transformations on it
      */
     public void show() {
-        Quaternion rotationMovement = measurements.get(measurements.size() - 1).getRotation();
+        Quaternion rotationMovement = trackingData.get(trackingData.size() - 1).getRotation();
         Matrix3D rotMat = rotationMovement.toRotationMatrix();
 
-        double x = measurements.get(measurements.size() - 1).getPos().getX();
-        double y = measurements.get(measurements.size() - 1).getPos().getY();
-        double z = measurements.get(measurements.size() - 1).getPos().getZ();
+        double x = trackingData.get(trackingData.size() - 1).getPos().getX();
+        double y = trackingData.get(trackingData.size() - 1).getPos().getY();
+        double z = trackingData.get(trackingData.size() - 1).getPos().getZ();
 
         setPos(new Vector3D(x,y,z));
         rotate(rotMat);
@@ -292,16 +292,16 @@ public class Tool {
      * Returns a list of measurements
      * @return List containing all the measurements of the tools
      */
-    public List<Measurement> getMeasurement() {
-        return measurements;
+    public List<TrackingData> getMeasurement() {
+        return trackingData;
     }
 
     /**
      * Adds a measurement to the list
-     * @param measurement measurement to be added
+     * @param trackingData measurement to be added
      */
-    public void addMeasurement(Measurement measurement) {
-        measurements.add(measurement);
+    public void addMeasurement(TrackingData trackingData) {
+        this.trackingData.add(trackingData);
     }
 
     /**
@@ -315,48 +315,12 @@ public class Tool {
     public List<Double> getErrors(Vector3D avgPoint) {
         List<Double> errors = new ArrayList<>();
 
-        for (Measurement measurement : measurements) {
-            Vector3D point = measurement.getPos();
+        for (TrackingData trackingData : this.trackingData) {
+            Vector3D point = trackingData.getPos();
             double distance = point.distTo(avgPoint);
             errors.add(distance);
         }
         return errors;
-    }
-
-    /**
-     * This method computes the mean of the passed values.
-     * getAverageMeasurement gets a list of measurements. Size of the list is
-     * determined. A null point is created. A loop goes over the number of
-     * measurements. In place i the point will be fetched and added to
-     * addPoint. For x, y and z an average point is calculated. Though all
-     * points from addPoint are pitched by the size of the list. An average
-     * measurement and an average point is created.
-     *
-     * @return averageMeasurement - a average measurement
-     */
-    public AverageMeasurement getAverageMeasurement() {
-
-        int measureSize = measurements.size();
-        Vector3D addPoint = new Vector3D();
-
-        for (int i = 0; i < measureSize; i++) {
-            Measurement measurement = measurements.get(i);
-            Vector3D point = measurement.getPos();
-            addPoint.addLocal(point);
-        }
-
-        double averageX = addPoint.getX() / measureSize;
-        double averageY = addPoint.getY() / measureSize;
-        double averageZ = addPoint.getZ() / measureSize;
-
-        AverageMeasurement averageMeasurement = new AverageMeasurement();
-        Vector3D averagePoint = new Vector3D(averageX, averageY, averageZ);
-
-        averageMeasurement.setPos(averagePoint);
-        averageMeasurement.setRotation(getAverageRotation());
-        averageMeasurement.setRotationJitter(this.getRotationJitter());
-        averageMeasurement.setErrors(this.getErrors(averagePoint));
-        return averageMeasurement;
     }
 
     /**
@@ -372,11 +336,11 @@ public class Tool {
      */
     public Quaternion getAverageRotation() {
 
-        Quaternion firstRotation = measurements.get(0).getRotation();
-        Quaternion lastRotation = measurements.get(measurements.size() - 1)
+        Quaternion firstRotation = trackingData.get(0).getRotation();
+        Quaternion lastRotation = trackingData.get(trackingData.size() - 1)
                 .getRotation();
 
-        float positionAtTime = 1f / measurements.size();
+        float positionAtTime = 1f / trackingData.size();
 
         return firstRotation.slerp(firstRotation, lastRotation, positionAtTime);
     }
@@ -404,12 +368,12 @@ public class Tool {
         List<Double> rotationErrorZ = new ArrayList<>();
         List<Double> rotationErrorW = new ArrayList<>();
 
-        for (int i = 0; i < measurements.size(); i++) {
+        for (int i = 0; i < trackingData.size(); i++) {
 
-            Quaternion rotationMovement = measurements.get(i).getRotation();
+            Quaternion rotationMovement = trackingData.get(i).getRotation();
 
             if (i > 0) {
-                rotationMovement = rotationMovement.subtract(measurements.get(i - 1)
+                rotationMovement = rotationMovement.subtract(trackingData.get(i - 1)
                         .getRotation());
             }
 
