@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import algorithm.*;
-import inputOutput.AIDataSource;
 import inputOutput.CSVFileReader;
 import inputOutput.OIGTTrackingDataSource;
 import javafx.animation.Animation;

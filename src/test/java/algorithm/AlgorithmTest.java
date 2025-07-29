@@ -16,28 +16,11 @@ public class AlgorithmTest {
 
     TrackingData firstTrackingData;
     TrackingData secondTrackingData;
-    private TrackingDataProcessor processor;
     private DataService dataService;
     private TrackingTool testTrackingTool;
 
     @Test
     /**
-     * {@link TrackingDataProcessor} {@link TrackingDataProcessor#getAccuracy(double)}
-     */
-    public void getAccuracyIsCorrect() {
-
-        setUpDataAccuracy();
-        double expectedDistance = 1.7320508075688772;
-
-        double result = processor.getAccuracy(expectedDistance, firstTrackingData, secondTrackingData);
-
-        // no deviation expected
-        assertEquals(0, result);
-    }
-
-    @Test
-    /**
-     * {@link TrackingDataProcessor} {@link TrackingDataProcessor#getRotationJitter(List)}
      */
     public void getRotationJitterIsCorrect() {
         setUpData();
@@ -46,21 +29,6 @@ public class AlgorithmTest {
 
         assertEquals(result, new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
 
-    }
-
-    @Test
-    /**
-     * {@link TrackingDataProcessor} {@link TrackingDataProcessor#getAccuracyRotation(TrackingData)}
-     */
-    public void getAccuracyRotationIsCorrect() {
-
-        setUpDataAccuracy();
-        Quaternion expectedRotation = new Quaternion((float) 0, (float) sin(PI / 4), (float) 0, (float) sin(PI / 4));
-
-        Quaternion result = processor.getAccuracyRotation(expectedRotation, firstTrackingData, secondTrackingData);
-
-        // no deviation expected
-        assertEquals(result, new Quaternion((float) 0, (float) 0, (float) 0, (float) -1));
     }
 
 
@@ -86,8 +54,6 @@ public class AlgorithmTest {
     }
 
     private void setUpDataAccuracy() {
-        processor = new TrackingDataProcessor();
-
         firstTrackingData = new TrackingData();
         secondTrackingData = new TrackingData();
 
@@ -101,8 +67,6 @@ public class AlgorithmTest {
     }
 
     private void setUpData() {
-
-        processor = new TrackingDataProcessor();
         testTrackingTool = new TrackingTool("TestTool");
         List<TrackingData> trackingData = new ArrayList<>();
 

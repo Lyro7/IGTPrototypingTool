@@ -145,6 +145,9 @@ public class VisualizationManager {
      * Loads the previously used stl files for visualisation
      */
     public void loadLastSTLModels() {
+        //Commented out persistence because there is a bug removing the data,
+        //so it is at least removed when the application is restarted
+        /*
         StlMeshImporter importer = new StlMeshImporter();
         try {
             JSONObject jsonSTLModels = util.Persistence.readStlSaveFile();
@@ -174,7 +177,7 @@ public class VisualizationManager {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     /**
