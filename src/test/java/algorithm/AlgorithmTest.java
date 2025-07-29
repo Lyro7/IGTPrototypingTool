@@ -18,8 +18,8 @@ public class AlgorithmTest {
     TrackingData secondTrackingData;
     private TrackingDataProcessor processor;
     private DataService dataService;
-    private Tool testTool;
-    
+    private TrackingTool testTrackingTool;
+
     @Test
     /**
      * {@link TrackingDataProcessor} {@link TrackingDataProcessor#getAccuracy(double)}
@@ -42,7 +42,7 @@ public class AlgorithmTest {
     public void getRotationJitterIsCorrect() {
         setUpData();
 
-        Quaternion result = testTool.getAverageRotation();
+        Quaternion result = testTrackingTool.getAverageRotation();
 
         assertEquals(result, new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
 
@@ -73,7 +73,7 @@ public class AlgorithmTest {
         dataService = new DataService();
         setUpData();
 
-        Tool result = null;
+        TrackingTool result = null;
 
         try {
             result = dataService.getToolByName("TestTool");
@@ -103,7 +103,7 @@ public class AlgorithmTest {
     private void setUpData() {
 
         processor = new TrackingDataProcessor();
-        testTool = new Tool("TestTool");
+        testTrackingTool = new TrackingTool("TestTool");
         List<TrackingData> trackingData = new ArrayList<>();
 
         TrackingData trackingData1 = new TrackingData();
@@ -126,9 +126,9 @@ public class AlgorithmTest {
         trackingData.add(trackingData2);
         trackingData.add(trackingData3);
 
-        testTool.addMeasurement(trackingData1);
-        testTool.addMeasurement(trackingData2);
-        testTool.addMeasurement(trackingData3);
+        testTrackingTool.addMeasurement(trackingData1);
+        testTrackingTool.addMeasurement(trackingData2);
+        testTrackingTool.addMeasurement(trackingData3);
 
     }
 

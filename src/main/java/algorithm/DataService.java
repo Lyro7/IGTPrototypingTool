@@ -52,10 +52,10 @@ public class DataService {
      * @exception Exception if tool is not found
      */
 
-    public Tool getToolByName(String name) throws Exception {
-        for(Tool tool : dataManager.getToolMeasures()) {
-            if(tool.getName().equals(name)) {
-                return tool;
+    public TrackingTool getToolByName(String name) throws Exception {
+        for(TrackingTool trackingTool : dataManager.getToolMeasures()) {
+            if(trackingTool.getName().equals(name)) {
+                return trackingTool;
             }
         }
         /* If the tool doesn't exists, the exception is thrown */
@@ -72,14 +72,14 @@ public class DataService {
      * @param countToGetNext - number of the reloaded data
      * @return dataManager.getToolMeasures() - list of tools of type ToolMesure
      */
-    public List<Tool> loadNextData(int countToGetNext) {
+    public List<TrackingTool> loadNextData(int countToGetNext) {
 
         /* calls method getNextData */
         dataManager.getNextData(countToGetNext);
         return dataManager.getToolMeasures();
     }
 
-    public List<Tool> loadNextData(int countToGetNext, boolean updateSource) {
+    public List<TrackingTool> loadNextData(int countToGetNext, boolean updateSource) {
 
         if(updateSource) dataManager.getSource().update();
         /* calls method getNextData */

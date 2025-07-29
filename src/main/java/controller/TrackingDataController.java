@@ -235,16 +235,16 @@ public class TrackingDataController implements Controller {
         // loads the next set of tracking data
         trackingService.getTrackingDataSource().update();
         // this returns tracking data from all tools at one point in time
-        List<Tool> tools = trackingService.getDataService().loadNextData(1);
+        List<TrackingTool> trackingTools = trackingService.getDataService().loadNextData(1);
 
-        if (tools.isEmpty()) return;
+        if (trackingTools.isEmpty()) return;
 
-        for (Tool tool : tools) {
+        for (TrackingTool trackingTool : trackingTools) {
 
-            TrackingDataDisplay display = checkToolDisplayList(tool.getName());
+            TrackingDataDisplay display = checkToolDisplayList(trackingTool.getName());
             display.clearData();
 
-            List<TrackingData> li = tool.getMeasurement();
+            List<TrackingData> li = trackingTool.getMeasurement();
             //use the last 5 measurements, otherwise blending will be a problem during motion
             for (int i = 1; i < 5; i++) {
                 if (li.size() - i < 0) {
@@ -262,11 +262,11 @@ public class TrackingDataController implements Controller {
                     double qZ = li.get(li.size() - i).getRotation().getZ();
                     double qR = li.get(li.size() - i).getRotation().getW();
 
-                    position.get(tool.getName()).setText(tool.getName() + ": ["
+                    position.get(trackingTool.getName()).setText(trackingTool.getName() + ": ["
                             + df.format(x) + ";"
                             + df.format(y) + ";"
                             + df.format(z) + "]");
-                    rotation.get(tool.getName()).setText(tool.getName() + ": ["
+                    rotation.get(trackingTool.getName()).setText(trackingTool.getName() + ": ["
                             + df.format(qX) + ";"
                             + df.format(qY) + ";"
                             + df.format(qZ) + ";"

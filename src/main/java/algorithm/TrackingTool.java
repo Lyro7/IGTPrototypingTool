@@ -27,7 +27,7 @@ import java.util.prefs.Preferences;
  * The class Tool represents the name of a tool,
  * its respective measurements and the visualisation.
  */
-public class Tool {
+public class TrackingTool {
     @Expose
     private String name;
     @Expose
@@ -42,12 +42,12 @@ public class Tool {
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public Tool(String name) {
+    public TrackingTool(String name) {
         this.name = name;
         init();
     }
 
-    public Tool() {
+    public TrackingTool() {
         init();
     }
 

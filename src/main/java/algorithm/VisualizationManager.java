@@ -300,14 +300,14 @@ public class VisualizationManager {
 
         // loads the next set of tracking data
         trackingService.getTrackingDataSource().update();
-        List<Tool> tools = trackingService.getDataService().loadNextData(1);
+        List<TrackingTool> trackingTools = trackingService.getDataService().loadNextData(1);
 
-        for (Tool tool : tools) {
+        for (TrackingTool trackingTool : trackingTools) {
             if (flagReloadMatrix) {
-                tool.loadTransformationMatrix();
+                trackingTool.loadTransformationMatrix();
             }
-            tool.show();
-            tool.checkBounds(stlModels);
+            trackingTool.show();
+            trackingTool.checkBounds(stlModels);
         }
         flagReloadMatrix = false;
     }
@@ -366,11 +366,11 @@ public class VisualizationManager {
         }
 
         if (trackingService.getDataService() != null) {
-            List<Tool> tools = trackingService.getDataService().loadNextData(1);
-            for (Tool tool : tools) {
-                tool.addVisualizationToRoot(root);
+            List<TrackingTool> trackingTools = trackingService.getDataService().loadNextData(1);
+            for (TrackingTool trackingTool : trackingTools) {
+                trackingTool.addVisualizationToRoot(root);
                 if (targets != null) {
-                    tool.setTargets(targets);
+                    trackingTool.setTargets(targets);
                 }
             }
         }

@@ -14,12 +14,12 @@ import java.util.logging.Logger;
  */
 public class TrackingDataManager {
 
-    List<Tool> tools = new ArrayList<>();
+    List<TrackingTool> trackingTools = new ArrayList<>();
     private AbstractTrackingDataSource source;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public List<Tool> getToolMeasures() {
-        return tools;
+    public List<TrackingTool> getToolMeasures() {
+        return trackingTools;
     }
 
     /**
@@ -27,7 +27,7 @@ public class TrackingDataManager {
      * the internal list of tools.
      */
     public void restartMeasurements() {
-        tools = new ArrayList<>();
+        trackingTools = new ArrayList<>();
     }
 
     /**
@@ -38,11 +38,11 @@ public class TrackingDataManager {
      * @param countToGetNext ,
      * @return toolMeasures
      */
-    public List<Tool> getNextData(int countToGetNext) {
+    public List<TrackingTool> getNextData(int countToGetNext) {
 
         if (source == null) {
             logger.log(Level.WARNING,"Tracking data source is not set. Aborting!");
-            return tools;
+            return trackingTools;
         }
 
         for (double i = 1; i <= countToGetNext; i++) {
@@ -61,7 +61,7 @@ public class TrackingDataManager {
 
         }
 
-        return tools;
+        return trackingTools;
     }
 
     public AbstractTrackingDataSource getSource() {
@@ -87,18 +87,18 @@ public class TrackingDataManager {
     private void addMeasurementToTool(TrackingData trackingData) {
 
         /* Check if tool exists */
-        for (Tool tool : tools) {
-            if (tool.getName().equals(trackingData.getToolname())) {
+        for (TrackingTool trackingTool : trackingTools) {
+            if (trackingTool.getName().equals(trackingData.getToolname())) {
 
                 /* added new measurements to the tool */
-                tool.addMeasurement(trackingData);
+                trackingTool.addMeasurement(trackingData);
                 return;
             }
         }
 
         /* creation of a new tool */
-        Tool newTool = new Tool(trackingData.getToolname());
-        newTool.addMeasurement(trackingData);
-        tools.add(newTool);
+        TrackingTool newTrackingTool = new TrackingTool(trackingData.getToolname());
+        newTrackingTool.addMeasurement(trackingData);
+        trackingTools.add(newTrackingTool);
     }
 }
