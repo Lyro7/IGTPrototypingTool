@@ -25,11 +25,6 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Window">
                 <Menu mnemonicParsing="false" text="Show View">
-                    <MenuItem mnemonicParsing="false" onAction="#openMeasurementView" text="Measurement"/>
-                    <MenuItem mnemonicParsing="false" onAction="#openThrombectomyView" text="Thrombectomy"/>
-                    <MenuItem mnemonicParsing="false" onAction="#openAutoTrackView" text="AutoTrack"/>
-                    <MenuItem mnemonicParsing="false" onAction="#openExampleView" text="Example" />
-                    <MenuItem mnemonicParsing="false" onAction="#openAIView" text="AI View"/>
                 </Menu>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
@@ -50,10 +45,6 @@
             </Tab>
             <Tab closable="false" fx:id="visualizationTab" text="Visualization" onSelectionChanged="#onChangeView">
                 <fx:include fx:id="visualization" source="VisualizationView.fxml"/>
-            </Tab>
-
-            <Tab closable="false" fx:id="annotationTab" text="Annotation" onSelectionChanged="#onChangeView">
-                <fx:include fx:id="annotation" source="AnnotationView.fxml"/>
             </Tab>
 
         </TabPane>

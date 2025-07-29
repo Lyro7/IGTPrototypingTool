@@ -41,12 +41,6 @@ public class MainController implements Controller {
     @FXML
     Label status;
     private FXMLLoader loader;
-    private MeasurementController measurementController;
-    private ThrombectomyController thrombectomyController;
-    private AutoTrackController autoTrackController;
-
-    private controller.AiControllerOnnx AiController;
-	private ExampleController exampleController;
     private SettingsController settingsController;
     private final VisualizationManager visualizationManager = new VisualizationManager();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -133,108 +127,6 @@ public class MainController implements Controller {
         visualizationManager.injectStatusLabel(status);
 
         videoController.setMainController(this);
-    }
-
-    @FXML
-    private void openMeasurementView() {
-        try {
-            setupFXMLLoader("MeasurementView");
-            Tab t = new Tab("Measurement View", this.loader.load());
-            // set up connections between measurement and other parts of application
-            this.measurementController = this.loader.getController();
-            this.measurementController.injectStatusLabel(this.status);
-
-            this.tabPane.getTabs().add(t);
-            this.tabPane.getSelectionModel().select(t);
-            t.setOnCloseRequest(e -> this.measurementController.close());
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Error loading Measurement View", e);
-        }
-    }
-
-    @FXML
-    private void openThrombectomyView() {
-        if (this.thrombectomyController != null) return;
-
-        try {
-            setupFXMLLoader("ThrombectomyView");
-            Tab t = new Tab("Thrombectomy View", this.loader.load());
-
-            this.thrombectomyController = this.loader.getController();
-            this.thrombectomyController.injectStatusLabel(this.status);
-
-            this.tabPane.getTabs().add(t);
-            this.tabPane.getSelectionModel().select(t);
-            t.setOnCloseRequest(e -> this.thrombectomyController.close());
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Error loading Thrombectomy View", e);
-        }
-    }
-
-    @FXML
-    private void openAutoTrackView(){
-        if (this.autoTrackController != null) return;
-
-        try {
-            setupFXMLLoader("AutoTrackView");
-            Tab t = new Tab("Autotrack", this.loader.load());
-
-            this.autoTrackController = this.loader.getController();
-            this.autoTrackController.setStatusLabel(this.status);
-
-            this.tabPane.getTabs().add(t);
-            this.tabPane.getSelectionModel().select(t);
-            t.setOnCloseRequest(e -> {
-                this.autoTrackController.close();
-                this.autoTrackController = null;
-            });
-        } catch(IOException e) {
-            logger.log(Level.SEVERE, "Error loading AutoTrack View", e);
-        }
-    }
-	
-	@FXML
-    private void openExampleView(){
-        if (this.exampleController != null) return;
-
-        try {
-            setupFXMLLoader("ExampleView");
-            Tab t = new Tab("Example", this.loader.load());
-
-            this.exampleController = this.loader.getController();
-
-            this.tabPane.getTabs().add(t);
-            this.tabPane.getSelectionModel().select(t);
-            t.setOnCloseRequest(e -> {
-                this.exampleController.close();
-                this.exampleController = null;
-            });
-        } catch(IOException e) {
-            logger.log(Level.SEVERE, "Error loading Example View", e);
-        }
-    }
-
-    @FXML
-    private void openAIView(){
-        if (this.AiController != null) return;
-
-        try {
-            setupFXMLLoader("AiView");
-            Tab t = new Tab("AiView", this.loader.load());
-
-            this.AiController = this.loader.getController();
-            this.AiController.setStatusLabel(this.status);
-
-            this.tabPane.getTabs().add(t);
-            this.tabPane.getSelectionModel().select(t);
-            videoController.setAiController(this.AiController);
-            t.setOnCloseRequest(e -> {
-                this.AiController.close();
-                this.AiController = null;
-            });
-        } catch(IOException e) {
-            logger.log(Level.SEVERE, "Error loading AutoTrack View", e);
-        }
     }
 
     @FXML

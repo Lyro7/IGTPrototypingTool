@@ -45,14 +45,10 @@ public class VideoController implements Controller {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private Label statusLabel;
 
-    private AiControllerOnnx aiController;
+
     private int sourceTracker;
 
-    public void setAiController(AiControllerOnnx aiController) {
-        this.aiController = aiController;
-    }
-
-    private MainController mainController;
+   private MainController mainController;
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
@@ -189,10 +185,6 @@ public class VideoController implements Controller {
         iv.setFitHeight(Double.parseDouble(ivHeight.getText()));
         iv.setFitWidth(Double.parseDouble(ivWidth.getText()));
 
-        // Notify AiControllerOnnx of the new resolution
-        if (aiController != null) {
-            aiController.updateResolution(Double.parseDouble(ivHeight.getText()), Double.parseDouble(ivWidth.getText()));
-        }
     }
 
     public void update() {
@@ -205,10 +197,6 @@ public class VideoController implements Controller {
         Image frame = matToImage(matrixCopy);
         iv.setImage(frame);
 
-        // Send the original matrix for AI processing
-        if (aiController != null) {
-            aiController.processFrame(matrix);
-        }
     }
 
     private Image matToImage(Mat frame) {
