@@ -59,46 +59,47 @@
                         <content>
                            <VBox>
                               <children>
-                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                    <children>
-                                           <VBox fx:id="trackerVBox" alignment="TOP_CENTER" disable="true" prefHeight="748.0" prefWidth="143.0">
-                                               <TextField fx:id="trackerTextField" prefHeight="37.0" prefWidth="143.0" />
-                                               <VBox fillWidth="false" prefHeight="42.0" prefWidth="748.0" spacing="10.0">
-                                                   <Label alignment="CENTER" prefHeight="17.0" prefWidth="146.0" text="Tracker Size:" textAlignment="CENTER" />
-                                                   <Slider fx:id="trackerSlider" blockIncrement="1.0" majorTickUnit="1.0" max="20.0" min="1.0" minorTickCount="0" onMouseDragged="#setTrackerSize" value="10.0" />
-                                               </VBox>
-                                               <VBox alignment="CENTER" prefHeight="63.0" prefWidth="143.0" spacing="10.0">
-                                                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="143.0" text="Tracker Color:" wrapText="true" />
-                                                   <ColorPicker fx:id="trackerColorPicker" onAction="#setTrackerColor" prefHeight="25.0" prefWidth="80.0">
-                                                       <value>
-                                                           <Color red="0.9490196108818054" green="0.9490196108818054" blue="0.9490196108818054" />
-                                                       </value>
-                                                   </ColorPicker>
-                                               </VBox>
-                                               <HBox alignment="CENTER" prefHeight="22.0" prefWidth="143.0">
-                                                   <CheckBox fx:id="trackingVisibleCB" mnemonicParsing="false" onAction="#setTrackerVisibility" selected="true" text="Show Tracker" />
-                                               </HBox>
-                                               <HBox alignment="CENTER" prefHeight="22.0" prefWidth="143.0">
-                                                   <CheckBox fx:id="needleProjectionCB" mnemonicParsing="false" onAction="#setProjectionVisibility" text="Needle Projection" />
-                                               </HBox>
-                                           </VBox>
-                                           <VBox fx:id="stlVBox" disable="true" prefHeight="748.0" prefWidth="143.0" visible="false">
-                                               <TextField fx:id="stlLabel" prefHeight="37.0" prefWidth="143.0" />
-                                               <VBox alignment="CENTER" prefHeight="63.0" prefWidth="143.0" spacing="10.0">
-                                                   <Label alignment="CENTER" prefHeight="17.0" prefWidth="143.0" text="STL Color:" />
-                                                   <ColorPicker fx:id="stlColorPicker" onAction="#setSTLColor" prefHeight="25.0" prefWidth="80.0">
-                                                       <value>
-                                                           <Color red="0.9490196108818054" green="0.9490196108818054" blue="0.9490196108818054" />
-                                                       </value>
-                                                   </ColorPicker>
-                                               </VBox>
-                                               <HBox alignment="CENTER" prefHeight="22.0" prefWidth="143.0">
-                                                   <CheckBox fx:id="stlVisibleCB" mnemonicParsing="false" onAction="#setSTLVisibility" selected="true" text="Visible" />
-                                               </HBox>
-                                           </VBox>
-                                    </children>
-                                 </AnchorPane>
-                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                     <VBox fx:id="trackerVBox" alignment="TOP_CENTER" disable="true" prefWidth="143.0">
+                                         <TextField fx:id="trackerTextField" prefHeight="37.0" prefWidth="143.0" />
+                                    <HBox>
+                                       <children>
+                                                <Label alignment="CENTER" prefHeight="17.0" prefWidth="146.0" text="Size:" textAlignment="CENTER" />
+                                                <Slider fx:id="trackerSlider" blockIncrement="1.0" majorTickUnit="1.0" max="20.0" min="1.0" minorTickCount="0" onMouseDragged="#setTrackerSize" value="10.0" />
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <children>
+                                                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="143.0" text="Color:" wrapText="true" />
+                                                <ColorPicker fx:id="trackerColorPicker" onAction="#setTrackerColor" prefHeight="25.0" prefWidth="80.0">
+                                                    <value>
+                                                        <Color red="0.9490196108818054" green="0.9490196108818054" blue="0.9490196108818054" />
+                                                    </value>
+                                                </ColorPicker>
+                                       </children>
+                                    </HBox>
+                                         <HBox prefHeight="22.0" prefWidth="143.0">
+                                             <CheckBox fx:id="trackingVisibleCB" mnemonicParsing="false" onAction="#setTrackerVisibility" selected="true" text="Show Tracker" />
+                                         </HBox>
+                                         <HBox prefHeight="22.0" prefWidth="143.0">
+                                             <CheckBox fx:id="needleProjectionCB" mnemonicParsing="false" onAction="#setProjectionVisibility" text="Needle Projection" />
+                                         </HBox>
+                                     </VBox>
+                                     <VBox fx:id="stlVBox" disable="true" prefWidth="143.0" visible="false">
+                                         <TextField fx:id="stlLabel" prefHeight="37.0" prefWidth="143.0" />
+                                    <HBox>
+                                       <children>
+                                                <Label alignment="CENTER" prefHeight="17.0" prefWidth="143.0" text="STL Color:" />
+                                                <ColorPicker fx:id="stlColorPicker" onAction="#setSTLColor" prefHeight="25.0" prefWidth="80.0">
+                                                    <value>
+                                                        <Color red="0.9490196108818054" green="0.9490196108818054" blue="0.9490196108818054" />
+                                                    </value>
+                                                </ColorPicker>
+                                       </children>
+                                    </HBox>
+                                         <HBox alignment="CENTER" prefHeight="22.0" prefWidth="143.0">
+                                             <CheckBox fx:id="stlVisibleCB" mnemonicParsing="false" onAction="#setSTLVisibility" selected="true" text="Visible" />
+                                         </HBox>
+                                     </VBox>
                               </children>
                            </VBox>
                         </content>
