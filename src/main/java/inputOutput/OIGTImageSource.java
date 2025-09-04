@@ -7,6 +7,10 @@ import nu.pattern.OpenCV;
 
 import org.medcare.igtl.messages.ImageMessage;
 
+import static org.opencv.core.CvType.CV_32SC1;
+import static org.opencv.core.CvType.CV_8UC1;
+import static org.opencv.imgcodecs.Imgcodecs.imwrite;
+
 /**
  * provides the basic functionalities for the application like opening and closing the connection, and an image converted to a Mat object from OpenCV.
  * The class OpenIGTLinkConnection is needed here for establishing the connection.
@@ -86,7 +90,23 @@ public class OIGTImageSource extends AbstractImageSource {
      */
     public Mat getNextMat() {
         imgData = igtConnection.getImageDataByte();
-        frameMatrix.put(0, 0, imgData);
+
+        //Added the following code to interpret OpenIGTLink byte unsigned
+        //still need to test if this works for framegrabbers as well
+        int[] unsignedData = new int[imgData.length];
+        for(int i = 0; i < imgData.length; i++) {
+            unsignedData[i] = imgData[i] & 0xFF; // Zu unsigned konvertieren
+        }
+        // Temporäre Mat für 32-bit int Daten erstellen
+        Mat tempMatrix = new Mat(frameMatrix.rows(), frameMatrix.cols(), CV_32SC1);
+        tempMatrix.put(0, 0, unsignedData);
+        //imwrite("C:/temp/testimage2.png",tempMatrix); //Debug output of image
+
+        // Zu 8-bit unsigned konvertieren
+        tempMatrix.convertTo(frameMatrix, CV_8UC1);
+        //End of added code
+
+        //frameMatrix.put(0, 0, imgData); //old code to convert image date
 
         fps = (int) igtConnection.fps;
         return frameMatrix;
