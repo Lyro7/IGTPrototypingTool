@@ -91,22 +91,19 @@ public class OIGTImageSource extends AbstractImageSource {
     public Mat getNextMat() {
         imgData = igtConnection.getImageDataByte();
 
-        //Added the following code to interpret OpenIGTLink byte unsigned
-        //still need to test if this works for framegrabbers as well
+        //(1) Convert to unsigned byte
         int[] unsignedData = new int[imgData.length];
         for(int i = 0; i < imgData.length; i++) {
-            unsignedData[i] = imgData[i] & 0xFF; // Zu unsigned konvertieren
+            unsignedData[i] = imgData[i] & 0xFF; // Convert to unsigned
         }
-        // Temporäre Mat für 32-bit int Daten erstellen
+
+        //(2) Create temporary mat for 32-bit int data
         Mat tempMatrix = new Mat(frameMatrix.rows(), frameMatrix.cols(), CV_32SC1);
         tempMatrix.put(0, 0, unsignedData);
         //imwrite("C:/temp/testimage2.png",tempMatrix); //Debug output of image
 
-        // Zu 8-bit unsigned konvertieren
+        //(3) Convert to 8-bit unsigned
         tempMatrix.convertTo(frameMatrix, CV_8UC1);
-        //End of added code
-
-        //frameMatrix.put(0, 0, imgData); //old code to convert image date
 
         fps = (int) igtConnection.fps;
         return frameMatrix;
