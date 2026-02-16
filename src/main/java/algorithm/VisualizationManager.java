@@ -99,7 +99,7 @@ public class VisualizationManager {
     /**
      * LinkedList of all trackers
      */
-    private LinkedList<Target> targets;
+    private LinkedList<Target> targets = new LinkedList<>();
     private ScrollPane scrollPane;
     private Group meshGroup;
 
