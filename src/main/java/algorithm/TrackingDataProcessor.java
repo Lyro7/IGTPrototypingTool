@@ -5,9 +5,8 @@ import inputOutput.AbstractTrackingDataSource;
 import java.util.List;
 
 /**
- * The class TrackingDataProcessor represents the interface to team 1
- * Access to calculation with trackingdata over DataProcessor.
- * Access to trackingtool data and its source over DataManager.
+ * The class TrackingDataProcessor is used by the class TrackingService for handling tracking
+ * data sources.
  */
 
 public class TrackingDataProcessor {
