@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 /**
- * The class Tool represents the name of a tool,
- * its respective measurements and the visualisation.
+ * The class TrackingTool represents a tool that provides tracking data together with meta data,
+ * such as the name of the tool, its respective measurements and the visualisation.
  */
 public class TrackingTool {
     @Expose
