@@ -5,20 +5,20 @@ import inputOutput.AbstractTrackingDataSource;
 import java.util.List;
 
 /**
- * The class DataService represents the interface to team 1
+ * The class TrackingDataProcessor represents the interface to team 1
  * Access to calculation with trackingdata over DataProcessor.
  * Access to trackingtool data and its source over DataManager.
  */
 
-public class DataService {
-    private TrackingDataManager dataManager;
+public class TrackingDataProcessor {
+    private TrackingDataProcessorHandler dataManager;
 
-    public DataService() {
-        dataManager = new TrackingDataManager();
+    public TrackingDataProcessor() {
+        dataManager = new TrackingDataProcessorHandler();
     }
 
-    public DataService(AbstractTrackingDataSource source) {
-        dataManager = new TrackingDataManager();
+    public TrackingDataProcessor(AbstractTrackingDataSource source) {
+        dataManager = new TrackingDataProcessorHandler();
         dataManager.setSource(source);
     }
 
@@ -34,11 +34,11 @@ public class DataService {
         dataManager.restartMeasurements();
     }
 
-    public TrackingDataManager getDataManager() {
+    public TrackingDataProcessorHandler getDataManager() {
         return dataManager;
     }
 
-    public void setDataManager(TrackingDataManager dataManager) {
+    public void setDataManager(TrackingDataProcessorHandler dataManager) {
         this.dataManager = dataManager;
     }
 

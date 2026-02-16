@@ -183,7 +183,7 @@ public class TrackingController implements Controller {
 
         if (timeline == null && source != null) {
             // this is used to load tracking data from source
-            trackingService.changeDataService(new DataService(source));
+            trackingService.changeDataService(new TrackingDataProcessor(source));
 
             timeline = new Timeline();
             timeline.setCycleCount(Animation.INDEFINITE);

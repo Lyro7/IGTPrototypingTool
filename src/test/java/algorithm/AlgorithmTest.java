@@ -16,7 +16,7 @@ public class AlgorithmTest {
 
     TrackingData firstTrackingData;
     TrackingData secondTrackingData;
-    private DataService dataService;
+    private TrackingDataProcessor trackingDataProcessor;
     private TrackingTool testTrackingTool;
 
     @Test
@@ -34,17 +34,17 @@ public class AlgorithmTest {
 
     @Test
     /**
-     * {@link DataService} {@link DataService#getToolByName(String)}
+     * {@link TrackingDataProcessor} {@link TrackingDataProcessor#getToolByName(String)}
      */
     public void getToolByNameCorrect() {
 
-        dataService = new DataService();
+        trackingDataProcessor = new TrackingDataProcessor();
         setUpData();
 
         TrackingTool result = null;
 
         try {
-            result = dataService.getToolByName("TestTool");
+            result = trackingDataProcessor.getToolByName("TestTool");
 
         } catch (Exception e) {
 

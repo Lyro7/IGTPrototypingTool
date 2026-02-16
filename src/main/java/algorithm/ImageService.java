@@ -11,7 +11,7 @@ import org.opencv.core.Mat;
  * readBufImg(), or readMat() methods. Internally, the ImageDataProcessor class is used, in which the logic for
  * accessing the image data sources is implemented.
  */
-public class ImageDataManager {
+public class ImageService {
 
     ImageDataProcessor dataProcessor = new ImageDataProcessor();
 

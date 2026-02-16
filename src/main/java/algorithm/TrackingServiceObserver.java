@@ -7,7 +7,7 @@ public interface TrackingServiceObserver {
     /**
      * This method is triggered once a reference to one of the attributes of the TrackingService changed
      * @param sourceChanged true, if the TrackingSource changed
-     * @param dataServiceChanged true, if the DataService changed
+     * @param dataServiceChanged true, if the TrackingDataProcessor changed
      * @param timelineChanged true, if the timeline changed.
      */
     void onTrackingSourceChanged(boolean sourceChanged, boolean dataServiceChanged, boolean timelineChanged);

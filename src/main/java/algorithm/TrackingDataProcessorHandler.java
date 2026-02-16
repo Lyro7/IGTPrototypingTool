@@ -9,10 +9,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The class TrackingDataManager represents the interface between the GUI and
+ * The class TrackingDataProcessorHandler represents the interface between the GUI and
  * data from InputOutput. It manages all collected tracking data.
  */
-public class TrackingDataManager {
+public class TrackingDataProcessorHandler {
 
     List<TrackingTool> trackingTools = new ArrayList<>();
     private AbstractTrackingDataSource source;

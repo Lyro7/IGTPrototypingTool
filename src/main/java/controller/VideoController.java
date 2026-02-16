@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-import algorithm.ImageDataManager;
+import algorithm.ImageService;
 import algorithm.ImageDataProcessor;
 import inputOutput.VideoSource;
 import javafx.animation.Animation;
@@ -39,7 +39,7 @@ public class VideoController implements Controller {
     @FXML Spinner<Integer> rightSpinner;
     @FXML Spinner<Integer> leftSpinner;
 
-    ImageDataManager dataManager = new ImageDataManager();
+    ImageService dataManager = new ImageService();
     Timeline timeline = new Timeline();
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());
