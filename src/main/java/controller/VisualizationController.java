@@ -133,7 +133,7 @@ public class VisualizationController implements Controller {
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
-            alert.setHeaderText(null); // Optional: Header weglassen
+            alert.setHeaderText(null);
             alert.setContentText("Select Tracking Data Source first!");
             alert.showAndWait();
             //statusLabel.setText("Select Tracking Data Source first"); //improve status label first
