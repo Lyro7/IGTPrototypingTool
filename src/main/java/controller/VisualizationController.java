@@ -130,7 +130,13 @@ public class VisualizationController implements Controller {
      */
     public void addSTLFile() {
         if (trackingService.getTrackingDataSource() == null) {
-            statusLabel.setText("Select Tracking Data Source first");
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText(null); // Optional: Header weglassen
+            alert.setContentText("Select Tracking Data Source first!");
+            alert.showAndWait();
+            //statusLabel.setText("Select Tracking Data Source first"); //improve status label first
             return;
         }
 
