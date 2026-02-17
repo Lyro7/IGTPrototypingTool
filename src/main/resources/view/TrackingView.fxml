@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TrackingController">
+<ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TrackingController">
 	<VBox maxHeight="Infinity" maxWidth="Infinity">
    		<VBox alignment="CENTER" maxHeight="Infinity" maxWidth="Infinity">
 			<VBox.margin>
