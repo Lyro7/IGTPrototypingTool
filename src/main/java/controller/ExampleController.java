@@ -1,5 +1,5 @@
 package controller;
-import algorithm.ImageDataManager;
+import algorithm.ImageService;
 import algorithm.TrackingData;
 import algorithm.TrackingService;
 import inputOutput.VideoSource;
@@ -22,7 +22,7 @@ public class ExampleController implements Controller {
     public ImageView imageView;
 
     private boolean videoConnected = false;
-    private ImageDataManager imageDataManager = new ImageDataManager();
+    private ImageService imageDataManager = new ImageService();
     
 
     @Override
@@ -55,7 +55,7 @@ public class ExampleController implements Controller {
     public void  on_exampleVideoButton(){
         //Example for grabbing a video stream from device id 0
         if(!videoConnected) {
-            videoConnected = imageDataManager.openConnection(VideoSource.LIVESTREAM, 1);
+            videoConnected = imageDataManager.openConnection(VideoSource.LIVESTREAM, 0);
         }
         if(videoConnected){
             imageView.setImage(imageDataManager.readImg());
