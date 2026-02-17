@@ -41,6 +41,7 @@ public class MainController implements Controller {
     @FXML
     Label status;
     private FXMLLoader loader;
+	private ExampleController exampleController;
     private SettingsController settingsController;
     private final VisualizationManager visualizationManager = new VisualizationManager();
     private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -127,6 +128,27 @@ public class MainController implements Controller {
         visualizationManager.injectStatusLabel(status);
 
         videoController.setMainController(this);
+    }
+	
+	@FXML
+    private void openExampleView(){
+        if (this.exampleController != null) return;
+
+        try {
+            setupFXMLLoader("ExampleView");
+            Tab t = new Tab("Example", this.loader.load());
+
+            this.exampleController = this.loader.getController();
+
+            this.tabPane.getTabs().add(t);
+            this.tabPane.getSelectionModel().select(t);
+            t.setOnCloseRequest(e -> {
+                this.exampleController.close();
+                this.exampleController = null;
+            });
+        } catch(IOException e) {
+            logger.log(Level.SEVERE, "Error loading Example View", e);
+        }
     }
 
     @FXML
