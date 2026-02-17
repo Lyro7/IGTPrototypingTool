@@ -75,11 +75,11 @@ public class MainController implements Controller {
                     updateCircleColors(videoStatusCircle, Color.rgb(255, 0, 0, 1.0)); // Red bright
                     break;
                 case 1: // Connected but not yet tracking
-                    currentState.setText("Video: Connected (Not Yet Tracking)");
+                    currentState.setText("Video: Connected");
                     updateCircleColors(videoStatusCircle, Color.rgb(255, 173, 51, 1.0)); // Yellow bright
                     break;
                 case 2: // Connected and tracking
-                    currentState.setText("Video: Connected and Tracking");
+                    currentState.setText("Video: Running");
                     updateCircleColors(videoStatusCircle, Color.rgb(0, 255, 0, 1.0)); // Green bright
                     break;
                 default:
@@ -88,19 +88,19 @@ public class MainController implements Controller {
         } else if (sourceOrdinal == 1) { // OpenIGTLink source
             switch (statusIndex) {
                 case 0: // Not connected
-                    igtLinkState.setText("OpenIGTLink: Not Connected");
+                    igtLinkState.setText("Tracking: Not Connected");
                     updateCircleColors(igtLinkCircle, Color.rgb(255, 0, 0, 1.0)); // Red bright
                     break;
                 case 1: // Connected but not yet tracking
-                    igtLinkState.setText("OpenIGTLink: Connected (Not Yet Tracking)");
+                    igtLinkState.setText("Tracking: Connected");
                     updateCircleColors(igtLinkCircle, Color.rgb(255, 173, 51, 1.0)); // Yellow bright
                     break;
                 case 2: // Connected and tracking
-                    igtLinkState.setText("OpenIGTLink: Connected and Tracking");
+                    igtLinkState.setText("Tracking: Running");
                     updateCircleColors(igtLinkCircle, Color.rgb(0, 255, 0, 1.0)); // Green bright
                     break;
                 default:
-                    throw new IllegalArgumentException("Invalid status index for OpenIGTLink");
+                    throw new IllegalArgumentException("Invalid status index for TrackingContoller");
             }
         } else {
             throw new IllegalArgumentException("Invalid source ordinal");
@@ -128,6 +128,7 @@ public class MainController implements Controller {
         visualizationManager.injectStatusLabel(status);
 
         videoController.setMainController(this);
+        trackingController.setMainController(this);
     }
 	
 	@FXML

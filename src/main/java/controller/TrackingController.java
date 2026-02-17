@@ -68,6 +68,12 @@ public class TrackingController implements Controller {
     private final BooleanProperty visualizationRunning = new SimpleBooleanProperty(false);
     private final BooleanProperty sourceConnected = new SimpleBooleanProperty(false);
 
+    private MainController mainController;
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         registerController();
@@ -127,6 +133,7 @@ public class TrackingController implements Controller {
      */
     @FXML
     public void onConnectButtonClicked() {
+        mainController.handleChangeStatus(1,1);
         if (trackingService.getTrackingDataSource() != null) { // bit hacky
             disconnectSource();
         }
@@ -171,6 +178,7 @@ public class TrackingController implements Controller {
 
         sourceConnected.setValue(false);
         visualizationController.setSourceConnected(false);
+        mainController.handleChangeStatus(1,0);
     }
 
     /**
@@ -205,6 +213,7 @@ public class TrackingController implements Controller {
         if (timeline != null) {
             timeline.play();
         }
+        mainController.handleChangeStatus(1,2);
     }
 
     public void updateDiagrams() {
