@@ -9,17 +9,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The class TrackingDataManager represents the interface between the GUI and
- * data from InputOutput. It manages all collected tracking data.
+ * The class TrackingDataProcessorHandler handles access to tracking data
+ * from package InputOutput. It manages all collected tracking data.
  */
-public class TrackingDataManager {
+class TrackingDataProcessorHandler {
 
-    List<Tool> tools = new ArrayList<>();
+    List<TrackingTool> trackingTools = new ArrayList<>();
     private AbstractTrackingDataSource source;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public List<Tool> getToolMeasures() {
-        return tools;
+    public List<TrackingTool> getToolMeasures() {
+        return trackingTools;
     }
 
     /**
@@ -27,7 +27,7 @@ public class TrackingDataManager {
      * the internal list of tools.
      */
     public void restartMeasurements() {
-        tools = new ArrayList<>();
+        trackingTools = new ArrayList<>();
     }
 
     /**
@@ -38,11 +38,11 @@ public class TrackingDataManager {
      * @param countToGetNext ,
      * @return toolMeasures
      */
-    public List<Tool> getNextData(int countToGetNext) {
+    public List<TrackingTool> getNextData(int countToGetNext) {
 
         if (source == null) {
             logger.log(Level.WARNING,"Tracking data source is not set. Aborting!");
-            return tools;
+            return trackingTools;
         }
 
         for (double i = 1; i <= countToGetNext; i++) {
@@ -55,13 +55,13 @@ public class TrackingDataManager {
             }
 
             for (TempTool tempTool : tempTools) {
-                Measurement measurement = new Measurement(tempTool);
-                addMeasurementToTool(measurement);
+                TrackingData trackingData = new TrackingData(tempTool);
+                addMeasurementToTool(trackingData);
             }
 
         }
 
-        return tools;
+        return trackingTools;
     }
 
     public AbstractTrackingDataSource getSource() {
@@ -81,24 +81,24 @@ public class TrackingDataManager {
      * the method adds the new measurements to this tool. If there is no
      * tool with this name,then a new tool is created
      *
-     * @param measurement - variable of type Measurement
+     * @param trackingData - variable of type Measurement
      */
 
-    private void addMeasurementToTool(Measurement measurement) {
+    private void addMeasurementToTool(TrackingData trackingData) {
 
         /* Check if tool exists */
-        for (Tool tool : tools) {
-            if (tool.getName().equals(measurement.getToolname())) {
+        for (TrackingTool trackingTool : trackingTools) {
+            if (trackingTool.getName().equals(trackingData.getToolname())) {
 
                 /* added new measurements to the tool */
-                tool.addMeasurement(measurement);
+                trackingTool.addMeasurement(trackingData);
                 return;
             }
         }
 
         /* creation of a new tool */
-        Tool newTool = new Tool(measurement.getToolname());
-        newTool.addMeasurement(measurement);
-        tools.add(newTool);
+        TrackingTool newTrackingTool = new TrackingTool(trackingData.getToolname());
+        newTrackingTool.addMeasurement(trackingData);
+        trackingTools.add(newTrackingTool);
     }
 }

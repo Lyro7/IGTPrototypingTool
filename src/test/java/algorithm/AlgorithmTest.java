@@ -1,7 +1,5 @@
 package algorithm;
 
-import javafx.geometry.Point3D;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,132 +14,37 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AlgorithmTest {
 
-    AverageMeasurement firstAverangeMeasurement;
-    AverageMeasurement secondAverangeMeasurement;
-    Measurement firstMeasurement;
-    Measurement secondMeasurement;
-    private TrackingDataProcessor processor;
-    private DataService dataService;
-    private Tool testTool;
+    TrackingData firstTrackingData;
+    TrackingData secondTrackingData;
+    private TrackingDataProcessor trackingDataProcessor;
+    private TrackingTool testTrackingTool;
 
     @Test
     /**
-     * {@link TrackingDataProcessor}
-     * {@link TrackingDataProcessor#getAverageMeasurement(AverageMeasurement)}
-     */
-    public void getAverageMeasurementIsCorrect() {
-        setUpData();
-
-        AverageMeasurement result = testTool.getAverageMeasurement();
-
-        Vector3D expectedPoint = new Vector3D(2, 2, 2);
-        Vector3D avgPoint = result.getPos();
-
-        assertEquals(avgPoint.getX(), expectedPoint.getX());
-        assertEquals(avgPoint.getY(), expectedPoint.getY());
-        assertEquals(avgPoint.getZ(), expectedPoint.getZ());
-
-    }
-
-    @Test
-    /**
-     * {@link TrackingDataProcessor} {@link TrackingDataProcessor#getJitter(double)}
-     */
-    public void getJitterIsCorrect() {
-        setUpData();
-
-        double result = testTool.getAverageMeasurement().getJitter();
-        System.out.println("result:" + result);
-        assertEquals(1.414213562373095, result);
-
-    }
-
-    @Test
-    /**
-     * {@link TrackingDataProcessor} {@link TrackingDataProcessor#getAccuracy(double)}
-     */
-    public void getAccuracyIsCorrect() {
-
-        setUpDataAccuracy();
-        double expectedDistance = 1.7320508075688772;
-
-        double result = processor.getAccuracy(expectedDistance, firstAverangeMeasurement, secondAverangeMeasurement);
-
-        // no deviation expected
-        assertEquals(0, result);
-    }
-
-    @Test
-    /**
-     * {@link TrackingDataProcessor} {@link TrackingDataProcessor#getRotationJitter(List)}
      */
     public void getRotationJitterIsCorrect() {
         setUpData();
 
-        Quaternion result = testTool.getAverageRotation();
+        Quaternion result = testTrackingTool.getAverageRotation();
 
         assertEquals(result, new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
 
     }
 
-    @Test
-    /**
-     * {@link TrackingDataProcessor} {@link TrackingDataProcessor#getAccuracyRotation(Measurement)}
-     */
-    public void getAccuracyRotationIsCorrect() {
-
-        setUpDataAccuracy();
-        Quaternion expectedRotation = new Quaternion((float) 0, (float) sin(PI / 4), (float) 0, (float) sin(PI / 4));
-
-        Quaternion result = processor.getAccuracyRotation(expectedRotation, firstMeasurement, secondMeasurement);
-
-        // no deviation expected
-        assertEquals(result, new Quaternion((float) 0, (float) 0, (float) 0, (float) -1));
-    }
 
     @Test
     /**
-     * {@link TrackingDataProcessor} {@link TrackingDataProcessor#getBoxPlot(double)}
-     */
-    public void getBoxPlotIsCorrect() {
-
-        processor = new TrackingDataProcessor();
-
-        List<Double> values = new ArrayList<>();
-        values.add(1.0);
-        values.add(2.0);
-        values.add(3.0);
-        values.add(4.0);
-        values.add(5.0);
-
-        BoxPlot result = processor.getBoxPlot(values);
-
-        // no deviation expected
-        assertEquals(1, result.getMin());
-        assertEquals(1.5, result.getQ1());
-        assertEquals(3, result.getMedian());
-        assertEquals(4.5, result.getQ3());
-        assertEquals(5, result.getMax());
-
-        System.out.println(
-                "BoxPlot Werte: \n Min: " + result.getMin() + "\n" + " 1.Q : " + result.getQ1() + "\n" + " Median: "
-                        + result.getMedian() + "\n" + " 3.Q: " + result.getQ3() + "\n" + " Max: " + result.getMax());
-
-    }
-
-    @Test
-    /**
-     * {@link DataService} {@link DataService#getToolByName(String)}
+     * {@link TrackingDataProcessor} {@link TrackingDataProcessor#getToolByName(String)}
      */
     public void getToolByNameCorrect() {
 
-        dataService = new DataService();
+        trackingDataProcessor = new TrackingDataProcessor();
         setUpData();
 
-        Tool result = null;
+        TrackingTool result = null;
 
         try {
-            result = dataService.getToolByName("TestTool");
+            result = trackingDataProcessor.getToolByName("TestTool");
 
         } catch (Exception e) {
 
@@ -151,54 +54,45 @@ public class AlgorithmTest {
     }
 
     private void setUpDataAccuracy() {
-        processor = new TrackingDataProcessor();
-
-        firstAverangeMeasurement = new AverageMeasurement();
-        secondAverangeMeasurement = new AverageMeasurement();
-
-        firstMeasurement = new Measurement();
-        secondMeasurement = new Measurement();
+        firstTrackingData = new TrackingData();
+        secondTrackingData = new TrackingData();
 
         Vector3D p1 = new Vector3D(1, 1, 1);
         Vector3D p2 = new Vector3D(2, 2, 2);
         Quaternion quaternion1 = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
         Quaternion quaternion2 = new Quaternion(0.0f, (float) sin(PI / 4), 0, (float) sin(PI / 4));
-        firstMeasurement.setRotation(quaternion1);
-        secondMeasurement.setRotation(quaternion2);
+        firstTrackingData.setRotation(quaternion1);
+        secondTrackingData.setRotation(quaternion2);
 
-        firstAverangeMeasurement.setPos(p1);
-        secondAverangeMeasurement.setPos(p2);
     }
 
     private void setUpData() {
+        testTrackingTool = new TrackingTool("TestTool");
+        List<TrackingData> trackingData = new ArrayList<>();
 
-        processor = new TrackingDataProcessor();
-        testTool = new Tool("TestTool");
-        List<Measurement> measurements = new ArrayList<>();
-
-        Measurement measurement1 = new Measurement();
-        Measurement measurement2 = new Measurement();
-        Measurement measurement3 = new Measurement();
+        TrackingData trackingData1 = new TrackingData();
+        TrackingData trackingData2 = new TrackingData();
+        TrackingData trackingData3 = new TrackingData();
 
         Vector3D p1 = new Vector3D(1, 1, 1);
         Vector3D p2 = new Vector3D(2, 2, 2);
         Vector3D p3 = new Vector3D(3, 3, 3);
 
-        measurement1.setPos(p1);
-        measurement1.setRotation(new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
-        measurement2.setPos(p2);
-        measurement2.setRotation(new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
-        measurement3.setPos(p3);
-        measurement3.setRotation(new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        trackingData1.setPos(p1);
+        trackingData1.setRotation(new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        trackingData2.setPos(p2);
+        trackingData2.setRotation(new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        trackingData3.setPos(p3);
+        trackingData3.setRotation(new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
 
 
-        measurements.add(measurement1);
-        measurements.add(measurement2);
-        measurements.add(measurement3);
+        trackingData.add(trackingData1);
+        trackingData.add(trackingData2);
+        trackingData.add(trackingData3);
 
-        testTool.addMeasurement(measurement1);
-        testTool.addMeasurement(measurement2);
-        testTool.addMeasurement(measurement3);
+        testTrackingTool.addMeasurement(trackingData1);
+        testTrackingTool.addMeasurement(trackingData2);
+        testTrackingTool.addMeasurement(trackingData3);
 
     }
 

@@ -86,12 +86,12 @@ public class TrackingCone extends MeshView {
         getTransforms().clear();
         getTransforms().add(new Affine(1.0,0.0,0.0,0.0,
                 0.0,1.0,0.0,0.0,
-                0.0,0.0,-1.0,0.0));
+                0.0,0.0,1.0,0.0));
         new Affine();
         getTransforms().add(new Affine(rotMat.get(0,0),rotMat.get(0,1),rotMat.get(0,2),0.0,
                 rotMat.get(1,0),rotMat.get(1,1),rotMat.get(1,2),0.0,
                 rotMat.get(2,0),rotMat.get(2,1),rotMat.get(2,2),0.0));
-        getTransforms().add(new Rotate(-90, Rotate.Z_AXIS));
+        getTransforms().add(new Rotate(-90, Rotate.X_AXIS));
     }
 
     /*

@@ -9,12 +9,12 @@ import java.util.List;
 /**
  * This class is used to manage the access to the OpenIGTLink-Connection and therefore to the trackers.
  * It is a singleton in order to provide the same reference to all users.
- * It should be used to get the reference to the currently active TrackingService, DataService and Timeline.
+ * It should be used to get the reference to the currently active TrackingService, TrackingDataProcessor and Timeline.
  */
 public final class TrackingService {
     private static TrackingService trackingService;
     private AbstractTrackingDataSource trackingDataSource;
-    private DataService dataService;
+    private TrackingDataProcessor trackingDataProcessor;
     private Timeline timeline;
     private final List<TrackingServiceObserver> observers = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public final class TrackingService {
     public void registerObserver(TrackingServiceObserver observer){
         observers.add(observer);
         // Inform them about the initial status
-        observer.onTrackingSourceChanged(trackingDataSource!=null, dataService!=null,timeline!=null);
+        observer.onTrackingSourceChanged(trackingDataSource!=null, trackingDataProcessor !=null,timeline!=null);
     }
 
     /**
@@ -54,10 +54,10 @@ public final class TrackingService {
 
     /**
      * Sets the reference to the data service.
-     * @param dataService the new dataservice
+     * @param trackingDataProcessor the new dataservice
      */
-    public void changeDataService(DataService dataService){
-        this.dataService = dataService;
+    public void changeDataService(TrackingDataProcessor trackingDataProcessor){
+        this.trackingDataProcessor = trackingDataProcessor;
 
         // Trigger all observers
         observers.forEach(observer -> observer.onTrackingSourceChanged(false, true, false));
@@ -86,8 +86,8 @@ public final class TrackingService {
      * Returns the reference to the data service
      * @return The currently active data service
      */
-    public DataService getDataService(){
-        return dataService;
+    public TrackingDataProcessor getDataService(){
+        return trackingDataProcessor;
     }
 
     /**

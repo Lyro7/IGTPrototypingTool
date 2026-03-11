@@ -32,7 +32,7 @@ import javafx.util.Duration;
 import algorithm.VisualizationManager;
 import userinterface.TrackingDataDisplay;
 
-public class TrackingDataController implements Controller {
+public class TrackingController implements Controller {
 
     @FXML
     ScatterChart<Number, Number> s1;
@@ -67,6 +67,12 @@ public class TrackingDataController implements Controller {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private final BooleanProperty visualizationRunning = new SimpleBooleanProperty(false);
     private final BooleanProperty sourceConnected = new SimpleBooleanProperty(false);
+
+    private MainController mainController;
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -127,6 +133,7 @@ public class TrackingDataController implements Controller {
      */
     @FXML
     public void onConnectButtonClicked() {
+        mainController.handleChangeStatus(1,1);
         if (trackingService.getTrackingDataSource() != null) { // bit hacky
             disconnectSource();
         }
@@ -171,6 +178,7 @@ public class TrackingDataController implements Controller {
 
         sourceConnected.setValue(false);
         visualizationController.setSourceConnected(false);
+        mainController.handleChangeStatus(1,0);
     }
 
     /**
@@ -183,7 +191,7 @@ public class TrackingDataController implements Controller {
 
         if (timeline == null && source != null) {
             // this is used to load tracking data from source
-            trackingService.changeDataService(new DataService(source));
+            trackingService.changeDataService(new TrackingDataProcessor(source));
 
             timeline = new Timeline();
             timeline.setCycleCount(Animation.INDEFINITE);
@@ -205,6 +213,7 @@ public class TrackingDataController implements Controller {
         if (timeline != null) {
             timeline.play();
         }
+        mainController.handleChangeStatus(1,2);
     }
 
     public void updateDiagrams() {
@@ -214,16 +223,16 @@ public class TrackingDataController implements Controller {
         // loads the next set of tracking data
         trackingService.getTrackingDataSource().update();
         // this returns tracking data from all tools at one point in time
-        List<Tool> tools = trackingService.getDataService().loadNextData(1);
+        List<TrackingTool> trackingTools = trackingService.getDataService().loadNextData(1);
 
-        if (tools.isEmpty()) return;
+        if (trackingTools.isEmpty()) return;
 
-        for (Tool tool : tools) {
+        for (TrackingTool trackingTool : trackingTools) {
 
-            TrackingDataDisplay display = checkToolDisplayList(tool.getName());
+            TrackingDataDisplay display = checkToolDisplayList(trackingTool.getName());
             display.clearData();
 
-            List<Measurement> li = tool.getMeasurement();
+            List<TrackingData> li = trackingTool.getMeasurement();
             //use the last 5 measurements, otherwise blending will be a problem during motion
             for (int i = 1; i < 5; i++) {
                 if (li.size() - i < 0) {
@@ -241,11 +250,11 @@ public class TrackingDataController implements Controller {
                     double qZ = li.get(li.size() - i).getRotation().getZ();
                     double qR = li.get(li.size() - i).getRotation().getW();
 
-                    position.get(tool.getName()).setText(tool.getName() + ": ["
+                    position.get(trackingTool.getName()).setText(trackingTool.getName() + ": ["
                             + df.format(x) + ";"
                             + df.format(y) + ";"
                             + df.format(z) + "]");
-                    rotation.get(tool.getName()).setText(tool.getName() + ": ["
+                    rotation.get(trackingTool.getName()).setText(trackingTool.getName() + ": ["
                             + df.format(qX) + ";"
                             + df.format(qY) + ";"
                             + df.format(qZ) + ";"
@@ -309,3 +318,6 @@ public class TrackingDataController implements Controller {
         unregisterController();
     }
 }
+
+
+

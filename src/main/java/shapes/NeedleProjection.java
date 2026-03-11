@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Affine;
+import javafx.scene.transform.Rotate;
 import util.Matrix3D;
 import util.Vector3D;
 
@@ -38,21 +39,31 @@ public class NeedleProjection extends Group {
      * @param rotMat the rotation matrix
      */
     public void rotateMatrix(Matrix3D rotMat) {
-        getTransforms().clear();
+        /*getTransforms().clear();
 
         // We have to rotate the atl files and therefor also the projection by 180°, haven't figured out why yet
         getTransforms().add(new Affine(1.0,0.0,0.0,0.0,
                 0.0,1.0,0.0,0.0,
-                0.0,0.0,-1.0,0.0));
+                0.0,0.0,1.0,0.0));
 
         // Apply the rotaion matrix
         getTransforms().add(new Affine(rotMat.get(0,0),rotMat.get(0,1),rotMat.get(0,2),0.0,
                 rotMat.get(1,0),rotMat.get(1,1),rotMat.get(1,2),0.0,
                 rotMat.get(2,0),rotMat.get(2,1),rotMat.get(2,2),0.0));
-        direction = rotMat.mult(new Vector3D(-1,0,0));
+        getTransforms().add(new Rotate(90, Rotate.Y_AXIS));
         Matrix3D temp = new Matrix3D(new double[] {1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,-1.0});
         direction = temp.mult(direction);
-        direction.setMag(1);
+        direction.setMag(1);*/
+
+        getTransforms().clear();
+        getTransforms().add(new Affine(1.0,0.0,0.0,0.0,
+                0.0,1.0,0.0,0.0,
+                0.0,0.0,1.0,0.0));
+        new Affine();
+        getTransforms().add(new Affine(rotMat.get(0,0),rotMat.get(0,1),rotMat.get(0,2),0.0,
+                rotMat.get(1,0),rotMat.get(1,1),rotMat.get(1,2),0.0,
+                rotMat.get(2,0),rotMat.get(2,1),rotMat.get(2,2),0.0));
+        getTransforms().add(new Rotate(90, Rotate.Y_AXIS));
     }
 
     /**

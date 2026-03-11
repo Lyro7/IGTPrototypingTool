@@ -99,7 +99,7 @@ public class VisualizationManager {
     /**
      * LinkedList of all trackers
      */
-    private LinkedList<Target> targets;
+    private LinkedList<Target> targets = new LinkedList<>();
     private ScrollPane scrollPane;
     private Group meshGroup;
 
@@ -145,6 +145,9 @@ public class VisualizationManager {
      * Loads the previously used stl files for visualisation
      */
     public void loadLastSTLModels() {
+        //Commented out persistence because there is a bug removing the data,
+        //so it is at least removed when the application is restarted
+        /*
         StlMeshImporter importer = new StlMeshImporter();
         try {
             JSONObject jsonSTLModels = util.Persistence.readStlSaveFile();
@@ -174,7 +177,7 @@ public class VisualizationManager {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     /**
@@ -300,14 +303,14 @@ public class VisualizationManager {
 
         // loads the next set of tracking data
         trackingService.getTrackingDataSource().update();
-        List<Tool> tools = trackingService.getDataService().loadNextData(1);
+        List<TrackingTool> trackingTools = trackingService.getDataService().loadNextData(1);
 
-        for (Tool tool : tools) {
+        for (TrackingTool trackingTool : trackingTools) {
             if (flagReloadMatrix) {
-                tool.loadTransformationMatrix();
+                trackingTool.loadTransformationMatrix();
             }
-            tool.show();
-            tool.checkBounds(stlModels);
+            trackingTool.show();
+            trackingTool.checkBounds(stlModels);
         }
         flagReloadMatrix = false;
     }
@@ -366,11 +369,11 @@ public class VisualizationManager {
         }
 
         if (trackingService.getDataService() != null) {
-            List<Tool> tools = trackingService.getDataService().loadNextData(1);
-            for (Tool tool : tools) {
-                tool.addVisualizationToRoot(root);
+            List<TrackingTool> trackingTools = trackingService.getDataService().loadNextData(1);
+            for (TrackingTool trackingTool : trackingTools) {
+                trackingTool.addVisualizationToRoot(root);
                 if (targets != null) {
-                    tool.setTargets(targets);
+                    trackingTool.setTargets(targets);
                 }
             }
         }

@@ -42,6 +42,13 @@ Run the checkstyle gradle task to check your code:
 
 _*To ensure compatibility with older Java versions, please set the language level of this project to the lowest supported language version, currently Java 11.*_
 
+## Getting Started
+With the basic version of the IGTPrototypingTool, you can connect to tracking systems and video sources and display 3D objects in relation to them. Based on this, you can implement your own projects. To get started, see also the example view.
+
+To connect a tracker, you can either play back recorded CSV data (see repository under src\test\resources) or connect to a real tracker using OpenIGTLink. [MITK-IGT](https://github.com/IMSY-DKFZ/MITK-IGT) or [PLUS](https://plustoolkit.github.io/) are suitable OpenIGTLink sources. The current version has been tested with [MITK-IGT-2025.02](https://github.com/IMSY-DKFZ/MITK-IGT/releases/tag/mitk-igt-2025.02), for which Windows binaries are available. To connect, start the MITK Workbench, connect to a tracker using the “TrackingToolbox” view, and activate OpenIGTLink using the ‘OpenIGTLinkManager’ view (click “go online”). You can now connect to an instance of the IGTPrototypingTool. Once tracking is running, you can load STL files in the “Visualization” tab, which will then be displayed in relation to the tracking data.
+
+The connection to a video source (e.g., ultrasound device via frame grabber) is established via OpenCV. Alternatively, ultrasound data can also be transmitted via [PLUS](https://plustoolkit.github.io/) using OpenIGTLink. For a function test, you can use a webcam and connect to it with the IGTPrototypingTool (tab “Video Input”). If there are problems with multiple video sources, a workaround is to disable all unnecessary ones in the device manager of the operating system. The connection to PLUS was tested, for example, with a Telemed ultrasound system running PlusApp version 2.9.0.
+
 ## Documentation
 JavaDoc is automatically compiled and published to [GitHub Pages](https://nami-thu.github.io/IGTPrototypingTool/). 
 Please make sure to document all public methods and classes to help lowering the barrier for new students.

@@ -7,14 +7,11 @@ import javafx.scene.image.Image;
 import org.opencv.core.Mat;
 
 /**
- * builds an interface to other teams, includes distance measurement and
- * conversion from matrix in bufferedimage
- * @author Team2
- *
- * Access to calculations with DistanceMeasurement.
- * Access to imagedata and its source/connection over ImageDataProcessor.
+ * This class is the central interface to image data sources. The current image can be accessed using the readImg(),
+ * readBufImg(), or readMat() methods. Internally, the ImageDataProcessor class is used, in which the logic for
+ * accessing the image data sources is implemented.
  */
-public class ImageDataManager {
+public class ImageService {
 
     ImageDataProcessor dataProcessor = new ImageDataProcessor();
 
