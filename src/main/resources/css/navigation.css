@@ -1,0 +1,45 @@
+#outerCircle {
+    -fx-fill: transparent;
+    -fx-stroke: black;
+    -fx-stroke-width: 4;
+    -fx-stroke-type: outside;
+}
+
+#innerCircle {
+    -fx-fill: #a89032;
+    -fx-stroke: black;
+    -fx-stroke-width: 4;
+    -fx-stroke-type: outside;
+}
+
+#innerLine {
+    -fx-fill: #808080;
+    -fx-stroke-width: 2;
+}
+
+#trafficLight1 {
+    -fx-fill: #FF0000;
+}
+
+#trafficLight2 {
+    -fx-fill: #f3e03b;
+}
+
+#trafficLight3 {
+    -fx-fill: #308446;
+}
+
+#trafficLightVBox {
+    -fx-border-color: black;
+    -fx-border-width: 3;
+}
+
+#depthSeparator {
+    -fx-fill: #808080;
+    -fx-stroke-width: 2;
+}
+
+#depthVBox {
+     -fx-border-color: black;
+     -fx-border-width: 3;
+}
