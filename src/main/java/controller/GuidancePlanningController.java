@@ -43,7 +43,7 @@ public class GuidancePlanningController implements Controller {
     }
 
     public void onLoadTestSceneClicked() {
-
+        // TODO
     }
 
     public void onStartVisualizationClicked(javafx.event.ActionEvent actionEvent) {
@@ -52,6 +52,7 @@ public class GuidancePlanningController implements Controller {
 
     public void setGuidanceHandler(GuidanceHandler guidanceHandler) {
         this.guidanceHandler = guidanceHandler;
+        guidanceHandler.addGuidanceController(this);
     }
 
 }
