@@ -32,6 +32,7 @@ public class GuidanceNavigationController implements Controller {
     @Override
     public void close() {
         unregisterController();
+        guidanceHandler.stopNavigationLoop();
     }
 
     @Override
@@ -45,6 +46,10 @@ public class GuidanceNavigationController implements Controller {
 
     public void setGuidanceHandler(GuidanceHandler guidanceHandler) {
         this.guidanceHandler = guidanceHandler;
+        guidanceHandler.addGuidanceController(this);
+        guidanceHandler.startNavigationLoop();
     }
+
+
 
 }
