@@ -304,16 +304,19 @@ public class MainController implements Controller {
      * This method is used to switch out the content of the tab.
      * @param fileName The file name of the .fxml file.
      * */
-    public void switchTabs(String fileName) {
+    public void switchContentOfTab(String fileName) {
         setupFXMLLoader(fileName);
 
         try {
             Node content = loader.load();
 
-            updateGuidanceControllers();
-
             Tab currentTab = tabPane.getSelectionModel().getSelectedItem();
             currentTab.setContent(content);
+
+            guidanceHandler.resetControllers();
+
+            updateGuidanceControllers();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
