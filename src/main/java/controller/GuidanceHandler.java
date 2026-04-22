@@ -9,7 +9,8 @@ public class GuidanceHandler {
 
     private MainController mainController;
 
-    private final List<Controller> guidanceControllers = new ArrayList<>();
+    /* List, which contains the current active controller */
+    private final List<GuidanceController> guidanceControllers = new ArrayList<>();
 
     private AnimationTimer animator;
 
@@ -29,7 +30,7 @@ public class GuidanceHandler {
         animator = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                //TODO
+
             }
         };
     }
@@ -43,14 +44,15 @@ public class GuidanceHandler {
     }
 
     public void resetControllers() {
-        for (Controller controller : guidanceControllers) {
+        for (GuidanceController controller : guidanceControllers) {
             controller.close();
         }
         guidanceControllers.clear();
     }
 
-    public void addGuidanceController(Controller controller) {
+    public void addGuidanceController(GuidanceController controller) {
         this.guidanceControllers.add(controller);
     }
+
 
 }
