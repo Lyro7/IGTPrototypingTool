@@ -7,6 +7,6 @@
 <AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.GuidancePlanningController" prefHeight="400.0" prefWidth="600.0">
     <HBox spacing="10" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" alignment="CENTER">
             <Button fx:id="startVisualization" text="Start Visualization" onAction="#onStartVisualizationClicked"/>
-            <Button fx:id="loadTestScene" text="Load test scene" onAction="#onLoadTestSceneClicked"/>
+            <Button fx:id="loadPuncturePath" text="Load puncture path" onAction="#onLoadPuncturePathClicked"/>
     </HBox>
 </AnchorPane>
