@@ -5,16 +5,20 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.Group?>
-
-<!-- Phase 2 Navigation View -->
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+
+<!-- Phase 2 Navigation View -->
 <StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.GuidanceNavigationController" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/navigation.css">
     <Group StackPane.alignment="CENTER">
         <Circle id="outerCircle" radius="200" centerX="0" centerY="0"/>
         <Circle id="innerCircle" radius="100" centerX="0" centerY="0"/>
         <Line id="innerLine" startX="-200" startY="0"    endX="200" endY="0"/>
         <Line id="innerLine" startX="0"    startY="-200" endX="0"   endY="200"/>
+        <Group fx:id="targetCross">
+            <Line startX="-125" startY="-125" endX="-150" endY="-150"/>
+            <Line startX="-125" startY="-150" endX="-150" endY="-125"/>
+        </Group>
     </Group>
     <BorderPane>
         <left>
