@@ -15,7 +15,7 @@ public class GuidancePlanningController implements GuidanceController {
     public Button startVisualization;
 
     @FXML
-    public Button loadTestScene;
+    public Button loadPuncturePath;
 
     @Override
     public void registerController() {
@@ -48,14 +48,12 @@ public class GuidancePlanningController implements GuidanceController {
         guidanceHandler.addGuidanceController(this);
     }
 
-    public void onLoadTestSceneClicked() {
-        // TODO
-    }
-
-    public void onStartVisualizationClicked(javafx.event.ActionEvent actionEvent) {
+    public void onStartVisualizationClicked() {
         guidanceHandler.switchToTab("GuidanceNavigationView");
     }
 
-
+    public void onLoadPuncturePathClicked() {
+        guidanceHandler.loadPuncturePath();
+    }
 
 }
