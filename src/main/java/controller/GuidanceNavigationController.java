@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -21,6 +22,8 @@ public class GuidanceNavigationController implements GuidanceController {
     public VBox depthBox;
     @FXML
     public Label depth;
+    @FXML
+    public Group targetCross;
 
     private GuidanceHandler guidanceHandler;
 
@@ -64,6 +67,8 @@ public class GuidanceNavigationController implements GuidanceController {
         guidanceHandler.switchToTab("GuidancePlanningView");
     }
 
-
+    public Group getTargetCross() {
+        return targetCross;
+    }
 
 }
