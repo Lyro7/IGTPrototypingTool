@@ -15,18 +15,27 @@ public class GuidanceManager {
         this.guidanceHandler = guidanceHandler;
     }
 
-    public void retrievePosition() {
+    public void translateDeviationAndRenderCross() {
         List<TrackingTool> tools = trackingService.getDataService().loadNextData(1);
 
         for (TrackingTool data : tools) {
             List<TrackingData> measurement = data.getMeasurement();
             for (TrackingData trackingData : measurement) {
 
-                Vector3D vec = calculateTranslationVector(trackingData.getPos());
-                guidanceHandler.getTargetCross().setTranslateX(vec.getX());
-                guidanceHandler.getTargetCross().setTranslateY(vec.getY());
+                Vector3D translationVector = calculateTranslationVector(trackingData.getPos());
+
+                calculateDepthInformation(translationVector);
+
+                Vector3D scaledTranslationVector = calculateScaledTranslationVector(translationVector);
+
+                translateTargetCross(scaledTranslationVector.getY(), scaledTranslationVector.getZ());
             }
         }
+    }
+
+    private void translateTargetCross(double value1, double value2) {
+        guidanceHandler.getTargetCross().setTranslateX(value1);
+        guidanceHandler.getTargetCross().setTranslateY(value2);
     }
 
     public Vector3D calculateTranslationVector(Vector3D worldPosition3D) {
@@ -34,21 +43,25 @@ public class GuidanceManager {
         Vector3D entryPoint = guidanceHandler.getTargetList().getFirst();
 
         // Translation from entry point to position
-        Vector3D translationVector = worldPosition3D.sub(entryPoint);
-
-        double scale = 2.0; // MM -> Pixel
-
-        double uiX = translationVector.getX() * scale;
-        double uiY = translationVector.getY() * scale;
-
-        return new Vector3D(uiX, uiY, 0);
+        return worldPosition3D.sub(entryPoint);
     }
 
-    private void clampTargetCross() {
+    // Is dependent on the plane
+    private Vector3D calculateScaledTranslationVector(Vector3D translationVector) {
+        double scale = 1.5; // MM -> Pixel
+
+        double uiY = -translationVector.getY() * scale;
+        double uiZ = -translationVector.getZ() * scale;
+
+        return new Vector3D(0, uiY, uiZ);
+    }
+
+    private void calculateDepthInformation(Vector3D translationVector) {
         // TODO:
     }
 
-    private void depthInformation() {
+    // Maybe not needed?
+    private void clampTargetCross() {
         // TODO:
     }
 
