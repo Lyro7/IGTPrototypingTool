@@ -15,9 +15,9 @@
         <Circle id="innerCircle" radius="100" centerX="0" centerY="0"/>
         <Line id="innerLine" startX="-200" startY="0"    endX="200" endY="0"/>
         <Line id="innerLine" startX="0"    startY="-200" endX="0"   endY="200"/>
-        <Group fx:id="targetCross">
-            <Line startX="-125" startY="-125" endX="-150" endY="-150"/>
-            <Line startX="-125" startY="-150" endX="-150" endY="-125"/>
+        <Group fx:id="targetCross" StackPane.alignment="CENTER">
+            <Line startX="-10" startY="-10" endX="10" endY="10"/>
+            <Line startX="-10" startY="10" endX="10" endY="-10"/>
         </Group>
     </Group>
     <BorderPane>
