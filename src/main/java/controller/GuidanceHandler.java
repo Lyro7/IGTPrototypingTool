@@ -50,7 +50,8 @@ public class GuidanceHandler {
         animator = new AnimationTimer() {
             @Override
             public void handle(long now) {
-               guidanceManager.retrievePosition();
+                // Align
+                guidanceManager.translateDeviationAndRenderCross();
             }
         };
     }
