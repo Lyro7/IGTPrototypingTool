@@ -19,6 +19,7 @@
 
 #trafficLight1 {
     -fx-fill: #FF0000;
+     -fx-effect: dropshadow(three-pass-box, #FF0000, 20, 0.5, 0, 0)
 }
 
 #trafficLight2 {
