@@ -10,7 +10,7 @@ import javafx.scene.shape.Circle;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class GuidanceNavigationController implements GuidanceController {
+public class GuidanceAlignmentController implements GuidanceController {
 
     @FXML
     public Circle tLight1;
@@ -48,7 +48,7 @@ public class GuidanceNavigationController implements GuidanceController {
     @Override
     public void close() {
         unregisterController();
-        guidanceHandler.stopNavigationLoop();
+        guidanceHandler.stopGuidanceLoop();
     }
 
     @Override
@@ -60,7 +60,6 @@ public class GuidanceNavigationController implements GuidanceController {
     public void setGuidanceHandler(GuidanceHandler guidanceHandler) {
         this.guidanceHandler = guidanceHandler;
         guidanceHandler.addGuidanceController(this);
-        guidanceHandler.startNavigationLoop();
     }
 
     public void onStopVisualizationClicked() {
