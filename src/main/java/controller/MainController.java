@@ -276,6 +276,8 @@ public class MainController implements Controller {
         alert.showAndWait();
     }
 
+
+
     /**
      * This method gives needed references to classes.
      * It is used to maintain the guidance architecture.
@@ -291,12 +293,9 @@ public class MainController implements Controller {
      * This is especially needed, because the loader returns a new instance of the controller.
      * */
     private void updateGuidanceControllers() {
-        if (loader.getController() instanceof GuidancePlanningController) {
-            GuidancePlanningController planningController = loader.getController();
-            planningController.setGuidanceHandler(guidanceHandler);
-        } else if (loader.getController() instanceof GuidanceNavigationController) {
-            GuidanceNavigationController navigationController = loader.getController();
-            navigationController.setGuidanceHandler(guidanceHandler);
+        if (loader.getController() instanceof GuidanceController) {
+            GuidanceController guidanceController = loader.getController();
+            guidanceController.setGuidanceHandler(guidanceHandler);
         }
     }
 
@@ -314,6 +313,9 @@ public class MainController implements Controller {
             currentTab.setContent(content);
 
             guidanceHandler.resetControllers();
+
+            guidanceHandler.updateKeyHandler(currentTab);
+            guidanceHandler.registerKeyHandler(content.getScene());
 
             updateGuidanceControllers();
 
