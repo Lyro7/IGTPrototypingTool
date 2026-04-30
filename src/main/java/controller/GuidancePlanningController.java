@@ -49,7 +49,8 @@ public class GuidancePlanningController implements GuidanceController {
     }
 
     public void onStartVisualizationClicked() {
-        guidanceHandler.switchToTab("GuidanceNavigationView");
+        guidanceHandler.switchToTab("GuidanceAlignmentView");
+        guidanceHandler.startGuidanceLoop();
     }
 
     public void onLoadPuncturePathClicked() {
