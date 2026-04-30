@@ -3,12 +3,15 @@ package controller;
 import algorithm.GuidanceManager;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Tab;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import util.GuidanceKeyHandler;
 import util.Vector3D;
 
 import javax.xml.XMLConstants;
@@ -23,9 +26,15 @@ import java.util.List;
 
 public class GuidanceHandler {
 
+    public enum Phase { ALIGNMENT, ANGLE, DEPTH }
+
+    private Phase currentPhase = Phase.ALIGNMENT;
+
     private MainController mainController;
 
     private final GuidanceManager guidanceManager = new GuidanceManager(this);
+
+    private final GuidanceKeyHandler guidanceKeyHandler = new GuidanceKeyHandler(this);
 
     private final LinkedList<Vector3D> targetList = new LinkedList<>();
 
@@ -35,7 +44,7 @@ public class GuidanceHandler {
     private AnimationTimer animator;
 
     public GuidanceHandler() {
-        navigationLoop();
+        guidanceLoop();
     }
 
     public void setMainController(MainController mainController) {
@@ -46,21 +55,25 @@ public class GuidanceHandler {
         mainController.switchContentOfTab(fileName);
     }
 
-    public void navigationLoop() {
+    public void guidanceLoop() {
         animator = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 // Align
-                guidanceManager.translateDeviationAndRenderCross();
+                if (currentPhase.equals(Phase.ALIGNMENT)) {
+                    guidanceManager.translateDeviationAndRenderCross();
+                } else if (currentPhase.equals(Phase.ANGLE)) {
+                    // ...
+                }
             }
         };
     }
 
-    public void startNavigationLoop() {
+    public void startGuidanceLoop() {
         animator.start();
     }
 
-    public void stopNavigationLoop() {
+    public void stopGuidanceLoop() {
         animator.stop();
     }
 
@@ -73,10 +86,6 @@ public class GuidanceHandler {
 
     public void addGuidanceController(GuidanceController controller) {
         this.guidanceControllers.add(controller);
-    }
-
-    public Group getTargetCross() {
-        return ((GuidanceNavigationController) guidanceControllers.getFirst()).getTargetCross();
     }
 
     /**
@@ -120,6 +129,38 @@ public class GuidanceHandler {
 
     public LinkedList<Vector3D> getTargetList() {
         return targetList;
+    }
+
+    public Group getTargetCross() {
+        return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getTargetCross();
+    }
+
+    public void updateKeyHandler(Tab guidanceTab) {
+        guidanceKeyHandler.setContentNode(guidanceTab);
+    }
+
+    public void registerKeyHandler(Scene scene) {
+        guidanceKeyHandler.handleKeyPressed(scene);
+    }
+
+    public Phase getCurrentPhase() {
+        return currentPhase;
+    }
+
+    public void updateCurrentPhase(Phase currentPhase) {
+        this.currentPhase = currentPhase;
+        phaseToSwitch();
+    }
+
+    private void phaseToSwitch() {
+        if (currentPhase.equals(Phase.ALIGNMENT)) {
+            switchToTab("GuidanceAlignmentView");
+        } else if (currentPhase.equals(Phase.ANGLE)) {
+            switchToTab("GuidanceAngleView");
+        } else if (currentPhase.equals(Phase.DEPTH)) {
+            // Soon...
+        }
+
     }
 
 
