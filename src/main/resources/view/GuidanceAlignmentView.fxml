@@ -7,9 +7,10 @@
 <?import javafx.scene.Group?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Text?>
 
-<!-- Phase 2 Navigation View -->
-<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.GuidanceNavigationController" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/navigation.css">
+<!-- Phase 2 Alignment View -->
+<StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.GuidanceAlignmentController" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/guidance.css">
     <Group StackPane.alignment="CENTER">
         <Circle id="outerCircle" radius="200" centerX="0" centerY="0"/>
         <Circle id="innerCircle" radius="100" centerX="0" centerY="0"/>
@@ -17,7 +18,7 @@
         <Line id="innerLine" startX="0"    startY="-200" endX="0"   endY="200"/>
         <Group fx:id="targetCross" StackPane.alignment="CENTER">
             <Line startX="-10" startY="-10" endX="10" endY="10"/>
-            <Line startX="-10" startY="10" endX="10" endY="-10"/>
+            <Line startX="-10" startY="10"  endX="10" endY="-10"/>
         </Group>
     </Group>
     <BorderPane>
@@ -29,7 +30,7 @@
                 <padding>
                     <Insets top="3" right = "3" left="3" bottom="3"/>
                 </padding>
-                <Circle fx:id="tLight1" id="trafficLight1" radius="35" centerX ="45" centerY="20"/>
+                <Circle fx:id="tLight1" id="glowTrafficLight1" radius="35" centerX ="45" centerY="20"/>
                 <Circle fx:id="tLight2" id="trafficLight2" radius="35" centerX ="45" centerY="60"/>
                 <Circle fx:id="tLight3" id="trafficLight3" radius="35" centerX ="45" centerY="100"/>
             </VBox>
@@ -55,5 +56,8 @@
                 </HBox>
             </StackPane>
         </bottom>
+        <top>
+            <Text id="title" BorderPane.alignment="CENTER" text="Phase 2: Alignment"/>
+        </top>
     </BorderPane>
 </StackPane>
