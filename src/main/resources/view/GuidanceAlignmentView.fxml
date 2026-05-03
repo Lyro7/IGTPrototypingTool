@@ -10,6 +10,7 @@
 <?import javafx.scene.text.Text?>
 
 <!-- Phase 2 Alignment View -->
+<?import javafx.scene.shape.Rectangle?>
 <StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.GuidanceAlignmentController" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/guidance.css">
     <Group StackPane.alignment="CENTER">
         <Circle id="outerCircle" radius="200" centerX="0" centerY="0"/>
@@ -36,12 +37,18 @@
             </VBox>
         </left>
         <right>
-            <VBox fx:id="depthBox" id="depthVBox" BorderPane.alignment="BOTTOM_RIGHT" alignment="CENTER" maxHeight="400" >
+            <Group>
                 <BorderPane.margin>
-                    <Insets bottom="20" left="20" right="20" top="20"/>
+                    <Insets top="400" bottom="0" right="30" left="0"/>
                 </BorderPane.margin>
-                <Line id="depthSeparator" startX="150" endX="250" startY="0" endY="0"/>
-            </VBox>
+                <Rectangle height="300" width="150" fill="#333"/>
+                <Rectangle fx:id="fillRect" height="0" width="150" fill="limegreen"/>
+                <Line startX="-25" endX="175" startY="100" endY="100" />
+                <Label text="Entry" layoutX="-40" layoutY="100"/>
+                <Line startX="-25" endX="175" startY="300" endY="300" />
+                <Label text="Target" layoutX="-40" layoutY="300"/>
+                <Label fx:id="depth" text="Depth: " layoutX="40" layoutY="320"/>
+            </Group>
         </right>
         <bottom>
             <StackPane alignment="BOTTOM_CENTER">
@@ -50,9 +57,8 @@
                 </HBox>
                 <HBox spacing="0" alignment="BOTTOM_RIGHT" mouseTransparent="true">
                     <StackPane.margin>
-                        <Insets bottom="0" left="0" right="40" top="0"/>
+                        <Insets bottom="0" left="0" right="90" top="0"/>
                     </StackPane.margin>
-                    <Label fx:id="depth" text="Depth: "/>
                 </HBox>
             </StackPane>
         </bottom>
