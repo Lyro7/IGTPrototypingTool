@@ -4,7 +4,9 @@ import algorithm.GuidanceManager;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
@@ -61,7 +63,7 @@ public class GuidanceHandler {
             public void handle(long now) {
                 // Align
                 if (currentPhase.equals(Phase.ALIGNMENT)) {
-                    guidanceManager.translateDeviationAndRenderCross();
+                    guidanceManager.alignmentLogic();
                 } else if (currentPhase.equals(Phase.ANGLE)) {
                     // ...
                 }
@@ -135,6 +137,14 @@ public class GuidanceHandler {
         return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getTargetCross();
     }
 
+    public Rectangle getDepthRectangle() {
+        return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getDepthRectangle();
+    }
+
+    public Label getDepthLabel() {
+        return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getDepthLabel();
+    }
+
     public void updateKeyHandler(Tab guidanceTab) {
         guidanceKeyHandler.setContentNode(guidanceTab);
     }
@@ -160,8 +170,8 @@ public class GuidanceHandler {
         } else if (currentPhase.equals(Phase.DEPTH)) {
             // Soon...
         }
-
     }
+
 
 
 }
