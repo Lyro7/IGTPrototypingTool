@@ -162,6 +162,34 @@ public class Vector3D {
         return sum;
     }
 
+    public Vector3D normalize() {
+        double x = vector[0];
+        double y = vector[1];
+        double z = vector[2];
+
+        double length = Math.sqrt((x * x) + (y * y) + (z * z));
+
+        if (length == 0) {
+            return new Vector3D(0, 0, 0);
+        }
+
+        return new Vector3D(x / length, y / length, z / length);
+    }
+
+    public void normalizeLocal() {
+        double x = vector[0];
+        double y = vector[1];
+        double z = vector[2];
+
+        double length = Math.sqrt((x * x) + (y * y) + (z * z));
+
+        if (length != 0) {
+            vector[0] = x / length;
+            vector[1] = y / length;
+            vector[2] = z / length;
+        }
+    }
+
     /**
      * Scalar multiply the current vector with a number
      * Changes the current vector
