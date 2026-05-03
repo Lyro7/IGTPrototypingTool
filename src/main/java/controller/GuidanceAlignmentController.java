@@ -4,8 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,11 +19,11 @@ public class GuidanceAlignmentController implements GuidanceController {
     @FXML
     public Circle tLight3;
     @FXML
-    public VBox depthBox;
-    @FXML
     public Label depth;
     @FXML
     public Group targetCross;
+    @FXML
+    public Rectangle fillRect;
 
     private GuidanceHandler guidanceHandler;
 
@@ -68,6 +68,14 @@ public class GuidanceAlignmentController implements GuidanceController {
 
     public Group getTargetCross() {
         return targetCross;
+    }
+
+    public Rectangle getDepthRectangle() {
+        return fillRect;
+    }
+
+    public Label getDepthLabel() {
+        return depth;
     }
 
 }
