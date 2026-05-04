@@ -32,16 +32,21 @@ public class GuidanceAngleController implements GuidanceController {
 
     @Override
     public void close() {
-
+        unregisterController();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        registerController();
     }
 
     public void onStopVisualizationClicked(ActionEvent actionEvent) {
         guidanceHandler.switchToTab("GuidancePlanningView");
+        guidanceHandler.stopGuidanceLoop();
+    }
+
+    public Circle getTargetCircle() {
+        return targetCircle;
     }
 
 
