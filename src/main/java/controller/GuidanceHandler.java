@@ -6,6 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -61,11 +62,10 @@ public class GuidanceHandler {
         animator = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                // Align
                 if (currentPhase.equals(Phase.ALIGNMENT)) {
                     guidanceManager.alignmentLogic();
                 } else if (currentPhase.equals(Phase.ANGLE)) {
-                    // ...
+                    guidanceManager.angulationLogic();
                 }
             }
         };
@@ -137,6 +137,10 @@ public class GuidanceHandler {
         return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getTargetCross();
     }
 
+    public Circle getTargetCircle() {
+        return ((GuidanceAngleController) guidanceControllers.getFirst()).getTargetCircle();
+    }
+
     public Rectangle getDepthRectangle() {
         return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getDepthRectangle();
     }
@@ -171,7 +175,5 @@ public class GuidanceHandler {
             // Soon...
         }
     }
-
-
 
 }
