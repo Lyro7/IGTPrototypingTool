@@ -48,7 +48,6 @@ public class GuidanceAlignmentController implements GuidanceController {
     @Override
     public void close() {
         unregisterController();
-        guidanceHandler.stopGuidanceLoop();
     }
 
     @Override
@@ -64,6 +63,7 @@ public class GuidanceAlignmentController implements GuidanceController {
 
     public void onStopVisualizationClicked() {
         guidanceHandler.switchToTab("GuidancePlanningView");
+        guidanceHandler.stopGuidanceLoop();
     }
 
     public Group getTargetCross() {
