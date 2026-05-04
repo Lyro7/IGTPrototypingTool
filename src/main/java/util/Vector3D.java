@@ -162,6 +162,22 @@ public class Vector3D {
         return sum;
     }
 
+    public Vector3D cross(Vector3D other) {
+        double x = vector[0];
+        double y = vector[1];
+        double z = vector[2];
+
+        double x2 = other.getX();
+        double y2 = other.getY();
+        double z2 = other.getZ();
+
+        double x3 = (y * z2) - (z * y2);
+        double y3 = (z * x2) - (x * z2);
+        double z3 = (x * y2) - (y * x2);
+
+        return new Vector3D(x3, y3, z3);
+    }
+
     public Vector3D normalize() {
         double x = vector[0];
         double y = vector[1];
