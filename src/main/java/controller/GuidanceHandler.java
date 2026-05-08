@@ -62,11 +62,7 @@ public class GuidanceHandler {
         animator = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (currentPhase.equals(Phase.ALIGNMENT)) {
-                    guidanceManager.alignmentLogic();
-                } else if (currentPhase.equals(Phase.ANGLE)) {
-                    guidanceManager.angulationLogic();
-                }
+                guidanceManager.alignment();
             }
         };
     }
@@ -138,7 +134,7 @@ public class GuidanceHandler {
     }
 
     public Circle getTargetCircle() {
-        return ((GuidanceAngleController) guidanceControllers.getFirst()).getTargetCircle();
+        return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getTargetCircle();
     }
 
     public Rectangle getDepthRectangle() {
@@ -163,17 +159,39 @@ public class GuidanceHandler {
 
     public void updateCurrentPhase(Phase currentPhase) {
         this.currentPhase = currentPhase;
-        phaseToSwitch();
+        viewAdjustments();
     }
 
-    private void phaseToSwitch() {
+    private void viewAdjustments() {
         if (currentPhase.equals(Phase.ALIGNMENT)) {
-            switchToTab("GuidanceAlignmentView");
+            tipAlignmentViewAdjustments();
         } else if (currentPhase.equals(Phase.ANGLE)) {
-            switchToTab("GuidanceAngleView");
+            angulationViewAdjustments();
         } else if (currentPhase.equals(Phase.DEPTH)) {
             // Soon...
         }
+    }
+
+    private void tipAlignmentViewAdjustments() {
+        GuidanceAlignmentController controller = ((GuidanceAlignmentController) guidanceControllers.getFirst());
+
+        controller.title.setText("Phase 2: Tip Alignment");
+
+        controller.targetCircle.setVisible(false);
+
+        controller.tLight1.setId("glowTrafficLight1");
+        controller.tLight2.setId("trafficLight2");
+    }
+
+    private void angulationViewAdjustments() {
+        GuidanceAlignmentController controller = ((GuidanceAlignmentController) guidanceControllers.getFirst());
+
+        controller.title.setText("Phase 3: Angulation");
+
+        controller.targetCircle.setVisible(true);
+
+        controller.tLight1.setId("trafficLight1");
+        controller.tLight2.setId("glowTrafficLight2");
     }
 
 }
