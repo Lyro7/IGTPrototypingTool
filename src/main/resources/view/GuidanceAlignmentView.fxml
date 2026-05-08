@@ -21,6 +21,7 @@
             <Line startX="-10" startY="-10" endX="10" endY="10"/>
             <Line startX="-10" startY="10"  endX="10" endY="-10"/>
         </Group>
+        <Circle id="targetCircle" fx:id="targetCircle" visible="false" centerX="0" centerY="0" radius="10"/>
     </Group>
     <BorderPane>
         <left>
@@ -63,7 +64,7 @@
             </StackPane>
         </bottom>
         <top>
-            <Text id="title" BorderPane.alignment="CENTER" text="Phase 2: Alignment"/>
+            <Text fx:id="title" id="title" BorderPane.alignment="CENTER" text="Phase 2: Tip Alignment"/>
         </top>
     </BorderPane>
 </StackPane>
