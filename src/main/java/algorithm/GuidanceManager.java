@@ -13,72 +13,90 @@ public class GuidanceManager {
 
     private final TrackingService trackingService = TrackingService.getInstance();
 
-    private final Vector3D entryAngulationPosition = new Vector3D(0, 0, 100);
+    private final Vector3D modelFeetPos = new Vector3D(0, 0, 100);
 
     public GuidanceManager(GuidanceHandler guidanceHandler) {
         this.guidanceHandler = guidanceHandler;
     }
 
-    public void alignmentLogic() {
+    public void alignment() {
         List<TrackingTool> tools = trackingService.getDataService().loadNextData(1);
 
         for (TrackingTool data : tools) {
             List<TrackingData> measurement = data.getMeasurement();
             for (TrackingData trackingData : measurement) {
 
-                Vector3D translationVector = calculateTranslationVector(trackingData.getPos());
+                // Depth
+                depth(trackingData.getPos());
 
-                double depth = calculateDepth(trackingData.getPos());
+                // Tip alignment
+                if (guidanceHandler.getCurrentPhase().equals(GuidanceHandler.Phase.ALIGNMENT)
+                        || guidanceHandler.getCurrentPhase().equals(GuidanceHandler.Phase.ANGLE)) {
+                    tipAlignment(trackingData.getPos());
+                }
 
-                renderDepthLabel(depth);
-
-                double progress = calculateDepthProgress(depth);
-
-                adjustDepthRectangle(progress);
-
-                Vector3D scaledTranslationVector = calculateScaledTranslationVector(translationVector);
-
-                translateTargetCross(scaledTranslationVector.getY(), scaledTranslationVector.getZ());
+                // Angulation
+                if (guidanceHandler.getCurrentPhase().equals(GuidanceHandler.Phase.ANGLE)) {
+                    angulation(trackingData);
+                }
             }
         }
     }
 
-    public void angulationLogic() {
-        List<TrackingTool> tools = trackingService.getDataService().loadNextData(1);
+    private void depth(Vector3D tipPosition) {
+        double depth = calculateDepth(tipPosition);
 
-        for (TrackingTool data : tools) {
-            List<TrackingData> measurement = data.getMeasurement();
-            for (TrackingData trackingData : measurement) {
-                Vector3D tipPos = trackingData.getPos();
+        renderDepthLabel(depth);
 
-                Vector3D feetPos = getNeedleFeetPosition(trackingData);
+        double progress = calculateDepthProgress(depth);
 
-                Vector3D entryPoint = guidanceHandler.getTargetList().getFirst();
-                Vector3D targetPoint = guidanceHandler.getTargetList().getLast();
+        double height = adjustDepthRectangleHeight(progress);
 
-                Vector3D path = targetPoint.sub(entryPoint).normalize();
-                Vector3D orientation = tipPos.sub(feetPos).normalize();
-
-                double angle = Math.acos(path.dot(orientation));
-
-                Vector3D rotationAxis = orientation.cross(path).normalize();
-
-                Vector3D scaledAngulation = scaleBasedAngulation(rotationAxis, angle);
-
-                translateTargetCircle(scaledAngulation.getY(), scaledAngulation.getZ());
-            }
-        }
+        adjustDepthRectangle(height);
     }
 
-    public Vector3D scaleBasedAngulation(Vector3D axis, double angle) {
-        double angleInDegrees = Math.toDegrees(angle);
+    private void tipAlignment(Vector3D tipPosition) {
+        Vector3D translationVector = calculateTranslationVector(tipPosition);
 
-        double scale = 0.5; // MM -> Pixel
+        Vector3D scaledTranslationVector = calculateScaledTranslationVector(translationVector);
 
-        double uiY = axis.getY() * angleInDegrees * scale;
-        double uiZ = axis.getZ() * angleInDegrees * scale;
+        translateTargetCross(scaledTranslationVector.getY(), scaledTranslationVector.getZ());
+    }
 
-        return new Vector3D(0, uiY, uiZ);
+    public void angulation(TrackingData data) {
+        Vector3D tipPos = data.getPos();
+
+        Vector3D feetPos = getNeedleFeetPosition(data);
+
+        Vector3D entryPoint  = guidanceHandler.getTargetList().getFirst();
+        Vector3D targetPoint = guidanceHandler.getTargetList().getLast();
+
+        Vector3D path = targetPoint.sub(entryPoint).normalize();
+
+        Vector3D orientation = tipPos.sub(feetPos);
+
+        double needleLength = orientation.getMag();
+
+        path.multLocal(needleLength);
+
+        // Calculate point, where feet pos should be positioned
+        Vector3D wantedPoint = tipPos.sub(path);
+
+        // Get the rotated right and up axis based off the path
+        Vector3D right = path.cross(new Vector3D(1, 0, 0)).normalize();
+        Vector3D up = right.cross(path).normalize();
+
+        Vector3D current = feetPos.sub(tipPos).normalize();
+        Vector3D should = wantedPoint.sub(tipPos).normalize();
+
+        // Get the rotation axis
+        Vector3D rotationAxis = current.cross(should);
+
+        // Get the horizontal and vertical angular deviation
+        double x = rotationAxis.dot(right) * 50;
+        double y = rotationAxis.dot(up) * 50;
+
+        translateTargetCircle(x, y);
     }
 
     private Vector3D getNeedleFeetPosition(TrackingData trackingData) {
@@ -87,30 +105,7 @@ public class GuidanceManager {
         Quaternion quaternion = trackingData.getRotation();
         Matrix3D rotationMatrix = quaternion.toRotationMatrix();
 
-        return tipPosition.add(rotationMatrix.mult(entryAngulationPosition));
-    }
-
-    // TODO: Fix mm <-> pixel relation
-    private void adjustDepthRectangle(double progress) {
-        double height;
-
-        // Behind the entry point
-        if (progress < 0.0) {
-            height = (1 - Math.min(Math.abs(progress), 1.0)) * 100;
-        // Exactly on the entry point
-        } else if (progress == 0.0) {
-            height = 100;
-        // Above the target point
-        } else if (progress > 1.0) {
-            // TODO: Show warning!
-            height = Math.clamp(progress, 0.0, 1.0);
-        // Inside the body, not on target point yet
-        } else {
-            height = Math.min(Math.abs(progress), 1.0) * 300;
-        }
-
-        guidanceHandler.getDepthRectangle().setHeight(height);
-
+        return tipPosition.add(rotationMatrix.mult(modelFeetPos));
     }
 
     public Vector3D calculateTranslationVector(Vector3D worldPosition3D) {
@@ -130,6 +125,8 @@ public class GuidanceManager {
 
         return new Vector3D(0, uiY, uiZ);
     }
+
+    /* DEPTH */
 
     private double calculateDepth(Vector3D position) {
         Vector3D entryPoint = guidanceHandler.getTargetList().getFirst();
@@ -151,9 +148,36 @@ public class GuidanceManager {
         return depth / maxDepth;
     }
 
+    private double adjustDepthRectangleHeight(double progress) {
+        double height;
+
+        // Behind the entry point
+        if (progress < 0.0) {
+            height = (1 - Math.min(Math.abs(progress), 1.0)) * 100;
+            // Exactly on the entry point
+        } else if (progress == 0.0) {
+            height = 100;
+            // Above the target point
+        } else if (progress > 1.0) {
+            height = Math.clamp(progress, 0.0, 1.0);
+            // Inside the body, not on target point yet
+        } else {
+            height = Math.min(Math.abs(progress), 1.0) * 300;
+        }
+
+        return height;
+    }
+
+    /* UI-CALLS */
+
+    private void adjustDepthRectangle(double height) {
+        guidanceHandler.getDepthRectangle().setHeight(height);
+    }
+
     private void translateTargetCross(double value1, double value2) {
         guidanceHandler.getTargetCross().setTranslateX(value1);
         guidanceHandler.getTargetCross().setTranslateY(value2);
+        System.out.println("V: " + value1);
     }
 
     private void translateTargetCircle(double value1, double value2) {
