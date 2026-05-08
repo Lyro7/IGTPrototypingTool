@@ -177,7 +177,6 @@ public class GuidanceManager {
     private void translateTargetCross(double value1, double value2) {
         guidanceHandler.getTargetCross().setTranslateX(value1);
         guidanceHandler.getTargetCross().setTranslateY(value2);
-        System.out.println("V: " + value1);
     }
 
     private void translateTargetCircle(double value1, double value2) {
