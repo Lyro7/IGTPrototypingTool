@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,6 +25,10 @@ public class GuidanceAlignmentController implements GuidanceController {
     public Group targetCross;
     @FXML
     public Rectangle fillRect;
+    @FXML
+    public Circle targetCircle;
+    @FXML
+    public Text title;
 
     private GuidanceHandler guidanceHandler;
 
@@ -68,6 +73,10 @@ public class GuidanceAlignmentController implements GuidanceController {
 
     public Group getTargetCross() {
         return targetCross;
+    }
+
+    public Circle getTargetCircle() {
+        return targetCircle;
     }
 
     public Rectangle getDepthRectangle() {
