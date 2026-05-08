@@ -94,7 +94,7 @@ public class GuidanceManager {
 
         // Get the horizontal and vertical angular deviation
         double x = rotationAxis.dot(right) * 50;
-        double y = rotationAxis.dot(up) * 50;
+        double y = -rotationAxis.dot(up) * 50;
 
         translateTargetCircle(x, y);
     }
