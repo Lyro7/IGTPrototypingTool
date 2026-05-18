@@ -83,7 +83,7 @@ public class GuidanceManager {
         Vector3D wantedPoint = tipPos.sub(path);
 
         // Get the rotated right and up axis based off the path
-        Vector3D right = path.cross(new Vector3D(1, 0, 0)).normalize();
+        Vector3D right = path.cross(new Vector3D(0, 1, 0)).normalize();
         Vector3D up = right.cross(path).normalize();
 
         Vector3D current = feetPos.sub(tipPos).normalize();
