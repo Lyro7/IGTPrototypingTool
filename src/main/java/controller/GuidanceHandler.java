@@ -177,6 +177,7 @@ public class GuidanceHandler {
 
         controller.title.setText("Phase 2: Tip Alignment");
 
+        controller.targetCross.setVisible(true);
         controller.targetCircle.setVisible(false);
 
         controller.tLight1.setId("glowTrafficLight1");
@@ -188,6 +189,7 @@ public class GuidanceHandler {
 
         controller.title.setText("Phase 3: Angulation");
 
+        controller.targetCross.setVisible(false);
         controller.targetCircle.setVisible(true);
 
         controller.tLight1.setId("trafficLight1");

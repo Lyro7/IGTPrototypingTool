@@ -30,8 +30,7 @@ public class GuidanceManager {
                 depth(trackingData.getPos());
 
                 // Tip alignment
-                if (guidanceHandler.getCurrentPhase().equals(GuidanceHandler.Phase.ALIGNMENT)
-                        || guidanceHandler.getCurrentPhase().equals(GuidanceHandler.Phase.ANGLE)) {
+                if (guidanceHandler.getCurrentPhase().equals(GuidanceHandler.Phase.ALIGNMENT)) {
                     tipAlignment(trackingData.getPos());
                 }
 
