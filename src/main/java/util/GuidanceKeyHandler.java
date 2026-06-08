@@ -28,7 +28,7 @@ public class GuidanceKeyHandler {
                     if (keyEvent.getCode() == KeyCode.Q) {
                         if (guidanceHandler.getCurrentPhase() == GuidanceHandler.Phase.ALIGNMENT) {
                             guidanceHandler.updateCurrentPhase(GuidanceHandler.Phase.ANGLE);
-                        } else if (guidanceHandler.getCurrentPhase() == GuidanceHandler.Phase.ALIGNMENT) {
+                        } else if (guidanceHandler.getCurrentPhase() == GuidanceHandler.Phase.ANGLE) {
                             guidanceHandler.updateCurrentPhase(GuidanceHandler.Phase.DEPTH);
                         }
                     }
