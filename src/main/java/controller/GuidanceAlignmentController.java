@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -29,6 +30,10 @@ public class GuidanceAlignmentController implements GuidanceController {
     public Circle targetCircle;
     @FXML
     public Text title;
+    @FXML
+    public StackPane subScenePane;
+    @FXML
+    public Group guidanceCircle;
 
     private GuidanceHandler guidanceHandler;
 
@@ -85,6 +90,10 @@ public class GuidanceAlignmentController implements GuidanceController {
 
     public Label getDepthLabel() {
         return depth;
+    }
+
+    public StackPane getSubScene() {
+        return subScenePane;
     }
 
 }
