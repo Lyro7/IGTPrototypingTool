@@ -1,6 +1,14 @@
 package algorithm;
 
 import controller.GuidanceHandler;
+import javafx.geometry.Point3D;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Cylinder;
+import javafx.scene.shape.Sphere;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import util.Matrix3D;
 import util.Quaternion;
 import util.Vector3D;
@@ -14,6 +22,10 @@ public class GuidanceManager {
     private final TrackingService trackingService = TrackingService.getInstance();
 
     private final Vector3D modelFeetPos = new Vector3D(0, 0, 100);
+
+    private Vector3D entryPoint;
+
+    private Vector3D targetPoint;
 
     public GuidanceManager(GuidanceHandler guidanceHandler) {
         this.guidanceHandler = guidanceHandler;
@@ -32,11 +44,33 @@ public class GuidanceManager {
                 // Tip alignment
                 if (guidanceHandler.getCurrentPhase().equals(GuidanceHandler.Phase.ALIGNMENT)) {
                     tipAlignment(trackingData.getPos());
+                    cameraTipAlignmentPhase(trackingData.getPos());
+
+                    guidanceHandler.phaseSwitch = false;
                 }
 
                 // Angulation
                 if (guidanceHandler.getCurrentPhase().equals(GuidanceHandler.Phase.ANGLE)) {
                     angulation(trackingData);
+                    cameraAngulationPhase(trackingData.getPos(), trackingData.getRotation());
+
+                    guidanceHandler.phaseSwitch = false;
+                }
+
+                // Scene-depth
+                if (guidanceHandler.getCurrentPhase().equals(GuidanceHandler.Phase.DEPTH)) {
+                    // First time
+                    if (guidanceHandler.phaseSwitch) {
+                        renderPlannedPath();
+                        addTargetSphere();
+                    }
+
+                    cameraAngulationPhase(trackingData.getPos(), trackingData.getRotation());
+
+                    //Vector3D predictedPoint = calculatePredictedPoint(trackingData.getPos(), trackingData.getRotation());
+                    //double hitError = calculateErrorTerm(predictedPoint);
+
+                    guidanceHandler.phaseSwitch = false;
                 }
             }
         }
@@ -66,9 +100,6 @@ public class GuidanceManager {
         Vector3D tipPos = data.getPos();
 
         Vector3D feetPos = getNeedleFeetPosition(data);
-
-        Vector3D entryPoint  = guidanceHandler.getTargetList().getFirst();
-        Vector3D targetPoint = guidanceHandler.getTargetList().getLast();
 
         Vector3D path = targetPoint.sub(entryPoint).normalize();
 
@@ -108,9 +139,6 @@ public class GuidanceManager {
     }
 
     public Vector3D calculateTranslationVector(Vector3D worldPosition3D) {
-        // Center point
-        Vector3D entryPoint = guidanceHandler.getTargetList().getFirst();
-
         // Translation from entry point to position
         return worldPosition3D.sub(entryPoint);
     }
@@ -128,9 +156,6 @@ public class GuidanceManager {
     /* DEPTH */
 
     private double calculateDepth(Vector3D position) {
-        Vector3D entryPoint = guidanceHandler.getTargetList().getFirst();
-        Vector3D targetPoint = guidanceHandler.getTargetList().getLast();
-
         Vector3D pathDir = (targetPoint.sub(entryPoint)).normalize();
 
         Vector3D movement = position.sub(entryPoint);
@@ -139,9 +164,6 @@ public class GuidanceManager {
     }
 
     private double calculateDepthProgress(double depth) {
-        Vector3D entryPoint = guidanceHandler.getTargetList().getFirst();
-        Vector3D targetPoint = guidanceHandler.getTargetList().getLast();
-
         double maxDepth = targetPoint.sub(entryPoint).getMag();
 
         return depth / maxDepth;
@@ -165,6 +187,131 @@ public class GuidanceManager {
         }
 
         return height;
+    }
+
+    /* CAMERA-MECHANISMS FOR SCENE OVERLAY */
+
+    private void cameraTipAlignmentPhase(Vector3D pos) {
+        guidanceHandler.getCamera().setPos(pos);
+    }
+
+    private void cameraAngulationPhase(Vector3D pos, Quaternion quaternion) {
+        guidanceHandler.getCamera().setPos(pos);
+
+        // Check this
+        Quaternion damped = new Quaternion(
+                quaternion.getX() * 0.1,
+                quaternion.getY() * 0.1,
+                quaternion.getZ() * 0.1,
+                quaternion.getW()
+        );
+        damped.norm();
+
+        quaternion.norm();
+
+        Matrix3D rotationMatrix = quaternion.toRotationMatrix();
+
+        // Debug purposes
+        /*
+
+        Vector3D forward = calculateForwardVector(rotationMatrix);
+
+        forward.multLocal(50.0);
+
+        Vector3D cameraPos = entryPoint.add(forward);
+        guidanceHandler.getCamera().setPos(cameraPos);
+         */
+
+        Affine rotation = new Affine(
+                rotationMatrix.get(0, 0), rotationMatrix.get(0, 1), rotationMatrix.get(0, 2), 0,
+                rotationMatrix.get(1, 0), rotationMatrix.get(1, 1), rotationMatrix.get(1, 2), 0,
+                rotationMatrix.get(2, 0), rotationMatrix.get(2, 1), rotationMatrix.get(2, 2), 0);
+
+        guidanceHandler.getCamera().getPerspectiveCamera().getTransforms().setAll(rotation);
+    }
+
+    private Vector3D calculateForwardVector(Matrix3D rotationMatrix) {
+        Vector3D forward = new Vector3D(
+                -rotationMatrix.get(0, 2),
+                -rotationMatrix.get(1, 2),
+                -rotationMatrix.get(2, 2));
+
+        forward.normalizeLocal();
+
+        return forward;
+    }
+
+    private void renderPlannedPath() {
+        Cylinder plannedPath = createCylinder(new Point3D(entryPoint.getX(), entryPoint.getY(), entryPoint.getZ()),
+                new Point3D(targetPoint.getX(), targetPoint.getY(), targetPoint.getZ()));
+
+        guidanceHandler.getWorld().getChildren().add(plannedPath);
+    }
+
+    private Vector3D calculatePredictedPoint(Vector3D pos, Quaternion quaternion) {
+        Matrix3D rotationMatrix = quaternion.toRotationMatrix();
+
+        Vector3D forward = calculateForwardVector(rotationMatrix);
+
+        double d = pos.distTo(targetPoint);
+
+        forward.multLocal(d);
+
+        return pos.add(forward);
+    }
+
+    private void addTargetSphere() {
+        Sphere sphere = new Sphere();
+
+        sphere.setTranslateX(targetPoint.getX());
+        sphere.setTranslateY(targetPoint.getY());
+        sphere.setTranslateZ(targetPoint.getZ());
+
+        sphere.setRadius(0.5);
+
+        sphere.setMaterial(new PhongMaterial(Color.BLACK));
+
+        guidanceHandler.getWorld().getChildren().add(sphere);
+    }
+
+    private double calculateErrorTerm(Vector3D predictedPoint) {
+        return Math.round(predictedPoint.distTo(targetPoint));
+    }
+
+    /* Source: https://stackoverflow.com/questions/56259785/how-to-draw-a-3d-line-in-javafx */
+    private Cylinder createCylinder(Point3D start, Point3D end) {
+        Point3D yAxis = new Point3D(0, 1, 0);
+
+        Point3D seg = end.subtract(start);
+
+        double height = seg.magnitude();
+
+        Point3D midpoint = end.midpoint(start);
+
+        Translate moveToMidpoint = new Translate(
+                midpoint.getX(),
+                midpoint.getY(),
+                midpoint.getZ());
+
+        Point3D axisOfRotation = seg.crossProduct(yAxis);
+
+        double angle = Math.acos(
+                seg.normalize().dotProduct(yAxis));
+
+        Rotate rotateAroundCenter = new Rotate(
+                -Math.toDegrees(angle),
+                axisOfRotation);
+
+        Cylinder line = new Cylinder(0.2, height);
+
+        line.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
+
+        return line;
+    }
+
+    public void updatePlannedPoints(Vector3D entryPoint, Vector3D targetPoint) {
+        this.entryPoint = entryPoint;
+        this.targetPoint = targetPoint;
     }
 
     /* UI-CALLS */
