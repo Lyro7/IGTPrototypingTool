@@ -1,11 +1,13 @@
 package controller;
 
+import algorithm.GuidanceDepthVisualizer;
 import algorithm.GuidanceManager;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
@@ -14,6 +16,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import shapes.CameraContainer;
 import util.GuidanceKeyHandler;
 import util.Vector3D;
 
@@ -39,7 +42,11 @@ public class GuidanceHandler {
 
     private final GuidanceKeyHandler guidanceKeyHandler = new GuidanceKeyHandler(this);
 
+    private final GuidanceDepthVisualizer guidanceDepthVisualizer = new GuidanceDepthVisualizer(this);
+
     private final LinkedList<Vector3D> targetList = new LinkedList<>();
+
+    public boolean phaseSwitch = false;
 
     /* List, which contains the current active controller */
     private final List<GuidanceController> guidanceControllers = new ArrayList<>();
@@ -59,6 +66,7 @@ public class GuidanceHandler {
     }
 
     public void guidanceLoop() {
+
         animator = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -68,6 +76,10 @@ public class GuidanceHandler {
     }
 
     public void startGuidanceLoop() {
+        guidanceDepthVisualizer.initialize();
+
+        guidanceManager.updatePlannedPoints(targetList.getFirst(), targetList.getLast());
+
         animator.start();
     }
 
@@ -125,8 +137,8 @@ public class GuidanceHandler {
         }
     }
 
-    public LinkedList<Vector3D> getTargetList() {
-        return targetList;
+    public CameraContainer getCamera() {
+        return guidanceDepthVisualizer.getCamera();
     }
 
     public Group getTargetCross() {
@@ -145,6 +157,10 @@ public class GuidanceHandler {
         return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getDepthLabel();
     }
 
+    public StackPane getSubScene() {
+        return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getSubScene();
+    }
+
     public void updateKeyHandler(Tab guidanceTab) {
         guidanceKeyHandler.setContentNode(guidanceTab);
     }
@@ -157,7 +173,12 @@ public class GuidanceHandler {
         return currentPhase;
     }
 
+    public Group getWorld() {
+        return guidanceDepthVisualizer.getWorld();
+    }
+
     public void updateCurrentPhase(Phase currentPhase) {
+        phaseSwitch = true;
         this.currentPhase = currentPhase;
         viewAdjustments();
     }
@@ -168,7 +189,7 @@ public class GuidanceHandler {
         } else if (currentPhase.equals(Phase.ANGLE)) {
             angulationViewAdjustments();
         } else if (currentPhase.equals(Phase.DEPTH)) {
-            // Soon...
+            sceneDepthViewAdjustments();
         }
     }
 
@@ -194,6 +215,25 @@ public class GuidanceHandler {
 
         controller.tLight1.setId("trafficLight1");
         controller.tLight2.setId("glowTrafficLight2");
+        controller.tLight3.setId("trafficLight3");
+
+        controller.guidanceCircle.setVisible(true);
     }
+
+    private void sceneDepthViewAdjustments() {
+        GuidanceAlignmentController controller = ((GuidanceAlignmentController) guidanceControllers.getFirst());
+
+        controller.title.setText("Phase 4: Depth");
+
+        controller.tLight2.setId("trafficLight2");
+        controller.tLight3.setId("glowTrafficLight3");
+
+        controller.targetCross.setVisible(false);
+        controller.targetCircle.setVisible(false);
+
+        controller.guidanceCircle.setVisible(false);
+    }
+
+
 
 }
