@@ -11,8 +11,10 @@
 
 <!-- Phase 2 Alignment View -->
 <?import javafx.scene.shape.Rectangle?>
+
 <StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.GuidanceAlignmentController" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/guidance.css">
-    <Group StackPane.alignment="CENTER">
+    <StackPane fx:id="subScenePane"/>
+    <Group StackPane.alignment="CENTER" fx:id="guidanceCircle">
         <Circle id="outerCircle" radius="200" centerX="0" centerY="0"/>
         <Circle id="innerCircle" radius="100" centerX="0" centerY="0"/>
         <Line id="innerLine" startX="-200" startY="0"    endX="200" endY="0"/>
