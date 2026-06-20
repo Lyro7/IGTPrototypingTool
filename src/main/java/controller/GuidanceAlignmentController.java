@@ -34,6 +34,10 @@ public class GuidanceAlignmentController implements GuidanceController {
     public StackPane subScenePane;
     @FXML
     public Group guidanceCircle;
+    @FXML
+    public Label distance;
+    @FXML
+    public Label hitError;
 
     private GuidanceHandler guidanceHandler;
 
@@ -72,7 +76,7 @@ public class GuidanceAlignmentController implements GuidanceController {
     }
 
     public void onStopVisualizationClicked() {
-        guidanceHandler.switchToTab("GuidancePlanningView");
+        guidanceHandler.switchContentOfTab("GuidancePlanningView");
         guidanceHandler.stopGuidanceLoop();
     }
 
@@ -90,6 +94,14 @@ public class GuidanceAlignmentController implements GuidanceController {
 
     public Label getDepthLabel() {
         return depth;
+    }
+
+    public Label getDistanceLabel() {
+        return distance;
+    }
+
+    public Label getHitErrorLabel() {
+        return hitError;
     }
 
     public StackPane getSubScene() {
