@@ -9,7 +9,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Text?>
 
-<!-- Phase 2 Alignment View -->
 <?import javafx.scene.shape.Rectangle?>
 
 <StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.GuidanceAlignmentController" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/guidance.css">
@@ -42,7 +41,7 @@
         <right>
             <Group>
                 <BorderPane.margin>
-                    <Insets top="400" bottom="0" right="30" left="0"/>
+                    <Insets top="400" bottom="0" right="40" left="0"/>
                 </BorderPane.margin>
                 <Rectangle height="300" width="150" fill="#333"/>
                 <Rectangle fx:id="fillRect" height="0" width="150" fill="limegreen"/>
@@ -50,7 +49,7 @@
                 <Label text="Entry" layoutX="-40" layoutY="100"/>
                 <Line startX="-25" endX="175" startY="300" endY="300" />
                 <Label text="Target" layoutX="-40" layoutY="300"/>
-                <Label fx:id="depth" text="Depth: " layoutX="40" layoutY="320"/>
+                <Label fx:id="depth" text="Depth: " layoutX="20" layoutY="320"/>
             </Group>
         </right>
         <bottom>
@@ -60,8 +59,12 @@
                 </HBox>
                 <HBox spacing="0" alignment="BOTTOM_RIGHT" mouseTransparent="true">
                     <StackPane.margin>
-                        <Insets bottom="0" left="0" right="90" top="0"/>
+                        <Insets bottom="10" left="0" right="60" top="0"/>
                     </StackPane.margin>
+                    <HBox spacing="70" alignment="BOTTOM_RIGHT" mouseTransparent="true">
+                        <Label fx:id="distance" text="Distance: "/>
+                        <Label fx:id="hitError" text="Hit Error: ? mm "/>
+                    </HBox>
                 </HBox>
             </StackPane>
         </bottom>
