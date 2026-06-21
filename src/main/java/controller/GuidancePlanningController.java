@@ -14,8 +14,6 @@ public class GuidancePlanningController implements GuidanceController {
     @FXML
     public Button startVisualization;
     @FXML
-    public Button loadPuncturePath;
-    @FXML
     public ToggleButton xyPlane;
     @FXML
     public ToggleButton zxPlane;
@@ -102,10 +100,6 @@ public class GuidancePlanningController implements GuidanceController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    public void onLoadPuncturePathClicked() {
-        guidanceHandler.loadPuncturePath();
     }
 
     public void onXYClicked() {
