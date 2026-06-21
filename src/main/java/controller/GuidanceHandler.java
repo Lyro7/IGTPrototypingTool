@@ -1,7 +1,7 @@
 package controller;
 
 import algorithm.DataService;
-import algorithm.GuidanceDepthVisualizer;
+import algorithm.GuidanceSceneCoordinator;
 import algorithm.GuidanceManager;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
@@ -43,7 +43,7 @@ public class GuidanceHandler {
 
     private final GuidanceKeyHandler guidanceKeyHandler = new GuidanceKeyHandler(this);
 
-    private final GuidanceDepthVisualizer guidanceDepthVisualizer = new GuidanceDepthVisualizer(this);
+    private final GuidanceSceneCoordinator guidanceSceneCoordinator = new GuidanceSceneCoordinator(this);
 
     private AnimationTimer animator;
 
@@ -72,8 +72,8 @@ public class GuidanceHandler {
                 DataService.getInstance().getTargetList().getFirst(),
                 DataService.getInstance().getTargetList().getLast());
 
-        guidanceDepthVisualizer.initialize();
-        guidanceDepthVisualizer.addActiveModelsToRoot();
+        guidanceSceneCoordinator.initialize();
+        guidanceSceneCoordinator.addActiveModelsToRoot();
     }
 
     /**
@@ -153,7 +153,7 @@ public class GuidanceHandler {
         controller.tLight1.setId("glowTrafficLight1");
         controller.tLight2.setId("trafficLight2");
 
-        guidanceDepthVisualizer.toggleTorso(true);
+        guidanceSceneCoordinator.toggleTorso(true);
     }
 
     /**
@@ -175,7 +175,7 @@ public class GuidanceHandler {
 
         controller.getHitErrorLabel().setText("Hit Error: ? mm");
 
-        guidanceDepthVisualizer.toggleTorso(false);
+        guidanceSceneCoordinator.toggleTorso(false);
     }
 
     /**
@@ -262,11 +262,11 @@ public class GuidanceHandler {
     /*----------------------------------------DELEGATES----------------------------------------*/
 
     public Group getWorld() {
-        return guidanceDepthVisualizer.getWorld();
+        return guidanceSceneCoordinator.getWorld();
     }
 
     public CameraContainer getCamera() {
-        return guidanceDepthVisualizer.getCamera();
+        return guidanceSceneCoordinator.getCamera();
     }
 
     public Group getTargetCross() {

@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * Also creates the subScene and adds the camera to it.
  * </p>
  * */
-public class GuidanceDepthVisualizer {
+public class GuidanceSceneCoordinator {
 
     private final GuidanceHandler guidanceHandler;
 
@@ -37,7 +37,7 @@ public class GuidanceDepthVisualizer {
     /** Will be initalized, if a torso.stl file is being loaded. */
     private MeshView torso;
 
-    public GuidanceDepthVisualizer(GuidanceHandler guidanceHandler) {
+    public GuidanceSceneCoordinator(GuidanceHandler guidanceHandler) {
         this.guidanceHandler = guidanceHandler;
     }
 
