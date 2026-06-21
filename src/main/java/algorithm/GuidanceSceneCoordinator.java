@@ -65,6 +65,10 @@ public class GuidanceSceneCoordinator {
             subScene.setCamera(cameraContainer.getPerspectiveCamera());
             subScenePane.getChildren().add(subScene);
         }
+
+        if (!subScenePane.getChildren().contains(subScene)) {
+            subScenePane.getChildren().add(subScene);
+        }
     }
 
     /**
