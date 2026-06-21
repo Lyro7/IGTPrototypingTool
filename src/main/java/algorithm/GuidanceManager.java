@@ -14,7 +14,7 @@ import util.Vector3D;
 
 import java.util.List;
 
-public class GuidanceSceneCoordinator {
+public class GuidanceManager {
 
     private final GuidanceHandler guidanceHandler;
 
@@ -47,7 +47,7 @@ public class GuidanceSceneCoordinator {
      * */
     private final static double TIP_ALIGNMENT_CAMERA_OFFSET_Z = -700;
 
-    public GuidanceSceneCoordinator(GuidanceHandler guidanceHandler) {
+    public GuidanceManager(GuidanceHandler guidanceHandler) {
         this.guidanceHandler = guidanceHandler;
     }
 

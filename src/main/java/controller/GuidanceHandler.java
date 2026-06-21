@@ -2,7 +2,7 @@ package controller;
 
 import algorithm.DataService;
 import algorithm.GuidanceDepthVisualizer;
-import algorithm.GuidanceSceneCoordinator;
+import algorithm.GuidanceManager;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -39,7 +39,7 @@ public class GuidanceHandler {
 
     private MainController mainController;
 
-    private final GuidanceSceneCoordinator guidanceSceneCoordinator = new GuidanceSceneCoordinator(this);
+    private final GuidanceManager guidanceManager = new GuidanceManager(this);
 
     private final GuidanceKeyHandler guidanceKeyHandler = new GuidanceKeyHandler(this);
 
@@ -58,7 +58,7 @@ public class GuidanceHandler {
         animator = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                guidanceSceneCoordinator.alignment();
+                guidanceManager.alignment();
             }
         };
     }
@@ -68,7 +68,7 @@ public class GuidanceHandler {
      * from the visualization section.
      */
     public void prepareTargetsAndMeshes() {
-        guidanceSceneCoordinator.updatePlannedPoints(
+        guidanceManager.updatePlannedPoints(
                 DataService.getInstance().getTargetList().getFirst(),
                 DataService.getInstance().getTargetList().getLast());
 
