@@ -1,5 +1,6 @@
 package controller;
 
+import algorithm.DataService;
 import algorithm.GuidanceDepthVisualizer;
 import algorithm.GuidanceManager;
 import javafx.animation.AnimationTimer;
@@ -10,31 +11,31 @@ import javafx.scene.control.Tab;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 import shapes.CameraContainer;
 import util.GuidanceKeyHandler;
-import util.Vector3D;
 
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class GuidanceHandler {
 
+    /** The 3 main phases after guidance started. */
     public enum Phase { ALIGNMENT, ANGLE, DEPTH }
 
+    /** The standard planes depending on the position of the EM-Tracker */
+    public enum Plane { XY, ZX, YZ }
+
+    /** The phase the user is currently in. */
     private Phase currentPhase = Phase.ALIGNMENT;
+
+    /** The current selected plane from the planing section. */
+    public Plane planeSelected;
+
+    /** The boolean if a phase switch occured. */
+    public boolean phaseSwitch = true;
+
+    /** List, which contains the current active controller */
+    private final List<GuidanceController> guidanceControllers = new ArrayList<>();
 
     private MainController mainController;
 
@@ -44,29 +45,16 @@ public class GuidanceHandler {
 
     private final GuidanceDepthVisualizer guidanceDepthVisualizer = new GuidanceDepthVisualizer(this);
 
-    private final LinkedList<Vector3D> targetList = new LinkedList<>();
-
-    public boolean phaseSwitch = false;
-
-    /* List, which contains the current active controller */
-    private final List<GuidanceController> guidanceControllers = new ArrayList<>();
-
     private AnimationTimer animator;
 
     public GuidanceHandler() {
         guidanceLoop();
     }
 
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-    }
-
-    public void switchToTab(String fileName) {
-        mainController.switchContentOfTab(fileName);
-    }
-
+    /**
+     * Creates the alignment main loop.
+     * */
     public void guidanceLoop() {
-
         animator = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -75,18 +63,43 @@ public class GuidanceHandler {
         };
     }
 
-    public void startGuidanceLoop() {
+    /**
+     * This method updates the selected target points, loads and transforms the meshes selected
+     * from the visualization section.
+     */
+    public void prepareTargetsAndMeshes() {
+        guidanceManager.updatePlannedPoints(
+                DataService.getInstance().getTargetList().getFirst(),
+                DataService.getInstance().getTargetList().getLast());
+
         guidanceDepthVisualizer.initialize();
+        guidanceDepthVisualizer.addActiveModelsToRoot();
+    }
 
-        guidanceManager.updatePlannedPoints(targetList.getFirst(), targetList.getLast());
-
+    /**
+     * Starts the main loop.
+     * */
+    public void startGuidanceLoop() {
         animator.start();
     }
 
+    /**
+     * Stops the main loop.
+     * */
     public void stopGuidanceLoop() {
         animator.stop();
     }
 
+    /**
+     * Delegates the tab switch from the guidance controllers to the main controller.
+     * */
+    public void switchContentOfTab(String fileName) {
+        mainController.switchContentOfTab(fileName);
+    }
+
+    /**
+     * This method is called by switching tabs. It closes and removes the last active controller.
+     * */
     public void resetControllers() {
         for (GuidanceController controller : guidanceControllers) {
             controller.close();
@@ -94,95 +107,28 @@ public class GuidanceHandler {
         guidanceControllers.clear();
     }
 
+    /**
+     * Adds the current active controller to the list.
+     * */
     public void addGuidanceController(GuidanceController controller) {
         this.guidanceControllers.add(controller);
     }
 
     /**
-     * This function is based on the implementation from the visualization section.
-     * <p>
-     * Select a .mps file created from MITK to add two targets to the guidance.
-     * One is the entry point and the other represents the target point.
-     * </p>
-     */
-    public void loadPuncturePath() {
-        targetList.clear();
-
-        FileChooser fc = new FileChooser();
-        fc.setTitle("Load puncture path");
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MPS Files", "*.mps"));
-        File file = fc.showOpenDialog(new Stage());
-        if (file != null) {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            try {
-                dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-                DocumentBuilder db = dbf.newDocumentBuilder();
-                Document doc = db.parse(file);
-                doc.getDocumentElement().normalize();
-                NodeList list = doc.getElementsByTagName("point");
-                for (int temp = 0; temp < list.getLength(); temp++) {
-                    org.w3c.dom.Node node = list.item(temp);
-                    if (node.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
-                        Element element = (Element) node;
-                        double x = Double.parseDouble(element.getElementsByTagName("x").item(0).getTextContent());
-                        double y = Double.parseDouble(element.getElementsByTagName("y").item(0).getTextContent());
-                        double z = Double.parseDouble(element.getElementsByTagName("z").item(0).getTextContent());
-
-                        targetList.add(new Vector3D(x, y, z));
-                    }
-                }
-            } catch (ParserConfigurationException | SAXException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public CameraContainer getCamera() {
-        return guidanceDepthVisualizer.getCamera();
-    }
-
-    public Group getTargetCross() {
-        return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getTargetCross();
-    }
-
-    public Circle getTargetCircle() {
-        return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getTargetCircle();
-    }
-
-    public Rectangle getDepthRectangle() {
-        return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getDepthRectangle();
-    }
-
-    public Label getDepthLabel() {
-        return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getDepthLabel();
-    }
-
-    public StackPane getSubScene() {
-        return ((GuidanceAlignmentController) guidanceControllers.getFirst()).getSubScene();
-    }
-
-    public void updateKeyHandler(Tab guidanceTab) {
-        guidanceKeyHandler.setContentNode(guidanceTab);
-    }
-
-    public void registerKeyHandler(Scene scene) {
-        guidanceKeyHandler.handleKeyPressed(scene);
-    }
-
-    public Phase getCurrentPhase() {
-        return currentPhase;
-    }
-
-    public Group getWorld() {
-        return guidanceDepthVisualizer.getWorld();
-    }
-
+     * This method is being called by the {@link GuidanceKeyHandler},
+     * if a key has been pressed.
+     *
+     * @param currentPhase The phase the user is currently in.
+     * */
     public void updateCurrentPhase(Phase currentPhase) {
         phaseSwitch = true;
         this.currentPhase = currentPhase;
         viewAdjustments();
     }
 
+    /**
+     * Calls related methods based of the current phase.
+     * */
     private void viewAdjustments() {
         if (currentPhase.equals(Phase.ALIGNMENT)) {
             tipAlignmentViewAdjustments();
@@ -193,6 +139,9 @@ public class GuidanceHandler {
         }
     }
 
+    /**
+     * Performs view changes by switching from angulation to tip alignment phase.
+     * */
     private void tipAlignmentViewAdjustments() {
         GuidanceAlignmentController controller = ((GuidanceAlignmentController) guidanceControllers.getFirst());
 
@@ -203,8 +152,13 @@ public class GuidanceHandler {
 
         controller.tLight1.setId("glowTrafficLight1");
         controller.tLight2.setId("trafficLight2");
+
+        guidanceDepthVisualizer.toggleTorso(true);
     }
 
+    /**
+     * Performs view changes by switching to angulation phase.
+     * */
     private void angulationViewAdjustments() {
         GuidanceAlignmentController controller = ((GuidanceAlignmentController) guidanceControllers.getFirst());
 
@@ -218,8 +172,15 @@ public class GuidanceHandler {
         controller.tLight3.setId("trafficLight3");
 
         controller.guidanceCircle.setVisible(true);
+
+        controller.getHitErrorLabel().setText("Hit Error: ? mm");
+
+        guidanceDepthVisualizer.toggleTorso(false);
     }
 
+    /**
+     * Performs view changes by switching from angulation to scene depth phase.
+     * */
     private void sceneDepthViewAdjustments() {
         GuidanceAlignmentController controller = ((GuidanceAlignmentController) guidanceControllers.getFirst());
 
@@ -234,6 +195,106 @@ public class GuidanceHandler {
         controller.guidanceCircle.setVisible(false);
     }
 
+    /**
+     * Gives access to the {@link GuidanceAlignmentController}.
+     * <p>
+     * This method will throw an {@link IllegalStateException} if the controller is not active.
+     * It should only be called from certain places where the guidance view is active.
+     * </p>
+     * @return The {@link GuidanceAlignmentController}.
+     * */
+    private GuidanceAlignmentController getGuidanceAlignmentControllerIfActive() {
+        if (guidanceControllers.getFirst() instanceof GuidanceAlignmentController) {
+            return ((GuidanceAlignmentController) guidanceControllers.getFirst());
+        }
+        throw new IllegalStateException("GuidanceAlignmentController is not active");
+    }
 
+    /**
+     * Gives access to the {@link GuidancePlanningController}.
+     * <p>
+     * This method will throw an {@link IllegalStateException} if the controller is not active.
+     * It should only be called from certain places where the planning view is active.
+     * </p>
+     * @return The {@link GuidancePlanningController}.
+     * */
+    private GuidancePlanningController getGuidancePlanningControllerIfActive() {
+        if (guidanceControllers.getFirst() instanceof GuidancePlanningController) {
+            return ((GuidancePlanningController) guidanceControllers.getFirst());
+        }
+        throw new IllegalStateException("GuidancePlanningController is not active");
+    }
+
+    /**
+     * Provides access to the current guidance tab and passes it to the {@link GuidanceKeyHandler}.
+     *
+     * @param guidanceTab The current guidance tab.
+     * */
+    public void updateKeyHandler(Tab guidanceTab) {
+        guidanceKeyHandler.setContentNode(guidanceTab);
+    }
+
+    /**
+     * Provides access to the scene and passes it to the {@link GuidanceKeyHandler}
+     *
+     * @param scene The scene which will be used to gain access of the keys pressed.
+     * */
+    public void registerKeyHandler(Scene scene) {
+        guidanceKeyHandler.handleKeyPressed(scene);
+    }
+
+    public Plane getPlaneSelected() {
+        return planeSelected;
+    }
+
+    public Phase getCurrentPhase() {
+        return currentPhase;
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
+    public void setPlaneSelected(Plane planeSelected) {
+        this.planeSelected = planeSelected;
+    }
+
+    /*----------------------------------------DELEGATES----------------------------------------*/
+
+    public Group getWorld() {
+        return guidanceDepthVisualizer.getWorld();
+    }
+
+    public CameraContainer getCamera() {
+        return guidanceDepthVisualizer.getCamera();
+    }
+
+    public Group getTargetCross() {
+        return getGuidanceAlignmentControllerIfActive().getTargetCross();
+    }
+
+    public Circle getTargetCircle() {
+        return getGuidanceAlignmentControllerIfActive().getTargetCircle();
+    }
+
+    public Rectangle getDepthRectangle() {
+        return getGuidanceAlignmentControllerIfActive().getDepthRectangle();
+    }
+
+    public Label getDepthLabel() {
+        return getGuidanceAlignmentControllerIfActive().getDepthLabel();
+    }
+
+    public Label getDistanceLabel() {
+        return getGuidanceAlignmentControllerIfActive().getDistanceLabel();
+    }
+
+    public Label getHitErrorLabel() {
+        return getGuidanceAlignmentControllerIfActive().getHitErrorLabel();
+    }
+
+    public StackPane getSubScene() {
+        return getGuidanceAlignmentControllerIfActive().getSubScene();
+    }
 
 }
