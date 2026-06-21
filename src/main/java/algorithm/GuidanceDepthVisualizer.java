@@ -1,6 +1,5 @@
 package algorithm;
 
-import com.interactivemesh.jfx.importer.stl.StlMeshImporter;
 import controller.GuidanceHandler;
 import javafx.scene.Group;
 import javafx.scene.SceneAntialiasing;
@@ -8,45 +7,100 @@ import javafx.scene.SubScene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
+import javafx.scene.transform.Affine;
 import shapes.CameraContainer;
+import java.util.ArrayList;
 
-import java.io.File;
-import java.net.URISyntaxException;
-import java.util.Objects;
-
+/**
+ * Class which handles the world, meshes and subScene for the scene overlay.
+ * <p>
+ * It loads the meshes from the {@link DataService}, transforms them and adds them to the scene.
+ * Also creates the subScene and adds the camera to it.
+ * </p>
+ * */
 public class GuidanceDepthVisualizer {
 
     private final GuidanceHandler guidanceHandler;
 
+    /** Camera used for scene overlay. */
     private final CameraContainer cameraContainer = new CameraContainer(true);
 
+    /** Group which contains the models and the camera. */
     private final Group world = new Group();
 
-    public GuidanceDepthVisualizer (GuidanceHandler guidanceHandler) {
+    /** Group that holds the models and it's transforms.  */
+    private final Group modelRoot = new Group();
+
+    /** The viewport hosting the background scene graph. */
+    private SubScene subScene;
+
+    /** Will be initalized, if a torso.stl file is being loaded. */
+    private MeshView torso;
+
+    public GuidanceDepthVisualizer(GuidanceHandler guidanceHandler) {
         this.guidanceHandler = guidanceHandler;
     }
 
+    /** This method is used to set up the scene overlay. It's always called by guidance start.
+     * <p>
+     * This method rotates the modelRoot and therefore the meshes by a matrix. It creates
+     * the subScene only once at runtime.
+     * </p>
+     *  */
     public void initialize() {
+        modelRoot.getTransforms().setAll(new Affine(
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                1, 0, 0, 0));
 
-        MeshView liver = loadMesh("/models/liver.stl");
-        MeshView kidneyLeft = loadMesh("/models/kidney_left.stl");
-        MeshView kidneyRight = loadMesh("/models/kidney_right.stl");
-        MeshView lung = loadMesh("/models/lung.stl");
-        MeshView bones = loadMesh("/models/bones.stl");
-        MeshView vessels = loadMesh("/models/vessels.stl");
-
-        world.getChildren().addAll(liver, kidneyLeft, kidneyRight, lung, bones, vessels);
+        if (!world.getChildren().contains(modelRoot)) {
+            world.getChildren().add(modelRoot);
+        }
 
         StackPane subScenePane = guidanceHandler.getSubScene();
 
-        SubScene subScene = new SubScene(world, 1200, 1000, true, SceneAntialiasing.BALANCED);
+        if (subScene == null) {
+            subScene = new SubScene(world, 1600, 800, true, SceneAntialiasing.BALANCED);
+            subScene.setRoot(world);
+            subScene.setCamera(cameraContainer.getPerspectiveCamera());
+            subScenePane.getChildren().add(subScene);
+        }
+    }
 
-        cameraContainer.getPerspectiveCamera().setTranslateZ(500);
+    /**
+     * Creates a {@link MeshView} from the meshes which are contained in the {@link DataService}.
+     * */
+    public void addActiveModelsToRoot() {
+        modelRoot.getChildren().clear();
 
-        subScene.setRoot(world);
-        subScene.setCamera(cameraContainer.getPerspectiveCamera());
+        ArrayList<TriangleMesh> meshes = DataService.getInstance().getMeshes();
+        ArrayList<String> meshNames = DataService.getInstance().getMeshNames();
 
-        subScenePane.getChildren().add(subScene);
+        for (int i = 0; i < meshes.size(); i++) {
+            MeshView meshView = new MeshView(meshes.get(i));
+            modelRoot.getChildren().add(meshView);
+            // If a torso is loaded, initialize variable
+            if (meshNames.get(i).contains("torso")) {
+                torso = meshView;
+            }
+        }
+    }
+
+    /**
+     * Manages the visibility of the torso in the background scene overlay.
+     *
+     * @param visible The visibility of the torso.
+     * */
+    public void toggleTorso(boolean visible) {
+        if (torso != null) {
+            if (!visible) {
+                modelRoot.getChildren().remove(torso);
+            } else {
+                if (!modelRoot.getChildren().contains(torso)) {
+                    modelRoot.getChildren().add(torso);
+                }
+            }
+        }
     }
 
     public CameraContainer getCamera() {
@@ -56,28 +110,5 @@ public class GuidanceDepthVisualizer {
     public Group getWorld() {
         return world;
     }
-
-    private MeshView loadMesh(String path) {
-        StlMeshImporter meshImporter = new StlMeshImporter();
-
-        try {
-            meshImporter.read(new File(Objects.requireNonNull(getClass().getResource(path)).toURI()));
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-
-        TriangleMesh mesh = meshImporter.getImport();
-        meshImporter.close();
-
-        MeshView meshView = new MeshView(mesh);
-
-        meshView.setScaleX(5);
-        meshView.setScaleY(5);
-        meshView.setScaleZ(5);
-
-        return meshView;
-    }
-
-
 
 }
