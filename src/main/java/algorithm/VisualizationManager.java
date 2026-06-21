@@ -1,9 +1,9 @@
 package algorithm;
 
 import com.interactivemesh.jfx.importer.stl.StlMeshImporter;
-import org.json.JSONObject;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.shape.TriangleMesh;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -17,7 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Mesh;
 import javafx.scene.shape.MeshView;
 import javafx.scene.transform.Rotate;
 import javafx.stage.FileChooser;
@@ -186,6 +185,7 @@ public class VisualizationManager {
     public void clearSTLModelsAndPaths() {
         stlModels.clear();
         targets.clear();
+        DataService.getInstance().clearAll();
     }
 
     /**
@@ -211,12 +211,13 @@ public class VisualizationManager {
      * @param fileList the file list of models to be loaded
      */
     private void loadNewSTLModel(List<File> fileList) {
+        DataService dataService = DataService.getInstance();
         for (int i = 0; i < fileList.size(); i++) {
             try {
                 StlMeshImporter importer = new StlMeshImporter();
 
                 importer.read(fileList.get(i));
-                Mesh mesh = importer.getImport();
+                TriangleMesh mesh = importer.getImport();
                 String name = getSTLName(fileList.get(i));
                 STLModel model = new STLModel(new MeshView(mesh), name, "ccccccff", true);
                 model.getMeshView().getTransforms().addAll(
@@ -224,6 +225,8 @@ public class VisualizationManager {
                         new Rotate(180, Rotate.X_AXIS)
                 );
                 stlModels.add(model);
+
+                dataService.addMesh(mesh, name);
 
                 //logger.log(Level.INFO, "STL file read from: " + fileList.get(i).getAbsolutePath());
             } catch (Exception e) {
@@ -262,6 +265,7 @@ public class VisualizationManager {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             // Refresh the target list, everytime you load new targets
             targets = new LinkedList<>();
+            DataService.getInstance().clearTargets();
             try {
                 dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
                 DocumentBuilder db = dbf.newDocumentBuilder();
@@ -276,6 +280,7 @@ public class VisualizationManager {
                         double y = Double.parseDouble(element.getElementsByTagName("y").item(0).getTextContent());
                         double z = Double.parseDouble(element.getElementsByTagName("z").item(0).getTextContent());
                         targets.add(new Target(x, y, z));
+                        DataService.getInstance().addTarget(new Vector3D(x, y, z));
                     }
                 }
             } catch (ParserConfigurationException | SAXException | IOException e) {
