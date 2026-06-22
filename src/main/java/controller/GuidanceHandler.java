@@ -74,6 +74,10 @@ public class GuidanceHandler {
 
         guidanceSceneCoordinator.initialize();
         guidanceSceneCoordinator.addActiveModelsToRoot();
+
+        if (!DataService.getInstance().meshNameContainsInList("torso")) {
+            guidanceSceneCoordinator.setTorsoNull();
+        }
     }
 
     /**
