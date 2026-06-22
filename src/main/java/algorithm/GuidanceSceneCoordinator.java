@@ -107,6 +107,13 @@ public class GuidanceSceneCoordinator {
         }
     }
 
+    /**
+     * If torso has been removed from the mesh list, set the variable null.
+     * */
+    public void setTorsoNull() {
+        torso = null;
+    }
+
     public CameraContainer getCamera() {
         return cameraContainer;
     }
