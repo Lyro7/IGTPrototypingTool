@@ -76,6 +76,13 @@ public final class DataService {
         targetList.clear();
     }
 
+    /**
+     * Checks if a given mesh name appears in the list.
+     * */
+    public boolean meshNameContainsInList(String meshName) {
+        return meshNames.contains(meshName);
+    }
+
     public LinkedList<Vector3D> getTargetList() {
         return targetList;
     }
