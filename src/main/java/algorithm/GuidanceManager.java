@@ -1,12 +1,12 @@
 package algorithm;
 
 import controller.GuidanceHandler;
-import javafx.geometry.Point3D;
 import javafx.scene.PerspectiveCamera;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
-import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Affine;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import util.Matrix3D;
 import util.Quaternion;
@@ -36,10 +36,10 @@ public class GuidanceManager {
     private final static double TARGET_SPHERE_RADIUS = 1.0;
 
     /** Representating the scale of the UI movement in the guidance circle for tip alignment phase. */
-    private final static double TIP_ALIGNMENT_SCALE = 1.5;
+    private final static double TIP_ALIGNMENT_SCALE = 2;
 
     /** Representating the scale of the UI movement in the guidance circle for angulation phase. */
-    private final static double ANGULATION_SCALE = 50;
+    private final static double ANGULATION_SCALE = 160;
 
     /**
      * Representating the offset where the camera will be set in tip alignment phase for the z-axis.
@@ -232,8 +232,8 @@ public class GuidanceManager {
                 uiV = errorVector.getZ() * TIP_ALIGNMENT_SCALE;
             }
             case ZX -> {
-                uiH = errorVector.getZ() * TIP_ALIGNMENT_SCALE;
-                uiV = errorVector.getX() * TIP_ALIGNMENT_SCALE;
+                uiH = -errorVector.getZ() * TIP_ALIGNMENT_SCALE;
+                uiV = -errorVector.getX() * TIP_ALIGNMENT_SCALE;
             }
             default -> throw new IllegalStateException("Undefined plane");
         }
@@ -316,50 +316,39 @@ public class GuidanceManager {
      * */
     private void cameraTipAlignmentPhase(Vector3D tipPos) {
         Vector3D mappedPos = trackingToScene(tipPos);
+        guidanceHandler.getCamera().getPerspectiveCamera().getTransforms().clear();
         guidanceHandler.getCamera().setPos(new Vector3D(
                 mappedPos.getX(), mappedPos.getY(), mappedPos.getZ() + TIP_ALIGNMENT_CAMERA_OFFSET_Z));
     }
 
     /**
-     * This method rotates the camera from its default +Z direction to the specified forward vector.
+     * This method calculates the camera transformation representing the needle with its rotation.
      * <p>
-     * It uses the forward vector, aka the needle's look direction, and rotates the +Z axis to align with it.
-     * The rotation axis is derived from the cross product, while the rotation angle is derived from the
-     * dot product.
-     * After applying the rotation, the camera looks exactly in the direction of the needle.
+     * It calculates the right vector using the needle forward vector and an initialized up vector.
+     * Because the up and right vector are not retrieved by the needle rotation matrix,
+     * the camera is only covering pitch and yaw but ignoring the roll.
      * </p>
-     *
-     * @param camera The JavaFX camera.
-     * @param forward The forward vector aka. the look direction of the needle.
+     * @param camera The perspective camera.
+     * @param forward The look direction of the needle.
      * */
     private void setLookDirection(PerspectiveCamera camera, Vector3D forward) {
-        Point3D lookDir = new Point3D(forward.getX(), forward.getY(), forward.getZ()).normalize();
+        Vector3D worldUp = new Vector3D(0, 1, 0);
 
-        // Perspective camera of JavaFX looks into +Z direction
-        Point3D zAxis = new Point3D(0, 0, 1);
+        Vector3D right = worldUp.cross(forward);
 
-        // Get the rotation axis
-        Point3D rotationAxis = zAxis.crossProduct(lookDir);
-
-        double dot = zAxis.dotProduct(lookDir);
-
-        // Defines how strong to rotate around the rotation axis
-        double angle = Math.toDegrees(Math.acos(Math.clamp(dot, -1.0, 1.0)));
-
-        // Will be true, if the forward vector points along +Z or -Z
-        if (rotationAxis.magnitude() < 1e-6) {
-            // Looking along +Z
-            if (dot > 0) {
-                angle = 0;
-                // Looking along -Z
-            } else {
-                angle = 180;
-            }
-            camera.getTransforms().setAll(new Rotate(angle, Rotate.X_AXIS));
-            return;
+        // Forward parallel to worldUp vector
+        if (right.getMag() < 1e-6) {
+            worldUp = new Vector3D(0, 0, 1);
+            right = worldUp.cross(worldUp).normalize();
         }
-        camera.getTransforms().setAll(
-                new Rotate(angle, rotationAxis.getX(), rotationAxis.getY(), rotationAxis.getZ()));
+        right = right.normalize();
+        Vector3D up = forward.cross(right).normalize();
+
+        camera.getTransforms().setAll(new Affine(
+                right.getX(), up.getX(), forward.getX(), 0,
+                right.getY(), up.getY(), forward.getY(), 0,
+                right.getZ(), up.getZ(), forward.getZ(), 0
+        ));
     }
 
     /**
@@ -391,7 +380,7 @@ public class GuidanceManager {
         return switch (guidanceHandler.getPlaneSelected()) {
             case XY -> new Vector3D(-v.getX(), -v.getY(), v.getZ());
             case YZ -> new Vector3D(-v.getY(), -v.getZ(), v.getX());
-            case ZX -> new Vector3D(-v.getZ(), -v.getX(), v.getY());
+            case ZX -> new Vector3D(-v.getZ(), -v.getZ(), v.getX());
         };
     }
 
@@ -451,7 +440,15 @@ public class GuidanceManager {
             targetSphere = new Sphere();
             targetSphere.setRadius(TARGET_SPHERE_RADIUS);
 
-            targetSphere.setMaterial(new PhongMaterial(Color.BLACK));
+            PhongMaterial mat = new PhongMaterial();
+            mat.setDiffuseColor(Color.GOLD);
+
+            WritableImage glow = new WritableImage(1, 1);
+            glow.getPixelWriter().setColor(0, 0, Color.GOLD);
+            mat.setSelfIlluminationMap(glow);
+
+            targetSphere.setMaterial(mat);
+
             guidanceHandler.getWorld().getChildren().add(targetSphere);
         }
 
