@@ -224,8 +224,8 @@ public class GuidanceManager {
 
         switch (guidanceHandler.getPlaneSelected()) {
             case XY -> {
-                uiH = errorVector.getX() * TIP_ALIGNMENT_SCALE;
-                uiV = errorVector.getY() * TIP_ALIGNMENT_SCALE;
+                uiH = errorVector.getY() * TIP_ALIGNMENT_SCALE;
+                uiV = -errorVector.getX() * TIP_ALIGNMENT_SCALE;
             }
             case YZ -> {
                 uiH = errorVector.getY() * TIP_ALIGNMENT_SCALE;
@@ -378,7 +378,7 @@ public class GuidanceManager {
      * */
     private Vector3D trackingToScene(Vector3D v) {
         return switch (guidanceHandler.getPlaneSelected()) {
-            case XY -> new Vector3D(-v.getX(), -v.getY(), v.getZ());
+            case XY -> new Vector3D(-v.getY(), v.getX(), v.getZ());
             case YZ -> new Vector3D(-v.getY(), -v.getZ(), v.getX());
             case ZX -> new Vector3D(-v.getZ(), -v.getZ(), v.getX());
         };
