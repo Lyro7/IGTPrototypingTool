@@ -2,8 +2,12 @@ package controller;
 
 import algorithm.DataService;
 import algorithm.TrackingService;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
+import util.PointSet;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -19,6 +23,8 @@ public class GuidancePlanningController implements GuidanceController {
     public ToggleButton zxPlane;
     @FXML
     public ToggleButton yzPlane;
+    @FXML
+    public ComboBox<PointSet> pathComboBox;
 
     @Override
     public void registerController() {
@@ -44,6 +50,36 @@ public class GuidancePlanningController implements GuidanceController {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         registerController();
 
+        pathComboBox.setItems(DataService.getInstance().getPointSet());
+
+        pathComboBox.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(PointSet pointSet) {
+                return (pointSet != null) ? pointSet.getName() : "";
+            }
+
+            @Override
+            public PointSet fromString(String s) {
+                return null;
+            }
+        });
+
+        pathComboBox.setOnAction(event -> {
+            PointSet pointSet = pathComboBox.getValue();
+
+            if (pointSet != null) {
+                guidanceHandler.updatePlannedPoints(pointSet.getV1(), pointSet.getV2());
+                guidanceHandler.setActivePointSet(pointSet);
+            }
+        });
+
+        // If a new point set is being added, always select the first one in the combo box
+        DataService.getInstance().getPointSet().addListener((ListChangeListener<PointSet>) change -> {
+            if (!DataService.getInstance().getPointSet().isEmpty()) {
+                pathComboBox.setValue(DataService.getInstance().getPointSet().getFirst());
+            }
+        });
+
         ToggleGroup planeGroup = new ToggleGroup();
 
         xyPlane.setToggleGroup(planeGroup);
@@ -58,6 +94,17 @@ public class GuidancePlanningController implements GuidanceController {
 
         if (guidanceHandler.getPlaneSelected() != null) {
             selectPlane(guidanceHandler.getPlaneSelected());
+        }
+
+        if (guidanceHandler.getActivePointSet() != null) {
+            setActivePointSet(guidanceHandler.getActivePointSet());
+        }
+
+    }
+
+    private void setActivePointSet(PointSet pointSet) {
+        if (pathComboBox.getValue() == null && pointSet != null) {
+            pathComboBox.setValue(pointSet);
         }
     }
 
@@ -84,14 +131,20 @@ public class GuidancePlanningController implements GuidanceController {
             showAlert("Please select a tracking source!");
             return true;
         }
-        if (DataService.getInstance().getTargetList().isEmpty()) {
+        if (DataService.getInstance().getPointSet().isEmpty()) {
             showAlert("Please load a puncture path!");
             return true;
         }
+
+        if (!xyPlane.isSelected() && !zxPlane.isSelected() && !yzPlane.isSelected()) {
+            guidanceHandler.setPlaneSelected(null);
+        }
+
         if (guidanceHandler.getPlaneSelected() == null) {
             showAlert("Please select a plane!");
             return true;
         }
+
         return false;
     }
 
