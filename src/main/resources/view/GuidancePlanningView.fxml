@@ -5,6 +5,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ComboBox?>
 <StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.GuidancePlanningController" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/guidance.css">
     <BorderPane>
         <top>
@@ -19,6 +20,9 @@
                     <ToggleButton fx:id="xyPlane" text="XY-Plane" onAction="#onXYClicked"/>
                     <ToggleButton fx:id="zxPlane" text="ZX-Plane" onAction="#onZXClicked"/>
                     <ToggleButton fx:id="yzPlane" text="YZ-Plane" onAction="#onYZClicked"/>
+                </HBox>
+                <HBox spacing="10" alignment="CENTER">
+                    <ComboBox fx:id="pathComboBox" id="comboBox" prefWidth="200"/>
                 </HBox>
             </VBox>
         </center>
