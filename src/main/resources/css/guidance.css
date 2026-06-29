@@ -69,3 +69,7 @@
 #title {
     -fx-font-size: 25;
 }
+
+#comboBox .list-cell {
+    -fx-cell-size: 35;
+}
