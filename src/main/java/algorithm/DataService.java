@@ -1,18 +1,19 @@
 package algorithm;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.shape.TriangleMesh;
-import util.Vector3D;
+import util.PointSet;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * Singleton class which holds meshes and target points globally, which are loaded from visualization.
  * */
 public final class DataService {
 
-    /** List which contains the entry and target point loaded from the .mps file. */
-    private final LinkedList<Vector3D> targetList = new LinkedList<>();
+    /** List which contains sets of the entry and target point loaded from the .mps file. */
+    private final ObservableList<PointSet> pointSetList = FXCollections.observableArrayList();
 
     /** List which contains the meshes, loaded from the visualization section. */
     private final ArrayList<TriangleMesh> meshes = new ArrayList<>();
@@ -52,28 +53,27 @@ public final class DataService {
     }
 
     /**
-     * This method adds a 3D vector to the target list.
+     * This method adds a point set to the point set list.
      *
-     * @param target The target.
+     * @param pointSet The point set.
      * */
-    public void addTarget(Vector3D target) {
-        targetList.add(target);
+    public void addPointSet(PointSet pointSet) {
+        pointSetList.add(pointSet);
     }
 
     /**
-     * This method clears the targets, meshes and mesh names.
+     * This method clears the point sets
      * */
-    public void clearAll() {
-        targetList.clear();
+    public void clearPointSets() {
+        pointSetList.clear();
+    }
+
+    /**
+     * This method clears the meshes and mesh names.
+     * */
+    public void clearMeshes() {
         meshes.clear();
         meshNames.clear();
-    }
-
-    /**
-     * Clears the target list.
-     * */
-    public void clearTargets() {
-        targetList.clear();
     }
 
     /**
@@ -83,8 +83,8 @@ public final class DataService {
         return meshNames.contains(meshName);
     }
 
-    public LinkedList<Vector3D> getTargetList() {
-        return targetList;
+    public ObservableList<PointSet> getPointSet() {
+        return pointSetList;
     }
 
     public ArrayList<TriangleMesh> getMeshes() {
