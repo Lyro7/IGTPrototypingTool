@@ -13,6 +13,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import shapes.CameraContainer;
 import util.GuidanceKeyHandler;
+import util.PointSet;
+import util.Vector3D;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,9 @@ public class GuidanceHandler {
 
     /** The boolean if a phase switch occured. */
     public boolean phaseSwitch = true;
+
+    /** Holds the selected value of the path combo box */
+    private PointSet activePointSet;
 
     /** List, which contains the current active controller */
     private final List<GuidanceController> guidanceControllers = new ArrayList<>();
@@ -68,16 +73,16 @@ public class GuidanceHandler {
      * from the visualization section.
      */
     public void prepareTargetsAndMeshes() {
-        guidanceManager.updatePlannedPoints(
-                DataService.getInstance().getTargetList().getFirst(),
-                DataService.getInstance().getTargetList().getLast());
-
         guidanceSceneCoordinator.initialize();
         guidanceSceneCoordinator.addActiveModelsToRoot();
 
         if (!DataService.getInstance().meshNameContainsInList("torso")) {
             guidanceSceneCoordinator.setTorsoNull();
         }
+    }
+
+    public void updatePlannedPoints(Vector3D entry, Vector3D target) {
+        guidanceManager.updatePlannedPoints(entry, target);
     }
 
     /**
@@ -92,6 +97,8 @@ public class GuidanceHandler {
      * */
     public void stopGuidanceLoop() {
         animator.stop();
+        // Reset phase after visualization stopped.
+        currentPhase = Phase.ALIGNMENT;
     }
 
     /**
@@ -255,12 +262,20 @@ public class GuidanceHandler {
         return currentPhase;
     }
 
+    public PointSet getActivePointSet() {
+        return activePointSet;
+    }
+
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
 
     public void setPlaneSelected(Plane planeSelected) {
         this.planeSelected = planeSelected;
+    }
+
+    public void setActivePointSet(PointSet activePointSet) {
+        this.activePointSet = activePointSet;
     }
 
     /*----------------------------------------DELEGATES----------------------------------------*/
