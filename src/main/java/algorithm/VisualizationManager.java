@@ -22,6 +22,7 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import shapes.Target;
+import util.PointSet;
 import util.Vector3D;
 
 import javax.xml.XMLConstants;
@@ -179,13 +180,14 @@ public class VisualizationManager {
         }*/
     }
 
-    /**
-     * Clears all stl models and paths from the visualisation
-     */
-    public void clearSTLModelsAndPaths() {
+    public void clearSTLModels() {
         stlModels.clear();
+        DataService.getInstance().clearMeshes();
+    }
+
+    public void clearTargetPoints() {
         targets.clear();
-        DataService.getInstance().clearAll();
+        DataService.getInstance().clearPointSets();
     }
 
     /**
@@ -250,29 +252,26 @@ public class VisualizationManager {
         return name;
     }
 
-    /**
-     * Select a .mps file created from MITK to add two targets to the visualisation
-     * One is the entry point and the other represents the target point
-     */
-    public void addPathVisualisation() {
+    public void loadPointSet() {
         FileChooser fc = new FileChooser();
-        fc.setTitle("Load Path Visualisation");
+        fc.setTitle("Load point set");
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MPS Files", "*.mps"));
         File file = fc.showOpenDialog(new Stage());
         if (file != null) {
+            targets = new LinkedList<>();
+            String name = file.getName();
             // Read xml files:
             // https://mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            // Refresh the target list, everytime you load new targets
-            targets = new LinkedList<>();
-            DataService.getInstance().clearTargets();
             try {
                 dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
                 DocumentBuilder db = dbf.newDocumentBuilder();
                 Document doc = db.parse(file);
                 doc.getDocumentElement().normalize();
                 NodeList list = doc.getElementsByTagName("point");
-                for (int temp = 0; temp < list.getLength(); temp++) {
+
+                // 1 .MPS file should only contain two points, ignore rest
+                for (int temp = 0; temp < 2; temp++) {
                     org.w3c.dom.Node node = list.item(temp);
                     if (node.getNodeType() == org.w3c.dom.Node.ELEMENT_NODE) {
                         Element element = (Element) node;
@@ -280,9 +279,12 @@ public class VisualizationManager {
                         double y = Double.parseDouble(element.getElementsByTagName("y").item(0).getTextContent());
                         double z = Double.parseDouble(element.getElementsByTagName("z").item(0).getTextContent());
                         targets.add(new Target(x, y, z));
-                        DataService.getInstance().addTarget(new Vector3D(x, y, z));
                     }
                 }
+
+                DataService.getInstance().addPointSet(new PointSet(
+                        targets.getFirst().getPos(), targets.getLast().getPos(), name
+                ));
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();
             }
