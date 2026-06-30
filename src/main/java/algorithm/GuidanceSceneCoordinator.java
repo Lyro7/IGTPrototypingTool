@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Affine;
@@ -60,9 +61,10 @@ public class GuidanceSceneCoordinator {
         StackPane subScenePane = guidanceHandler.getSubScene();
 
         if (subScene == null) {
-            subScene = new SubScene(world, 1600, 800, true, SceneAntialiasing.BALANCED);
+            subScene = new SubScene(world, 1500, 800, true, SceneAntialiasing.BALANCED);
             subScene.setRoot(world);
             subScene.setCamera(cameraContainer.getPerspectiveCamera());
+            subScene.setFill(Color.rgb(90, 90, 90, 0.5));
             subScenePane.getChildren().add(subScene);
         }
 
