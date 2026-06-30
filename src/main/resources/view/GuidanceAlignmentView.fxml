@@ -24,6 +24,10 @@
         </Group>
         <Circle id="targetCircle" fx:id="targetCircle" visible="false" centerX="0" centerY="0" radius="10"/>
     </Group>
+    <Group fx:id="centerCrosshair" StackPane.alignment="CENTER">
+        <Line startX="-10" startY="0"   endX="10" endY="0"/>
+        <Line startX="0"   startY="-10" endX="0"  endY="10"/>
+    </Group>
     <BorderPane>
         <left>
             <VBox id="trafficLightVBox" spacing="10" BorderPane.alignment="TOP_LEFT" maxHeight="180" alignment="CENTER">
