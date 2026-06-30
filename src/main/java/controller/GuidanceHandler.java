@@ -161,6 +161,8 @@ public class GuidanceHandler {
         controller.targetCross.setVisible(true);
         controller.targetCircle.setVisible(false);
 
+        controller.centerCrosshair.setVisible(false);
+
         controller.tLight1.setId("glowTrafficLight1");
         controller.tLight2.setId("trafficLight2");
 
@@ -177,6 +179,8 @@ public class GuidanceHandler {
 
         controller.targetCross.setVisible(false);
         controller.targetCircle.setVisible(true);
+
+        controller.centerCrosshair.setVisible(false);
 
         controller.tLight1.setId("trafficLight1");
         controller.tLight2.setId("glowTrafficLight2");
@@ -197,11 +201,13 @@ public class GuidanceHandler {
 
         controller.title.setText("Phase 4: Depth");
 
-        controller.tLight2.setId("trafficLight2");
-        controller.tLight3.setId("glowTrafficLight3");
-
         controller.targetCross.setVisible(false);
         controller.targetCircle.setVisible(false);
+
+        controller.centerCrosshair.setVisible(true);
+
+        controller.tLight2.setId("trafficLight2");
+        controller.tLight3.setId("glowTrafficLight3");
 
         controller.guidanceCircle.setVisible(false);
     }
@@ -296,6 +302,10 @@ public class GuidanceHandler {
         return getGuidanceAlignmentControllerIfActive().getTargetCircle();
     }
 
+    public Group getCenterCrosshair() {
+        return getGuidanceAlignmentControllerIfActive().getCenterCrosshair();
+    }
+
     public Rectangle getDepthRectangle() {
         return getGuidanceAlignmentControllerIfActive().getDepthRectangle();
     }
@@ -315,5 +325,7 @@ public class GuidanceHandler {
     public StackPane getSubScene() {
         return getGuidanceAlignmentControllerIfActive().getSubScene();
     }
+
+
 
 }
