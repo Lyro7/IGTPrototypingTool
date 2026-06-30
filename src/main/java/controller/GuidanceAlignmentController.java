@@ -38,11 +38,12 @@ public class GuidanceAlignmentController implements GuidanceController {
     public Label distance;
     @FXML
     public Label hitError;
-
-    private GuidanceHandler guidanceHandler;
-
+    @FXML
+    public Group centerCrosshair;
     @FXML
     public Button stopVisualization;
+
+    private GuidanceHandler guidanceHandler;
 
     @Override
     public void registerController() {
@@ -86,6 +87,10 @@ public class GuidanceAlignmentController implements GuidanceController {
 
     public Circle getTargetCircle() {
         return targetCircle;
+    }
+
+    public Group getCenterCrosshair() {
+        return centerCrosshair;
     }
 
     public Rectangle getDepthRectangle() {
