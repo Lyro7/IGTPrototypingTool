@@ -260,6 +260,13 @@ public class GuidanceHandler {
         guidanceKeyHandler.handleKeyPressed(scene);
     }
 
+    /**
+     * Used after first start of visualization.
+     * */
+    public void disableCenterCross() {
+        getGuidanceAlignmentControllerIfActive().getCenterCrosshair().setVisible(false);
+    }
+
     public Plane getPlaneSelected() {
         return planeSelected;
     }
@@ -300,10 +307,6 @@ public class GuidanceHandler {
 
     public Circle getTargetCircle() {
         return getGuidanceAlignmentControllerIfActive().getTargetCircle();
-    }
-
-    public Group getCenterCrosshair() {
-        return getGuidanceAlignmentControllerIfActive().getCenterCrosshair();
     }
 
     public Rectangle getDepthRectangle() {
