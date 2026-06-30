@@ -80,7 +80,11 @@
             </StackPane>
         </bottom>
         <top>
-            <Text fx:id="title" id="title" BorderPane.alignment="CENTER" text="Phase 2: Tip Alignment"/>
+            <Text fx:id="title" id="title" BorderPane.alignment="CENTER" text="Phase 2: Tip Alignment">
+                <BorderPane.margin>
+                    <Insets bottom="0" left="0" right="0" top="15"/>
+                </BorderPane.margin>
+            </Text>
         </top>
     </BorderPane>
 </StackPane>

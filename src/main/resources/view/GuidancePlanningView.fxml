@@ -6,10 +6,16 @@
 
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ComboBox?>
+
+<?import javafx.geometry.Insets?>
 <StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controller.GuidancePlanningController" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/guidance.css">
     <BorderPane>
         <top>
-            <Text id="title" BorderPane.alignment="TOP_CENTER" text="Phase 1: Planning"/>
+            <Text id="title" BorderPane.alignment="TOP_CENTER" text="Phase 1: Planning">
+                <BorderPane.margin>
+                    <Insets bottom="0" left="0" right="0" top="15"/>
+                </BorderPane.margin>
+            </Text>
         </top>
         <center>
             <VBox spacing="20" alignment="CENTER">
