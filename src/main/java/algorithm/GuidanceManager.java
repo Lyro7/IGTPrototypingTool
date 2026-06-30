@@ -339,7 +339,7 @@ public class GuidanceManager {
         // Forward parallel to worldUp vector
         if (right.getMag() < 1e-6) {
             worldUp = new Vector3D(0, 0, 1);
-            right = worldUp.cross(worldUp).normalize();
+            right = worldUp.cross(forward);
         }
         right = right.normalize();
         Vector3D up = forward.cross(right).normalize();
