@@ -123,7 +123,7 @@ public class GuidancePlanningController implements GuidanceController {
 
         guidanceHandler.switchContentOfTab("GuidanceAlignmentView");
         guidanceHandler.prepareTargetsAndMeshes();
-        guidanceHandler.disableCenterCross();
+        guidanceHandler.disableDepthViewCrosshair();
 
         guidanceHandler.startGuidanceLoop();
     }

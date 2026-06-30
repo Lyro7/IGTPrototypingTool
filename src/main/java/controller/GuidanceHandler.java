@@ -161,7 +161,7 @@ public class GuidanceHandler {
         controller.targetCross.setVisible(true);
         controller.targetCircle.setVisible(false);
 
-        controller.centerCrosshair.setVisible(false);
+        controller.depthViewCrosshair.setVisible(false);
 
         controller.tLight1.setId("glowTrafficLight1");
         controller.tLight2.setId("trafficLight2");
@@ -180,7 +180,7 @@ public class GuidanceHandler {
         controller.targetCross.setVisible(false);
         controller.targetCircle.setVisible(true);
 
-        controller.centerCrosshair.setVisible(false);
+        controller.depthViewCrosshair.setVisible(false);
 
         controller.tLight1.setId("trafficLight1");
         controller.tLight2.setId("glowTrafficLight2");
@@ -204,7 +204,7 @@ public class GuidanceHandler {
         controller.targetCross.setVisible(false);
         controller.targetCircle.setVisible(false);
 
-        controller.centerCrosshair.setVisible(true);
+        controller.depthViewCrosshair.setVisible(true);
 
         controller.tLight2.setId("trafficLight2");
         controller.tLight3.setId("glowTrafficLight3");
@@ -263,8 +263,8 @@ public class GuidanceHandler {
     /**
      * Used after first start of visualization.
      * */
-    public void disableCenterCross() {
-        getGuidanceAlignmentControllerIfActive().getCenterCrosshair().setVisible(false);
+    public void disableDepthViewCrosshair() {
+        getGuidanceAlignmentControllerIfActive().getDepthViewCrosshair().setVisible(false);
     }
 
     public Plane getPlaneSelected() {
