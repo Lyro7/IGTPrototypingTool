@@ -428,7 +428,7 @@ public class GuidanceManager {
      * @return The distance between the predicted point and the target point.
      * */
     private double calculateErrorTerm(Vector3D predictedPoint) {
-        return Math.round(predictedPoint.distTo(targetPoint));
+        return predictedPoint.distTo(targetPoint);
     }
 
     /**
@@ -441,10 +441,10 @@ public class GuidanceManager {
             targetSphere.setRadius(TARGET_SPHERE_RADIUS);
 
             PhongMaterial mat = new PhongMaterial();
-            mat.setDiffuseColor(Color.GOLD);
+            mat.setDiffuseColor(Color.DARKVIOLET);
 
             WritableImage glow = new WritableImage(1, 1);
-            glow.getPixelWriter().setColor(0, 0, Color.GOLD);
+            glow.getPixelWriter().setColor(0, 0, Color.DARKVIOLET);
             mat.setSelfIlluminationMap(glow);
 
             targetSphere.setMaterial(mat);
@@ -488,12 +488,12 @@ public class GuidanceManager {
 
     private void renderDistanceLabel(double distance) {
         String formattedDistance = String.format("%.2f", distance);
-        guidanceHandler.getDistanceLabel().setText("Distance: " + formattedDistance + " mm");
+        guidanceHandler.getDistanceLabel().setText("Distance to target: " + formattedDistance + " mm");
     }
 
     private void renderHitErrorLabel(double hitError) {
         String formattedHitError = String.format("%.2f", hitError);
-        guidanceHandler.getHitErrorLabel().setText("Hit Error: " + formattedHitError + " mm");
+        guidanceHandler.getHitErrorLabel().setText("Predicted hit-error: " + formattedHitError + " mm");
     }
 
 }
