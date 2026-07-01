@@ -65,6 +65,10 @@ public class GuidanceSceneCoordinator {
             subScene.setRoot(world);
             subScene.setCamera(cameraContainer.getPerspectiveCamera());
             subScene.setFill(Color.rgb(90, 90, 90, 0.5));
+
+            subScene.heightProperty().bind(subScenePane.heightProperty().multiply(0.82));
+            subScene.widthProperty().bind(subScene.heightProperty().multiply(16.0 / 9.0));
+
             subScenePane.getChildren().add(subScene);
         }
 
