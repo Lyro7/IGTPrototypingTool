@@ -14,6 +14,11 @@ import util.Vector3D;
 
 import java.util.List;
 
+/**
+ * This class manages the main logic of the whole guidance.
+ * It covers several mathematical operations, such as calculating the error vector,
+ * calculating the angular deviation, the depth of the needle and the correct camera movement.
+ * */
 public class GuidanceManager {
 
     private final GuidanceHandler guidanceHandler;
