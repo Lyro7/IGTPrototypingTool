@@ -20,7 +20,7 @@
         <center>
             <VBox spacing="20" alignment="CENTER">
                 <HBox spacing="10"  alignment="CENTER">
-                    <Button fx:id="startVisualization" text="Start Visualization" onAction="#onStartVisualizationClicked"/>
+                    <Button text="Start Visualization" onAction="#onStartVisualizationClicked"/>
                 </HBox>
                 <HBox spacing="10" alignment="CENTER" >
                     <ToggleButton fx:id="xyPlane" text="XY-Plane" onAction="#onXYClicked"/>

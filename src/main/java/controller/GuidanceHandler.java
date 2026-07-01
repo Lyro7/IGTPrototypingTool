@@ -156,15 +156,15 @@ public class GuidanceHandler {
     private void tipAlignmentViewAdjustments() {
         GuidanceAlignmentController controller = ((GuidanceAlignmentController) guidanceControllers.getFirst());
 
-        controller.title.setText("Phase 2: Tip Alignment");
+        controller.getTitle().setText("Phase 2: Tip Alignment");
 
-        controller.targetCross.setVisible(true);
-        controller.targetCircle.setVisible(false);
+        controller.getTargetCross().setVisible(true);
+        controller.getTargetCircle().setVisible(false);
 
-        controller.depthViewCrosshair.setVisible(false);
+        controller.getDepthViewCrosshair().setVisible(false);
 
-        controller.tLight1.setId("glowTrafficLight1");
-        controller.tLight2.setId("trafficLight2");
+        controller.getTLight1().setId("glowTrafficLight1");
+        controller.getTLight2().setId("trafficLight2");
 
         guidanceSceneCoordinator.toggleTorso(true);
     }
@@ -175,18 +175,18 @@ public class GuidanceHandler {
     private void angulationViewAdjustments() {
         GuidanceAlignmentController controller = ((GuidanceAlignmentController) guidanceControllers.getFirst());
 
-        controller.title.setText("Phase 3: Angulation");
+        controller.getTitle().setText("Phase 3: Angulation");
 
-        controller.targetCross.setVisible(false);
-        controller.targetCircle.setVisible(true);
+        controller.getTargetCross().setVisible(false);
+        controller.getTargetCircle().setVisible(true);
 
-        controller.depthViewCrosshair.setVisible(false);
+        controller.getDepthViewCrosshair().setVisible(false);
 
-        controller.tLight1.setId("trafficLight1");
-        controller.tLight2.setId("glowTrafficLight2");
-        controller.tLight3.setId("trafficLight3");
+        controller.getTLight1().setId("trafficLight1");
+        controller.getTLight2().setId("glowTrafficLight2");
+        controller.getTLight3().setId("trafficLight3");
 
-        controller.guidanceCircle.setVisible(true);
+        controller.getGuidanceCircle().setVisible(true);
 
         controller.getHitErrorLabel().setText("Hit Error: ? mm");
 
@@ -199,17 +199,17 @@ public class GuidanceHandler {
     private void sceneDepthViewAdjustments() {
         GuidanceAlignmentController controller = ((GuidanceAlignmentController) guidanceControllers.getFirst());
 
-        controller.title.setText("Phase 4: Depth");
+        controller.getTitle().setText("Phase 4: Depth");
 
-        controller.targetCross.setVisible(false);
-        controller.targetCircle.setVisible(false);
+        controller.getTargetCross().setVisible(false);
+        controller.getTargetCircle().setVisible(false);
 
-        controller.depthViewCrosshair.setVisible(true);
+        controller.getDepthViewCrosshair().setVisible(true);
 
-        controller.tLight2.setId("trafficLight2");
-        controller.tLight3.setId("glowTrafficLight3");
+        controller.getTLight2().setId("trafficLight2");
+        controller.getTLight3().setId("glowTrafficLight3");
 
-        controller.guidanceCircle.setVisible(false);
+        controller.getGuidanceCircle().setVisible(false);
     }
 
     /**

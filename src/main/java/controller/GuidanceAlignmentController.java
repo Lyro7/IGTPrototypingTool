@@ -2,7 +2,6 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
@@ -14,36 +13,34 @@ import java.util.ResourceBundle;
 
 public class GuidanceAlignmentController implements GuidanceController {
 
-    @FXML
-    public Circle tLight1;
-    @FXML
-    public Circle tLight2;
-    @FXML
-    public Circle tLight3;
-    @FXML
-    public Label depth;
-    @FXML
-    public Group targetCross;
-    @FXML
-    public Rectangle fillRect;
-    @FXML
-    public Circle targetCircle;
-    @FXML
-    public Text title;
-    @FXML
-    public StackPane subScenePane;
-    @FXML
-    public Group guidanceCircle;
-    @FXML
-    public Label distance;
-    @FXML
-    public Label hitError;
-    @FXML
-    public Button stopVisualization;
-    @FXML
-    public Group depthViewCrosshair;
-
     private GuidanceHandler guidanceHandler;
+
+    @FXML
+    private Circle tLight1;
+    @FXML
+    private Circle tLight2;
+    @FXML
+    private Circle tLight3;
+    @FXML
+    private Label depth;
+    @FXML
+    private Group targetCross;
+    @FXML
+    private Rectangle fillRect;
+    @FXML
+    private Circle targetCircle;
+    @FXML
+    private Text title;
+    @FXML
+    private StackPane subScenePane;
+    @FXML
+    private Group guidanceCircle;
+    @FXML
+    private Label distance;
+    @FXML
+    private Label hitError;
+    @FXML
+    private Group depthViewCrosshair;
 
     @Override
     public void registerController() {
@@ -81,24 +78,44 @@ public class GuidanceAlignmentController implements GuidanceController {
         guidanceHandler.stopGuidanceLoop();
     }
 
-    public Group getTargetCross() {
-        return targetCross;
+    public Circle getTLight1() {
+        return tLight1;
     }
 
-    public Circle getTargetCircle() {
-        return targetCircle;
+    public Circle getTLight2() {
+        return tLight2;
     }
-    
-    public Group getDepthViewCrosshair() {
-        return depthViewCrosshair;
+
+    public Circle getTLight3() {
+        return tLight3;
+    }
+
+    public Label getDepthLabel() {
+        return depth;
+    }
+
+    public Group getTargetCross() {
+        return targetCross;
     }
 
     public Rectangle getDepthRectangle() {
         return fillRect;
     }
 
-    public Label getDepthLabel() {
-        return depth;
+    public Circle getTargetCircle() {
+        return targetCircle;
+    }
+
+    public Text getTitle() {
+        return title;
+    }
+
+    public StackPane getSubScene() {
+        return subScenePane;
+    }
+
+    public Group getGuidanceCircle() {
+        return guidanceCircle;
     }
 
     public Label getDistanceLabel() {
@@ -109,8 +126,8 @@ public class GuidanceAlignmentController implements GuidanceController {
         return hitError;
     }
 
-    public StackPane getSubScene() {
-        return subScenePane;
+    public Group getDepthViewCrosshair() {
+        return depthViewCrosshair;
     }
 
 }

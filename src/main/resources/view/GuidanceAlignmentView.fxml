@@ -59,7 +59,7 @@
         <bottom>
             <StackPane alignment="BOTTOM_CENTER">
                 <HBox spacing="0" alignment="BOTTOM_CENTER">
-                    <Button fx:id="stopVisualization" text="Stop Visualization" onAction="#onStopVisualizationClicked"/>
+                    <Button text="Stop Visualization" onAction="#onStopVisualizationClicked"/>
                 </HBox>
                 <HBox spacing="0" alignment="BOTTOM_RIGHT" mouseTransparent="true">
                     <StackPane.margin>

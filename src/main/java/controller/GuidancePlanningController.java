@@ -16,15 +16,13 @@ public class GuidancePlanningController implements GuidanceController {
     private GuidanceHandler guidanceHandler;
 
     @FXML
-    public Button startVisualization;
+    private ToggleButton xyPlane;
     @FXML
-    public ToggleButton xyPlane;
+    private ToggleButton zxPlane;
     @FXML
-    public ToggleButton zxPlane;
+    private ToggleButton yzPlane;
     @FXML
-    public ToggleButton yzPlane;
-    @FXML
-    public ComboBox<PointSet> pathComboBox;
+    private ComboBox<PointSet> pathComboBox;
 
     @Override
     public void registerController() {
