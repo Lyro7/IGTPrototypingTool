@@ -31,10 +31,10 @@ public class GuidanceHandler {
     private Phase currentPhase = Phase.ALIGNMENT;
 
     /** The current selected plane from the planing section. */
-    public Plane planeSelected;
+    private Plane planeSelected;
 
     /** The boolean if a phase switch occured. */
-    public boolean phaseSwitch = true;
+    private boolean phaseSwitched = true;
 
     /** Holds the selected value of the path combo box */
     private PointSet activePointSet;
@@ -132,7 +132,7 @@ public class GuidanceHandler {
      * @param currentPhase The phase the user is currently in.
      * */
     public void updateCurrentPhase(Phase currentPhase) {
-        phaseSwitch = true;
+        phaseSwitched = true;
         this.currentPhase = currentPhase;
         viewAdjustments();
     }
@@ -154,7 +154,7 @@ public class GuidanceHandler {
      * Performs view changes by switching from angulation to tip alignment phase.
      * */
     private void tipAlignmentViewAdjustments() {
-        GuidanceAlignmentController controller = ((GuidanceAlignmentController) guidanceControllers.getFirst());
+        GuidanceAlignmentController controller = getGuidanceAlignmentControllerIfActive();
 
         controller.getTitle().setText("Phase 2: Tip Alignment");
 
@@ -173,7 +173,7 @@ public class GuidanceHandler {
      * Performs view changes by switching to angulation phase.
      * */
     private void angulationViewAdjustments() {
-        GuidanceAlignmentController controller = ((GuidanceAlignmentController) guidanceControllers.getFirst());
+        GuidanceAlignmentController controller = getGuidanceAlignmentControllerIfActive();
 
         controller.getTitle().setText("Phase 3: Angulation");
 
@@ -197,7 +197,7 @@ public class GuidanceHandler {
      * Performs view changes by switching from angulation to scene depth phase.
      * */
     private void sceneDepthViewAdjustments() {
-        GuidanceAlignmentController controller = ((GuidanceAlignmentController) guidanceControllers.getFirst());
+        GuidanceAlignmentController controller = getGuidanceAlignmentControllerIfActive();
 
         controller.getTitle().setText("Phase 4: Depth");
 
@@ -279,6 +279,10 @@ public class GuidanceHandler {
         return activePointSet;
     }
 
+    public boolean isPhaseSwitched() {
+        return phaseSwitched;
+    }
+
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
@@ -289,6 +293,10 @@ public class GuidanceHandler {
 
     public void setActivePointSet(PointSet activePointSet) {
         this.activePointSet = activePointSet;
+    }
+
+    public void setPhaseSwitched(boolean phaseSwitched) {
+        this.phaseSwitched = phaseSwitched;
     }
 
     /*----------------------------------------DELEGATES----------------------------------------*/

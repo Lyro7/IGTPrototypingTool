@@ -86,7 +86,7 @@ public class GuidanceManager {
 
                     disableTargetSphere();
 
-                    guidanceHandler.phaseSwitch = false;
+                    guidanceHandler.setPhaseSwitched(false);
                 }
 
                 // Angulation
@@ -97,13 +97,13 @@ public class GuidanceManager {
 
                     disableTargetSphere();
 
-                    guidanceHandler.phaseSwitch = false;
+                    guidanceHandler.setPhaseSwitched(false);
                 }
 
                 // Scene-depth
                 if (guidanceHandler.getCurrentPhase().equals(GuidanceHandler.Phase.DEPTH)) {
                     // First time
-                    if (guidanceHandler.phaseSwitch) {
+                    if (guidanceHandler.isPhaseSwitched()) {
                         addTargetSphere();
                     }
 
@@ -114,7 +114,7 @@ public class GuidanceManager {
                     double hitError = calculateErrorTerm(predictedPoint);
                     renderHitErrorLabel(hitError);
 
-                    guidanceHandler.phaseSwitch = false;
+                    guidanceHandler.setPhaseSwitched(false);
                 }
             }
         }
