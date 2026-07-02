@@ -56,16 +56,18 @@ public class GuidanceManager {
         this.guidanceHandler = guidanceHandler;
     }
 
-    public void alignment() {
+    public void alignment(List<TrackingTool> trackingTools) {
+        if (!guidanceHandler.isGuidanceRunning()) {
+            return;
+        }
+
         if (trackingService.getDataService() == null) {
             return;
         }
 
-        List<TrackingTool> tools = trackingService.getDataService().loadNextData(1);
-
         double maxDepth = targetPoint.sub(entryPoint).getMag();
 
-        for (TrackingTool data : tools) {
+        for (TrackingTool data : trackingTools) {
             List<TrackingData> measurement = data.getMeasurement();
             for (TrackingData trackingData : measurement) {
 
@@ -385,7 +387,7 @@ public class GuidanceManager {
         return switch (guidanceHandler.getPlaneSelected()) {
             case XY -> new Vector3D(-v.getY(), v.getX(), v.getZ());
             case YZ -> new Vector3D(-v.getY(), -v.getZ(), v.getX());
-            case ZX -> new Vector3D(-v.getZ(), -v.getZ(), v.getX());
+            case ZX -> new Vector3D(-v.getZ(), -v.getX(), v.getY());
         };
     }
 
