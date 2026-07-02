@@ -32,7 +32,7 @@
         <left>
             <VBox id="trafficLightVBox" spacing="10" BorderPane.alignment="TOP_LEFT" maxHeight="180" alignment="CENTER">
                 <BorderPane.margin>
-                    <Insets bottom="20" left="20" right="0" top="20"/>
+                    <Insets bottom="20" left="60" right="0" top="10"/>
                 </BorderPane.margin>
                 <padding>
                     <Insets top="3" right = "3" left="3" bottom="3"/>
@@ -53,7 +53,8 @@
                 <Label text="Entry" layoutX="-40" layoutY="100"/>
                 <Line startX="-25" endX="175" startY="300" endY="300" />
                 <Label text="Target" layoutX="-40" layoutY="300"/>
-                <Label fx:id="depth" text="Depth: " layoutX="20" layoutY="320"/>
+                <Label id="boldSizedDataLabel" text="Depth:" layoutX="10" layoutY="325"/>
+                <Label id="SizedDataLabel" fx:id="depth" text="-" layoutX="75" layoutY="325"/>
             </Group>
         </right>
         <bottom>
@@ -66,16 +67,28 @@
                         <Insets bottom="10" left="0" right="60" top="0"/>
                     </StackPane.margin>
                     <HBox spacing="70" alignment="BOTTOM_RIGHT" mouseTransparent="true">
-                        <Label fx:id="distance" text="Distance to target: "/>
-                        <Label fx:id="hitError" text="Predicted hit-error: - mm"/>
+                        <HBox spacing="5">
+                            <Label id="boldSizedDataLabel" text="Distance to target:"/>
+                            <Label id="SizedDataLabel" fx:id="distance" text="-"/>
+                        </HBox>
+                        <HBox spacing="5">
+                            <Label id="boldSizedDataLabel" text="Predicted hit-error:"/>
+                            <Label id="SizedDataLabel" fx:id="hitError" text="? mm"/>
+                        </HBox>
                     </HBox>
                 </HBox>
                 <HBox spacing="20" alignment="BOTTOM_LEFT" mouseTransparent="true">
                     <StackPane.margin>
                         <Insets bottom="10" left="60" right="0" top="0"/>
                     </StackPane.margin>
-                    <Label text="Q: Switch to next phase"/>
-                    <Label text="E: Switch to last phase"/>
+                    <HBox spacing="5">
+                        <Label id="boldDataLabel" text="Q:"/>
+                        <Label text="Switch to next phase"/>
+                    </HBox>
+                    <HBox spacing="5">
+                        <Label id="boldDataLabel" text="E:"/>
+                        <Label text="Switch to last phase"/>
+                    </HBox>
                 </HBox>
             </StackPane>
         </bottom>
