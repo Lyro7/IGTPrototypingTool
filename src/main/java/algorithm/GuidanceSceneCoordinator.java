@@ -6,6 +6,7 @@ import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Affine;
@@ -85,9 +86,11 @@ public class GuidanceSceneCoordinator {
 
         ArrayList<TriangleMesh> meshes = DataService.getInstance().getMeshes();
         ArrayList<String> meshNames = DataService.getInstance().getMeshNames();
+        ArrayList<Color> meshColors = DataService.getInstance().getMeshColors();
 
         for (int i = 0; i < meshes.size(); i++) {
             MeshView meshView = new MeshView(meshes.get(i));
+            meshView.setMaterial(new PhongMaterial(meshColors.get(i)));
             modelRoot.getChildren().add(meshView);
             // If a torso is loaded, initialize variable
             if (meshNames.get(i).contains("torso")) {
