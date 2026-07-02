@@ -75,7 +75,7 @@ public class GuidanceAlignmentController implements GuidanceController {
 
     public void onStopVisualizationClicked() {
         guidanceHandler.switchContentOfTab("GuidancePlanningView");
-        guidanceHandler.stopGuidanceLoop();
+        guidanceHandler.stopGuidance();
     }
 
     public Circle getTLight1() {
