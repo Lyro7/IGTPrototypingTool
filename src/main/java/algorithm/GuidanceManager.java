@@ -36,7 +36,7 @@ public class GuidanceManager {
     private final static Vector3D TOOL_FEET_POS = new Vector3D(0, 0, 100);
 
     /** Representating the radius of the target sphere */
-    private final static double TARGET_SPHERE_RADIUS = 1.0;
+    private final static double TARGET_SPHERE_RADIUS = 0.3;
 
     /** Representating the scale of the UI movement in the guidance circle for tip alignment phase. */
     private final static double TIP_ALIGNMENT_SCALE = 2;
