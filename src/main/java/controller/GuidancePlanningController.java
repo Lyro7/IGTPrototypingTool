@@ -28,6 +28,10 @@ public class GuidancePlanningController implements GuidanceController {
     private ToggleButton yzPlane;
     @FXML
     private ComboBox<PointSet> pathComboBox;
+    @FXML
+    public Spinner<Double> slerpSpinner;
+    @FXML
+    public CheckBox slerpCheckBox;
 
     private GuidanceHandler guidanceHandler;
 
@@ -54,6 +58,12 @@ public class GuidancePlanningController implements GuidanceController {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         registerController();
+
+        slerpSpinner.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0.1, 1.0, 0.6, 0.05));
+
+        // Updates the slerp factor when the spinner value changes
+        slerpSpinner.valueProperty().addListener((obs, oldVal, newVal)
+                -> guidanceHandler.setSlerpFactor(newVal.floatValue()));
 
         pathComboBox.setItems(DataService.getInstance().getPointSet());
 
@@ -99,13 +109,7 @@ public class GuidancePlanningController implements GuidanceController {
         this.guidanceHandler = guidanceHandler;
         guidanceHandler.addGuidanceController(this);
 
-        if (guidanceHandler.getPlaneSelected() != null) {
-            selectPlane(guidanceHandler.getPlaneSelected());
-        }
-
-        if (guidanceHandler.getActivePointSet() != null) {
-            setActivePointSet(guidanceHandler.getActivePointSet());
-        }
+        restoreSettingsIfAvailable();
     }
 
     /**
@@ -175,6 +179,26 @@ public class GuidancePlanningController implements GuidanceController {
     }
 
     /**
+     * This method restores the selected settings after visualization has been stopped.
+     * */
+    private void restoreSettingsIfAvailable() {
+        // Restore selected plane
+        if (guidanceHandler.getPlaneSelected() != null) {
+            selectPlane(guidanceHandler.getPlaneSelected());
+        }
+
+        // Restore active point set
+        if (guidanceHandler.getActivePointSet() != null) {
+            setActivePointSet(guidanceHandler.getActivePointSet());
+        }
+
+        // Restore slerp settings
+        slerpCheckBox.setSelected(guidanceHandler.isSlerpEnabled());
+        slerpSpinner.setDisable(!guidanceHandler.isSlerpEnabled());
+        slerpSpinner.getValueFactory().setValue((double) guidanceHandler.getSlerpFactor());
+    }
+
+    /**
      * Shows a warning message to the screen.
      *
      * @param message The message to show.
@@ -186,14 +210,32 @@ public class GuidancePlanningController implements GuidanceController {
         alert.showAndWait();
     }
 
+    /**
+     * Called when the smoothing checkbox is toggled by the view.
+     * */
+    public void onSlerpToggled() {
+        boolean enabled = slerpCheckBox.isSelected();
+        guidanceHandler.setSlerpEnabled(enabled);
+        slerpSpinner.setDisable(!enabled);
+    }
+
+    /**
+     * Called when XY-plane selected, dependent on the lab setup.
+     * */
     public void onXYClicked() {
         guidanceHandler.setPlaneSelected(GuidanceHandler.Plane.XY);
     }
 
+    /**
+     * Called when ZX-plane selected, dependent on the lab setup.
+     * */
     public void onZXClicked() {
         guidanceHandler.setPlaneSelected(GuidanceHandler.Plane.ZX);
     }
 
+    /**
+     * Called when YZ-plane selected, dependent on the lab setup.
+     * */
     public void onYZClicked() {
         guidanceHandler.setPlaneSelected(GuidanceHandler.Plane.YZ);
     }
