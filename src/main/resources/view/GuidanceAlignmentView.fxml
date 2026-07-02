@@ -54,7 +54,7 @@
                 <Line startX="-25" endX="175" startY="300" endY="300" />
                 <Label text="Target" layoutX="-40" layoutY="300"/>
                 <Label id="boldSizedDataLabel" text="Depth:" layoutX="10" layoutY="325"/>
-                <Label id="SizedDataLabel" fx:id="depth" text="-" layoutX="75" layoutY="325"/>
+                <Label id="SizedDataLabel" fx:id="depth" text="-" layoutX="70" layoutY="325"/>
             </Group>
         </right>
         <bottom>
