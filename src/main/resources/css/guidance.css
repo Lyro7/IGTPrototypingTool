@@ -68,8 +68,23 @@
 
 #title {
     -fx-font-size: 25;
+    -fx-font-weight: bold;
+    -fx-underline: true;
 }
 
 #comboBox .list-cell {
     -fx-cell-size: 35;
+}
+
+#boldSizedDataLabel {
+    -fx-font-size: 17;
+    -fx-font-weight: bold;
+}
+
+#SizedDataLabel {
+    -fx-font-size: 17;
+}
+
+#boldDataLabel {
+    -fx-font-weight: bold;
 }
