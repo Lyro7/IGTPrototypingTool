@@ -3,7 +3,7 @@ package controller;
 import algorithm.DataService;
 import algorithm.GuidanceSceneCoordinator;
 import algorithm.GuidanceManager;
-import javafx.animation.AnimationTimer;
+import algorithm.TrackingTool;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -30,6 +30,8 @@ public class GuidanceHandler {
     /** The phase the user is currently in. */
     private Phase currentPhase = Phase.ALIGNMENT;
 
+    private boolean guidanceRunning = false;
+
     /** The current selected plane from the planing section. */
     private Plane planeSelected;
 
@@ -50,24 +52,6 @@ public class GuidanceHandler {
 
     private final GuidanceSceneCoordinator guidanceSceneCoordinator = new GuidanceSceneCoordinator(this);
 
-    private AnimationTimer animator;
-
-    public GuidanceHandler() {
-        guidanceLoop();
-    }
-
-    /**
-     * Creates the alignment main loop.
-     * */
-    public void guidanceLoop() {
-        animator = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                guidanceManager.alignment();
-            }
-        };
-    }
-
     /**
      * This method updates the selected target points, loads and transforms the meshes selected
      * from the visualization section.
@@ -86,17 +70,17 @@ public class GuidanceHandler {
     }
 
     /**
-     * Starts the main loop.
+     * Starts the guidance.
      * */
-    public void startGuidanceLoop() {
-        animator.start();
+    public void startGuidance() {
+        guidanceRunning = true;
     }
 
     /**
-     * Stops the main loop.
+     * Stops the guidance.
      * */
-    public void stopGuidanceLoop() {
-        animator.stop();
+    public void stopGuidance() {
+        guidanceRunning = false;
         // Reset phase after visualization stopped.
         currentPhase = Phase.ALIGNMENT;
     }
@@ -283,6 +267,10 @@ public class GuidanceHandler {
         return phaseSwitched;
     }
 
+    public boolean isGuidanceRunning() {
+        return guidanceRunning;
+    }
+
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
@@ -300,6 +288,10 @@ public class GuidanceHandler {
     }
 
     /*----------------------------------------DELEGATES----------------------------------------*/
+
+    public void guidance(List<TrackingTool> trackingTools) {
+        guidanceManager.alignment(trackingTools);
+    }
 
     public Group getWorld() {
         return guidanceSceneCoordinator.getWorld();
