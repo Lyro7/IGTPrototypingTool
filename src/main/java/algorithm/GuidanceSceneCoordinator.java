@@ -8,6 +8,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Affine;
 import shapes.CameraContainer;
@@ -33,6 +34,9 @@ public class GuidanceSceneCoordinator {
 
     /** The viewport hosting the background scene graph. */
     private SubScene subScene;
+
+    /** A rectangle acting as a border around the sub scene. */
+    private Rectangle border;
 
     /** Will be initalized, if a torso.stl file is being loaded. */
     private MeshView torso;
@@ -73,8 +77,24 @@ public class GuidanceSceneCoordinator {
             subScenePane.getChildren().add(subScene);
         }
 
+        if (border == null) {
+            border = new Rectangle();
+            border.setFill(Color.TRANSPARENT);
+            border.setStroke(Color.rgb(85, 85, 85));
+            border.setStrokeWidth(3);
+            border.widthProperty().bind(subScene.widthProperty());
+            border.heightProperty().bind(subScene.heightProperty());
+            border.setMouseTransparent(true);
+
+            subScenePane.getChildren().add(border);
+        }
+
         if (!subScenePane.getChildren().contains(subScene)) {
             subScenePane.getChildren().add(subScene);
+        }
+
+        if (!subScenePane.getChildren().contains(border)) {
+            subScenePane.getChildren().add(border);
         }
     }
 
