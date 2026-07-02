@@ -247,6 +247,8 @@ public class GuidanceManager {
                 uiH = errorVector.getY() * TIP_ALIGNMENT_SCALE;
                 uiV = errorVector.getZ() * TIP_ALIGNMENT_SCALE;
             }
+            // WARNING: ZX-plane not tested in the lab yet!
+            // Values below are assumed and may need adjustment after testing.
             case ZX -> {
                 uiH = -errorVector.getZ() * TIP_ALIGNMENT_SCALE;
                 uiV = -errorVector.getX() * TIP_ALIGNMENT_SCALE;
@@ -396,6 +398,8 @@ public class GuidanceManager {
         return switch (guidanceHandler.getPlaneSelected()) {
             case XY -> new Vector3D(-v.getY(), v.getX(), v.getZ());
             case YZ -> new Vector3D(-v.getY(), -v.getZ(), v.getX());
+            // WARNING: ZX-plane not tested in the lab yet!
+            // Values below are assumed and may need adjustment after testing.
             case ZX -> new Vector3D(-v.getZ(), -v.getX(), v.getY());
         };
     }
