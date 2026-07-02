@@ -228,7 +228,7 @@ public class VisualizationManager {
                 );
                 stlModels.add(model);
 
-                dataService.addMesh(mesh, name);
+                dataService.addMesh(mesh, name, Color.web("ccccccff"));
 
                 //logger.log(Level.INFO, "STL file read from: " + fileList.get(i).getAbsolutePath());
             } catch (Exception e) {
