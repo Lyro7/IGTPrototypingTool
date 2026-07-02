@@ -32,6 +32,9 @@ public class GuidanceManager {
     /** The target sphere representating the target point. */
     private Sphere targetSphere;
 
+    /** Hold the smoothed camera rotation between frames, used when smoothing is enabled. */
+    private Quaternion smoothedRotation;
+
     /** The feet position of the needle in tool space, approximately 10cm in z-direction. */
     private final static Vector3D TOOL_FEET_POS = new Vector3D(0, 0, 100);
 
@@ -109,7 +112,7 @@ public class GuidanceManager {
                 if (guidanceHandler.getCurrentPhase().equals(GuidanceHandler.Phase.ANGLE)) {
 
                     angulation(tipPos, rotationMatrix);
-                    cameraAngulationPhase(tipPos, rotationMatrix);
+                    cameraAngulationPhase(tipPos, quaternion);
 
                     disableTargetSphere();
 
@@ -123,7 +126,7 @@ public class GuidanceManager {
                         addTargetSphere();
                     }
 
-                    cameraAngulationPhase(tipPos, rotationMatrix);
+                    cameraAngulationPhase(tipPos, quaternion);
 
                     // Hit error
                     Vector3D predictedPoint = calculatePredictedPoint(tipPos, rotationMatrix, depth, maxDepth);
@@ -373,12 +376,27 @@ public class GuidanceManager {
      * This method represents the camera behavior in the angulation and scene depth phase.
      * <p>
      * Other than in tip alignment phase, it updates both the camera position and its look direction.
+     * It also smooths the camera rotation by a factor, if enabled.
      * </p>
      * @param tipPos The needle tip position.
-     * @param rotationMatrix The needle rotation matrix.
+     * @param quaternion The needle quaternion.
      * */
-    private void cameraAngulationPhase(Vector3D tipPos, Matrix3D rotationMatrix) {
-        Vector3D forward = retrieveForwardVector(rotationMatrix);
+    private void cameraAngulationPhase(Vector3D tipPos, Quaternion quaternion) {
+        Quaternion rotationToUse;
+
+        if (guidanceHandler.isSlerpEnabled()) {
+            if (smoothedRotation == null) {
+                smoothedRotation = quaternion;
+            } else {
+                smoothedRotation = smoothedRotation.slerp(
+                        smoothedRotation, quaternion, guidanceHandler.getSlerpFactor());
+            }
+            rotationToUse = smoothedRotation;
+        } else {
+            rotationToUse = quaternion;
+        }
+
+        Vector3D forward = retrieveForwardVector(rotationToUse.toRotationMatrix());
         Vector3D mappedDir = trackingToScene(forward);
         Vector3D mappedPos = trackingToScene(tipPos);
 
@@ -514,17 +532,17 @@ public class GuidanceManager {
 
     private void renderDepthLabel(double depth) {
         String formattedDepth = String.format("%.2f", depth);
-        guidanceHandler.getDepthLabel().setText("Depth: " + formattedDepth + " mm");
+        guidanceHandler.getDepthLabel().setText(formattedDepth + " mm");
     }
 
     private void renderDistanceLabel(double distance) {
         String formattedDistance = String.format("%.2f", distance);
-        guidanceHandler.getDistanceLabel().setText("Distance to target: " + formattedDistance + " mm");
+        guidanceHandler.getDistanceLabel().setText(formattedDistance + " mm");
     }
 
     private void renderHitErrorLabel(double hitError) {
         String formattedHitError = String.format("%.2f", hitError);
-        guidanceHandler.getHitErrorLabel().setText("Predicted hit-error: " + formattedHitError + " mm");
+        guidanceHandler.getHitErrorLabel().setText(formattedHitError + " mm");
     }
 
 }

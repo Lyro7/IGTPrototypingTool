@@ -43,6 +43,12 @@ public class GuidanceHandler {
     /** The current selected plane from the planing section. */
     private Plane planeSelected;
 
+    /** Whether camera rotation smoothing is active. */
+    private boolean slerpEnabled = false;
+
+    /** The factor for camera rotation smoothing. 1.0 = no smoothing, lower = smoother but more latency. */
+    private float slerpFactor = 0.6f;
+
     /** The boolean if a phase switch occured. */
     private boolean phaseSwitched = true;
 
@@ -186,7 +192,7 @@ public class GuidanceHandler {
 
         controller.getGuidanceCircle().setVisible(true);
 
-        controller.getHitErrorLabel().setText("Hit Error: ? mm");
+        controller.getHitErrorLabel().setText("? mm");
 
         guidanceSceneCoordinator.toggleTorso(false);
     }
@@ -279,6 +285,14 @@ public class GuidanceHandler {
         return activePointSet;
     }
 
+    public boolean isSlerpEnabled() {
+        return slerpEnabled;
+    }
+
+    public float getSlerpFactor() {
+        return slerpFactor;
+    }
+
     public boolean isPhaseSwitched() {
         return phaseSwitched;
     }
@@ -301,6 +315,14 @@ public class GuidanceHandler {
 
     public void setPhaseSwitched(boolean phaseSwitched) {
         this.phaseSwitched = phaseSwitched;
+    }
+
+    public void setSlerpEnabled(boolean slerpEnabled) {
+        this.slerpEnabled = slerpEnabled;
+    }
+
+    public void setSlerpFactor(float slerpFactor) {
+        this.slerpFactor = slerpFactor;
     }
 
     /*----------------------------------------DELEGATES----------------------------------------*/
