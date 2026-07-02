@@ -280,8 +280,7 @@ public class MainController implements Controller {
 
 
     /**
-     * This method gives needed references to classes.
-     * It is used to maintain the guidance architecture.
+     * This method gives needed references to classes. It is used to maintain the guidance architecture.
      * */
     private void initializeGuidance() {
         guidanceHandler.setMainController(this);
