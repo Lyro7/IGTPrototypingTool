@@ -1,5 +1,6 @@
 package controller;
 
+import algorithm.DataService;
 import algorithm.TrackingTool;
 import algorithm.TrackingService;
 import algorithm.VisualizationManager;
@@ -330,8 +331,12 @@ public class VisualizationController implements Controller {
         int pos = getSelectedSTL();
         if (pos != -1) {
             ArrayList<STLModel> stlModels = visualizationManager.getSTLModels();
-            stlModels.get(pos).setColor(new PhongMaterial(stlColorPicker.getValue()));
-            changeAttributeOfSTL(pos, "Color", String.valueOf(stlColorPicker.getValue()));
+            Color newColor = stlColorPicker.getValue();
+
+            stlModels.get(pos).setColor(new PhongMaterial(newColor));
+            changeAttributeOfSTL(pos, "Color", String.valueOf(newColor));
+
+            DataService.getInstance().updateMeshColor(pos, newColor);
         }
     }
 
