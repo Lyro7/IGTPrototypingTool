@@ -19,6 +19,13 @@ import util.Vector3D;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class acts as a facade over the guidance subsystem.
+ * <p>
+ * It coordinates phase transitions (Alignment, Angle, Depth) and delegates to the
+ * underlying subsystems, without holding significant logic of its own.
+ * </p>
+ * */
 public class GuidanceHandler {
 
     /** The 3 main phases after guidance started. */
@@ -30,6 +37,7 @@ public class GuidanceHandler {
     /** The phase the user is currently in. */
     private Phase currentPhase = Phase.ALIGNMENT;
 
+    /** Holds state if the guidance running. */
     private boolean guidanceRunning = false;
 
     /** The current selected plane from the planing section. */
@@ -65,6 +73,12 @@ public class GuidanceHandler {
         }
     }
 
+    /**
+     * Updates the selected points to the guidance manager.
+     *
+     * @param entry The entry point.
+     * @param target The target point.
+     * */
     public void updatePlannedPoints(Vector3D entry, Vector3D target) {
         guidanceManager.updatePlannedPoints(entry, target);
     }
@@ -251,6 +265,8 @@ public class GuidanceHandler {
         getGuidanceAlignmentControllerIfActive().getDepthViewCrosshair().setVisible(false);
     }
 
+    /*----------------------------------------GETTER/SETTER----------------------------------------*/
+
     public Plane getPlaneSelected() {
         return planeSelected;
     }
@@ -328,7 +344,5 @@ public class GuidanceHandler {
     public StackPane getSubScene() {
         return getGuidanceAlignmentControllerIfActive().getSubScene();
     }
-
-
 
 }

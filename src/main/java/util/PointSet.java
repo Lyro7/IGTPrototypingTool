@@ -1,5 +1,8 @@
 package util;
 
+/**
+ * This class bundles the entry and target vectors of a loaded .MPS file with its file name.
+ * */
 public class PointSet {
 
     /** Entry position */

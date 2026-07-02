@@ -22,15 +22,13 @@ import java.util.ArrayList;
  * */
 public class GuidanceSceneCoordinator {
 
-    private final GuidanceHandler guidanceHandler;
-
     /** Camera used for scene overlay. */
     private final CameraContainer cameraContainer = new CameraContainer(true);
 
-    /** Group which contains the models and the camera. */
+    /** Group which contains the models. */
     private final Group world = new Group();
 
-    /** Group that holds the models and it's transforms.  */
+    /** Group that holds the models and its transform.  */
     private final Group modelRoot = new Group();
 
     /** The viewport hosting the background scene graph. */
@@ -38,6 +36,8 @@ public class GuidanceSceneCoordinator {
 
     /** Will be initalized, if a torso.stl file is being loaded. */
     private MeshView torso;
+
+    private final GuidanceHandler guidanceHandler;
 
     public GuidanceSceneCoordinator(GuidanceHandler guidanceHandler) {
         this.guidanceHandler = guidanceHandler;
@@ -117,7 +117,7 @@ public class GuidanceSceneCoordinator {
     }
 
     /**
-     * If torso has been removed from the mesh list, set the variable null.
+     * If torso has been removed from the mesh list, set the variable to null.
      * */
     public void setTorsoNull() {
         torso = null;

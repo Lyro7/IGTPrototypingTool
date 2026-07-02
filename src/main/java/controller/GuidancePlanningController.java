@@ -11,9 +11,14 @@ import util.PointSet;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the guidance planning view.
+ * <p>
+ * Handles selection of the tracking plane and the selected puncture path.
+ * Also triggers the start of the guidance procedure.
+ * </p>
+ * */
 public class GuidancePlanningController implements GuidanceController {
-
-    private GuidanceHandler guidanceHandler;
 
     @FXML
     private ToggleButton xyPlane;
@@ -23,6 +28,8 @@ public class GuidancePlanningController implements GuidanceController {
     private ToggleButton yzPlane;
     @FXML
     private ComboBox<PointSet> pathComboBox;
+
+    private GuidanceHandler guidanceHandler;
 
     @Override
     public void registerController() {
@@ -50,6 +57,7 @@ public class GuidancePlanningController implements GuidanceController {
 
         pathComboBox.setItems(DataService.getInstance().getPointSet());
 
+        // Displayed text in the combo box is the .MPS file name
         pathComboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(PointSet pointSet) {
@@ -62,6 +70,7 @@ public class GuidancePlanningController implements GuidanceController {
             }
         });
 
+        // Reselectes the stored point when the controller is reloaded
         pathComboBox.setOnAction(event -> {
             PointSet pointSet = pathComboBox.getValue();
 
@@ -97,15 +106,24 @@ public class GuidancePlanningController implements GuidanceController {
         if (guidanceHandler.getActivePointSet() != null) {
             setActivePointSet(guidanceHandler.getActivePointSet());
         }
-
     }
 
+    /**
+     * Reselects the previously selected point set in the combo box, after controller reload.
+     *
+     * @param pointSet The restored point set.
+     * */
     private void setActivePointSet(PointSet pointSet) {
         if (pathComboBox.getValue() == null && pointSet != null) {
             pathComboBox.setValue(pointSet);
         }
     }
 
+    /**
+     * Reselects the previously selected plane, after controller reload.
+     *
+     * @param plane The restored plane.
+     * */
     private void selectPlane(GuidanceHandler.Plane plane) {
         switch (plane) {
             case XY -> xyPlane.setSelected(true);
@@ -114,6 +132,10 @@ public class GuidancePlanningController implements GuidanceController {
         }
     }
 
+    /**
+     * Called when the start button is clicked by the view. It delegates to the
+     * {@link GuidanceHandler} to prepare for the guidance procedure.
+     * */
     public void onStartVisualizationClicked() {
         if (requirementsFailed()) {
             return;
@@ -125,6 +147,11 @@ public class GuidancePlanningController implements GuidanceController {
         guidanceHandler.startGuidance();
     }
 
+    /**
+     * Checks if all requirements to start the guidance are met.
+     *
+     * @return {@code true}, if a requirement is not met. {@code false}, if all requirements are met.
+     * */
     private boolean requirementsFailed() {
         if (TrackingService.getInstance().getDataService() == null) {
             showAlert("Please select a tracking source!");
@@ -147,6 +174,11 @@ public class GuidancePlanningController implements GuidanceController {
         return false;
     }
 
+    /**
+     * Shows a warning message to the screen.
+     *
+     * @param message The message to show.
+     * */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setHeaderText(null);

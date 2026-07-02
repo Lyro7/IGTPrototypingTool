@@ -16,14 +16,12 @@ import java.util.List;
 
 /**
  * This class manages the main logic of the whole guidance.
+ * <p>
  * It covers several mathematical operations, such as calculating the error vector,
  * calculating the angular deviation, the depth of the needle and the correct camera movement.
+ * </p>
  * */
 public class GuidanceManager {
-
-    private final GuidanceHandler guidanceHandler;
-
-    private final TrackingService trackingService = TrackingService.getInstance();
 
     /** The entry point on the skin. */
     private Vector3D entryPoint;
@@ -52,10 +50,21 @@ public class GuidanceManager {
      * */
     private final static double TIP_ALIGNMENT_CAMERA_OFFSET_Z = -700;
 
+    private final GuidanceHandler guidanceHandler;
+
+    private final TrackingService trackingService = TrackingService.getInstance();
+
     public GuidanceManager(GuidanceHandler guidanceHandler) {
         this.guidanceHandler = guidanceHandler;
     }
 
+    /**
+     * Main method which covers the whole guidance procedure.
+     * <p>
+     * It calls the corresponding methods for the current phase, along with additional calculations
+     * such as depth or geometric distance.
+     * </p>
+     * */
     public void alignment(List<TrackingTool> trackingTools) {
         if (!guidanceHandler.isGuidanceRunning()) {
             return;
@@ -464,15 +473,26 @@ public class GuidanceManager {
         targetSphere.setTranslateZ(mappedPos.getZ());
     }
 
+    /**
+     * Removes the target sphere from the background scene overlay.
+     * */
     private void disableTargetSphere() {
         guidanceHandler.getWorld().getChildren().remove(targetSphere);
         targetSphere = null;
     }
 
+    /**
+     * Updates the entry and target point for this guidance procedure.
+     *
+     * @param entryPoint The entry point.
+     * @param targetPoint The target point.
+     * */
     public void updatePlannedPoints(Vector3D entryPoint, Vector3D targetPoint) {
         this.entryPoint = entryPoint;
         this.targetPoint = targetPoint;
     }
+
+    /*----------------------------------------UI UPDATE CALLS---------------------------------------- */
 
     private void adjustDepthRectangle(double height) {
         guidanceHandler.getDepthRectangle().setHeight(height);

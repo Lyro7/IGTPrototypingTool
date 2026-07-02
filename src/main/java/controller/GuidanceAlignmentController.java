@@ -11,9 +11,14 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the guidance alignment view.
+ * <p>
+ * This view covers the whole guidance procedure. Its nodes are manipulated by the
+ * {@link GuidanceHandler} in runtime, depending on the current phase.
+ * </p>
+ * */
 public class GuidanceAlignmentController implements GuidanceController {
-
-    private GuidanceHandler guidanceHandler;
 
     @FXML
     private Circle tLight1;
@@ -41,6 +46,8 @@ public class GuidanceAlignmentController implements GuidanceController {
     private Label hitError;
     @FXML
     private Group depthViewCrosshair;
+
+    private GuidanceHandler guidanceHandler;
 
     @Override
     public void registerController() {
@@ -73,6 +80,10 @@ public class GuidanceAlignmentController implements GuidanceController {
         guidanceHandler.addGuidanceController(this);
     }
 
+    /**
+     * Called when the stop button is clicked by the view. It delegates to the
+     * {@link GuidanceHandler} to prepare for a view content switch.
+     * */
     public void onStopVisualizationClicked() {
         guidanceHandler.switchContentOfTab("GuidancePlanningView");
         guidanceHandler.stopGuidance();
