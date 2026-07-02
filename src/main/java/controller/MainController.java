@@ -127,6 +127,7 @@ public class MainController implements Controller {
         trackingController.injectStatusLabel(status);
         trackingController.injectVisualizationManager(visualizationManager);
         trackingController.injectVisualizationController(visualizationController);
+        trackingController.injectGuidanceHandler(guidanceHandler);
         videoController.injectStatusLabel(status);
         visualizationController.injectStatusLabel(status);
         visualizationController.injectTrackingDataController(trackingController);
