@@ -70,7 +70,7 @@ public class GuidanceHandler {
      * This method updates the selected target points, loads and transforms the meshes selected
      * from the visualization section.
      */
-    public void prepareTargetsAndMeshes() {
+    public void prepareScene() {
         guidanceSceneCoordinator.initialize();
         guidanceSceneCoordinator.addActiveModelsToRoot();
 
@@ -170,7 +170,7 @@ public class GuidanceHandler {
         controller.getTLight1().setId("glowTrafficLight1");
         controller.getTLight2().setId("trafficLight2");
 
-        guidanceSceneCoordinator.toggleTorso(true);
+        guidanceSceneCoordinator.torsoVisible(true);
     }
 
     /**
@@ -194,7 +194,7 @@ public class GuidanceHandler {
 
         controller.getHitErrorLabel().setText("? mm");
 
-        guidanceSceneCoordinator.toggleTorso(false);
+        guidanceSceneCoordinator.torsoVisible(false);
     }
 
     /**

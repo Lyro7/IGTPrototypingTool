@@ -124,7 +124,7 @@ public class GuidanceSceneCoordinator {
      *
      * @param visible The visibility of the torso.
      * */
-    public void toggleTorso(boolean visible) {
+    public void torsoVisible(boolean visible) {
         if (torso != null) {
             if (!visible) {
                 modelRoot.getChildren().remove(torso);
