@@ -30,20 +30,22 @@ public class GuidanceKeyHandler {
         if (guidanceTab != null) {
             scene.setOnKeyPressed(keyEvent -> {
                 if (guidanceTab.isSelected()) {
-                    // Switch to next phase
-                    if (keyEvent.getCode() == KeyCode.Q) {
-                        if (guidanceHandler.getCurrentPhase() == GuidanceHandler.Phase.ALIGNMENT) {
-                            guidanceHandler.updateCurrentPhase(GuidanceHandler.Phase.ANGLE);
-                        } else if (guidanceHandler.getCurrentPhase() == GuidanceHandler.Phase.ANGLE) {
-                            guidanceHandler.updateCurrentPhase(GuidanceHandler.Phase.DEPTH);
+                    if (guidanceHandler.isGuidanceRunning()) {
+                        // Switch to next phase
+                        if (keyEvent.getCode() == KeyCode.Q) {
+                            if (guidanceHandler.getCurrentPhase() == GuidanceHandler.Phase.ALIGNMENT) {
+                                guidanceHandler.updateCurrentPhase(GuidanceHandler.Phase.ANGLE);
+                            } else if (guidanceHandler.getCurrentPhase() == GuidanceHandler.Phase.ANGLE) {
+                                guidanceHandler.updateCurrentPhase(GuidanceHandler.Phase.DEPTH);
+                            }
                         }
-                    }
-                    // Switch to last phase
-                    if (keyEvent.getCode() == KeyCode.E) {
-                        if (guidanceHandler.getCurrentPhase() == GuidanceHandler.Phase.ANGLE) {
-                            guidanceHandler.updateCurrentPhase(GuidanceHandler.Phase.ALIGNMENT);
-                        } else if (guidanceHandler.getCurrentPhase() == GuidanceHandler.Phase.DEPTH) {
-                            guidanceHandler.updateCurrentPhase(GuidanceHandler.Phase.ANGLE);
+                        // Switch to last phase
+                        if (keyEvent.getCode() == KeyCode.E) {
+                            if (guidanceHandler.getCurrentPhase() == GuidanceHandler.Phase.ANGLE) {
+                                guidanceHandler.updateCurrentPhase(GuidanceHandler.Phase.ALIGNMENT);
+                            } else if (guidanceHandler.getCurrentPhase() == GuidanceHandler.Phase.DEPTH) {
+                                guidanceHandler.updateCurrentPhase(GuidanceHandler.Phase.ANGLE);
+                            }
                         }
                     }
                 }
